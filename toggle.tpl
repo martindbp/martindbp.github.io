@@ -72,3 +72,9 @@
     {% endif %}
   {% endif %}
 {%- endblock codecell %}
+{% block markdowncell scoped %}
+  {% set tags = cell['metadata'].get('tags', []) %}
+  {% if 'remove' not in tags %}
+    {{ super() }}
+  {% endif %}
+{%- endblock markdowncell %}
