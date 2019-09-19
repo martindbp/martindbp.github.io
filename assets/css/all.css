@@ -1023,6 +1023,14 @@ a.pagination-item:hover {
   display: none;
 }
 .toggleoff .cellwrapper {
-  display: none
+  display: none;
 }
+.toggleoff {
+  margin-bottom: 10px;
+}
+
+.output_area table {
+  width: auto;
+}
+
 
