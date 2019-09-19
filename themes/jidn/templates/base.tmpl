@@ -59,5 +59,18 @@ ${template_hooks['extra_head']()}
     </script>
     <!-- end fancy dates -->
     <%block name="extra_js"></%block>
+    <script type="text/javascript">
+      var toggle = function(id) {
+        toggleDiv = id.parentNode.parentNode
+        if (toggleDiv.classList.contains('toggleon')) {
+          toggleDiv.classList.remove('toggleon');
+          toggleDiv.classList.add('toggleoff');
+        }
+        else {
+          toggleDiv.classList.remove('toggleoff');
+          toggleDiv.classList.add('toggleon');
+        }
+      };
+    </script>
 </body>
 </html>

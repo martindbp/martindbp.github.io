@@ -1,32 +1,5 @@
 {% extends 'basic.tpl' %}
 
-{% block header scoped %}
-    <style>
-      .toggleon .showbutton {
-        display: none;
-      }
-      .toggleoff .hidebutton {
-        display: none;
-      }
-      .toggleoff .cellwrapper {
-        display: none
-      }
-    </style>
-    <script type="text/javascript">
-      var toggle = function(id) {
-        toggleDiv = id.parentNode.parentNode
-        if (toggleDiv.classList.contains('toggleon')) {
-          toggleDiv.classList.remove('toggleon');
-          toggleDiv.classList.add('toggleoff');
-        }
-        else {
-          toggleDiv.classList.remove('toggleoff');
-          toggleDiv.classList.add('toggleon');
-        }
-      };
-    </script>
-{%- endblock header %}
-
 {% block codecell scoped %}
   {% set tags = cell['metadata'].get('tags', []) %}
   {% if 'remove' not in tags %}
