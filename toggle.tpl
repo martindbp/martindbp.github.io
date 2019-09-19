@@ -1,6 +1,6 @@
 {% extends 'basic.tpl' %}
 
-{% block body scoped %}
+{% block header scoped %}
     <style>
       .toggleon .showbutton {
         display: none;
@@ -25,7 +25,7 @@
         }
       };
     </script>
-{%- endblock body %}
+{%- endblock header %}
 
 {% block codecell scoped %}
   {% set tags = cell['metadata'].get('tags', []) %}
