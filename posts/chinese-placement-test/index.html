@@ -2,7 +2,6 @@
 <html prefix="" lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="description" content="test">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Chinese Placement Test with Logistic Regression and Active Learning | martindbp</title>
 <link href="../../assets/css/all.css" rel="stylesheet" type="text/css">
@@ -25,7 +24,8 @@ MathJax.Hub.Config({
 <meta property="og:site_name" content="martindbp">
 <meta property="og:title" content="Chinese Placement Test with Logistic Regression and Active Learning">
 <meta property="og:url" content="https://martindbp.com/posts/chinese-placement-test/">
-<meta property="og:description" content="test">
+<meta property="og:description" content="An interesting problem with language learning apps is how to estimate the prior knowledge, the vocabulary, of a new user. Unless the user is a complete beginner, they will come with at least some leve">
+<meta property="og:image" content="https://martindbp.com/posts/chinese-placement-test/images/chinese_placement.png">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2019-09-09T21:09:01+10:00">
 </head>
@@ -65,7 +65,6 @@ MathJax.Hub.Config({
 </h1>
         <div class="metadata">
         <meta itemprop="inLanguage" content="en">
-<meta name="description" itemprop="description" content="test">
 <p class="dateline">
             <time class="post-date published dt-published" datetime="2019-09-09T21:09:01+10:00" itemprop="datePublished" title="2019-09-09 21:09">2019-09-09 21:09</time></p>
                 <p class="commentline">
@@ -391,7 +390,7 @@ MathJax.Hub.Config({
 <p>In order to visualize where HSK words end up as a function of frequency, here's a bar chart showing the most common 5000 words with the most frequent to the right. Each colored bar is a word in HSK and white gaps are words not in the HSK. It drives home the point that</p>
 <ol>
 <li>There is no clear visual separation between levels</li>
-<li>HSK really has a lot of gaps</li>
+<li>HSK really has plenty of gaps in this range</li>
 </ol>
 </div>
 </div>
@@ -599,7 +598,7 @@ MathJax.Hub.Config({
 <p>Still, "knowing" a word is a bit of a loose concept since being able to produce a translation given a Hanzi cue doesn't really show whether you can use it well in a sentence. Or being able to write it, or recognize it in speech etc. There are many ways you could imagine probing the user, but this little proof of concetp I'll simplify the problem to just a binary decision for Hanzi+Pinyin+Translation combos.</p>
 <p>First, let's consider a single independent variable, frequency, and see what we can do. Predicting a probability based on a independent variable seems like a perfect job for <em>logistic regression</em>. It works by scaling the independent variable, adding some bias to it and then putting the result through the sigmoid function, producing a value between 0 and 1:</p>
 $$\frac{1}{1+e^{(x^{L}_1 \beta_1 + \ldots + x^{L}_n \beta_n + \beta_c)}}$$<p>Logistic regression finds the best values for the $\beta$ coefficients that minimize the <em>Cross Entropy Loss</em>. Since we are essentially training a separate predictor for each individual user with very few data points, it's a good idea to use a simple model like this, with as few variables as possible in order to avoid overfitting and make sampling easier.</p>
-<p>Let's try regression on the words by picking some random words from different HSK levels, assigning positive labels to levels 1-3, and negative labels to levels 4-6 and see what it looks like. Due to the underlying Pareto distribution, it's better to use frequency rank rather than the frequency, so that we have a uniform discrete distribution of words over the independent variable:</p>
+<p>Let's try it by picking some random words from different HSK levels, assigning positive labels to levels 1-3, and negative labels to levels 4-6 and see what it looks like. Due to the underlying Pareto distribution, it's better to use frequency rank rather than the frequency as the independent variable, so that we have a uniform discrete distribution over the words:</p>
 
 </div>
 </div>
@@ -735,7 +734,8 @@ $$\frac{1}{1+e^{(x^{L}_1 \beta_1 + \ldots + x^{L}_n \beta_n + \beta_c)}}$$<p>Log
 <p>My intuition tells me that words close to 0 or 1 probability are not good picks, since we're very sure about them. It would be better to pick words we're uncertain about, around 0.5.</p>
 <p>What we want is to find the word which would be the most surprising if we got it wrong, but is also likely to happen. More concretely, we want the <em>surprisal</em> for being wrong, times the probability of being wrong about it.</p>
 <p>Suprisal is an actual term in information theory, although most often called "information content". The surprisal/information of an event happening is $I(X) = -\log(P(X))$. This means that if the probability of X happening is 0, we're infinitely surprised if it does actually happen (since $-\log(0)=\infty$). If it's 1, then we're not surprised at all if it happens (since $-\log(1)=0$).</p>
-<p>What we're looking for then is the <em>expected</em> surprisal of being wrong for both classes: $\sum_{c \in C} P(X=c)I(X=c)$. This is the same as the <em>entropy</em> for the binary probability distribution for a word. As it turns out, the maximum of this function is X=0.5, following our intuition. It also maximizes the expected loss for the Cross Entropy loss function, which gives further validity to the idea. There are other ways to sample for active learning, e.g. sampling close to the decision boundary, but this one is one of the basic ones and it' what I came up with before knowing what to google for.</p>
+<p>What we're looking for then is the <em>expected</em> surprisal of being wrong for both classes:</p>
+$$ \sum_{c \in \{T, F\}} P(W=c)I(W=c) $$<p>This is the same as the <em>entropy</em> for the binary probability distribution for a word. As it turns out, the maximum of this function is X=0.5, following our intuition. It also maximizes the expected loss for the Cross Entropy loss function, which gives further validity to the idea. There are other ways to sample for active learning, e.g. sampling close to the decision boundary, but this one is one of the basic ones and it's what I came up with before knowing what to google for :)</p>
 
 </div>
 </div>
