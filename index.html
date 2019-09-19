@@ -587,9 +587,8 @@ MathJax.Hub.Config({
 </h3>
 <p>Now that we know our data a bit better we can think about how to predict a user's vocabulary. The idea is to create some kind of interactive procedure to iteratively discover this distribution. This way we can hone in on the user's skill level without asking tons of questions up front.</p>
 <p>Still, "knowing" a word is a bit of a loose concept since being able to produce a translation given a Hanzi cue doesn't really show whether you can use it well in a sentence. Or being able to write it, or recognize it in speech etc. There are many ways you could imagine probing the user, but this little proof of concetp I'll simplify the problem to just a binary decision for Hanzi+Pinyin+Translation combos.</p>
-<p>First, let's consider a single independent variable, frequency, and see what we can do. Predicting a probability based on a independent variable seems like a perfect job for <em>logistic regression</em>. It works by scaling the independent variable, adding some bias to it and then putting the result through the sigmoid function, producing a value between 0 and 1:
-$$\frac{1}{1+e^{(x^{L}_1 \beta_1 + \ldots + x^{L}_n \beta_n + \beta_c)}}$$
-Logistic regression finds the best values for the $\beta$ coefficients that minimize the Cross Entropy Loss. Since we are essentially training a predictor for each user individually with very few data points, it's a good idea to use a simple model like this, with as few variables as possible in order to avoid overfitting and make sampling easier.</p>
+<p>First, let's consider a single independent variable, frequency, and see what we can do. Predicting a probability based on a independent variable seems like a perfect job for <em>logistic regression</em>. It works by scaling the independent variable, adding some bias to it and then putting the result through the sigmoid function, producing a value between 0 and 1:</p>
+$$\frac{1}{1+e^{(x^{L}_1 \beta_1 + \ldots + x^{L}_n \beta_n + \beta_c)}}$$<p>Logistic regression finds the best values for the $\beta$ coefficients that minimize the <em>Cross Entropy Loss</em>. Since we are essentially training a separate predictor for each individual user with very few data points, it's a good idea to use a simple model like this, with as few variables as possible in order to avoid overfitting and make sampling easier.</p>
 <p>Let's try regression on the word frequencies by picking some random words from different HSK levels, assigning positive labels to levels 1-3, and negative labels to levels 4-6 and see what it looks like:</p>
 
 </div>
@@ -621,7 +620,10 @@ Logistic regression finds the best values for the $\beta$ coefficients that mini
 <span class="n">in_hsk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">w</span> <span class="ow">in</span> <span class="n">hsk_word_index</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">])</span>
 <span class="n">hsk_lvls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">hsk_lvl_by_word</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">])</span>
 
+<span class="c1"># -----------------------------------------------------------------------</span>
+<span class="c1"># Here are a few different versions of the hsk variable</span>
 <span class="c1"># NOTE: out of these options, quadratic has the lowest mean loss and std</span>
+<span class="c1"># -----------------------------------------------------------------------</span>
 <span class="c1"># Quadratic</span>
 <span class="n">hsk_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mi">7</span> <span class="o">-</span> <span class="n">hsk_lvl_by_word</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">36</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">])]</span>
 <span class="c1"># Linear</span>
@@ -639,7 +641,6 @@ Logistic regression finds the best values for the $\beta$ coefficients that mini
 <span class="n">normalized_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">data_hsk_mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">data_hsk_std</span>
 <span class="n">normalized_word_rank</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">normalized_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span>
 
-<span class="c1"># Pick K random words from each HSK level</span>
 <span class="k">def</span> <span class="nf">sample_HSK_words_per_lvl</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
     <span class="n">test_words</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Make sure we randomize reproducibly</span>
@@ -829,11 +830,12 @@ $$\frac{1}{1+e^{(x^{L}_1 \beta_1 + \ldots + x^{L}_n \beta_n + \beta_c)}} = 0.5 \
 </h3>
 <p>At this point it's time to add in the HSK variable as a predictor. Instead of using a normalized HSK level, it makes more sense to reverse it such that HSK 1 becomes 6 and HSK 6 becomes 1, and "no level" becomes 0. After trying various</p>
 <ol>
-<li>a binary indicator variable (in HSK vs not)</li>
-<li>the reversed HSK level</li>
-<li>the squared reversed HSK level
-I found that the squared one worked best, probably related to the doubling of word count for consecutive levels.</li>
+<li>A binary indicator variable (HSK or not)</li>
+<li>Binary indicators for each level</li>
+<li>The reversed HSK level</li>
+<li>The squared reversed HSK level</li>
 </ol>
+<p>I found that the squared one worked best, probably related to the doubling of word count for consecutive levels.</p>
 <h2 id="Result">Result<a class="anchor-link" href="posts/chinese-placement-test/#Result">¶</a>
 </h2>
 <p>The procedure so far is then:</p>
@@ -1066,7 +1068,6 @@ I found that the squared one worked best, probably related to the doubling of wo
 
             <span class="c1"># Fix race condition in streams resulting in input coming first</span>
             <span class="k">if</span> <span class="n">answer_based_on_anki</span><span class="p">:</span>
-<span class="c1">#                print(f'HSK {hsk_lvl}: {w} {f}')</span>
                 <span class="n">outcome</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">anki_words</span> <span class="k">else</span> <span class="mf">0.0</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'HSK </span><span class="si">{hsk_lvl}</span><span class="s1">: </span><span class="si">{w}</span><span class="s1"> </span><span class="si">{f}</span><span class="s1">'</span><span class="p">)</span>
