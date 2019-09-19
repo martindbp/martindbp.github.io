@@ -50,7 +50,7 @@ html {
 }
 @media (min-width: 38em) {
   html {
-    font-size: 20px;
+    font-size: 16px;
   }
 }
 body {
@@ -943,8 +943,4 @@ a.pagination-item:hover {
 
 .cell .input_prompt {
   display: none;
-}
-
-.output_area table {
-  width: auto;
 }
