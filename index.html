@@ -68,30 +68,7 @@ MathJax.Hub.Config({
 </div>
     </header><div class="e-content entry-content">
     <div>
-<style>
-      .toggleon .showbutton {
-        display: none;
-      }
-      .toggleoff .hidebutton {
-        display: none;
-      }
-      .toggleoff .cellwrapper {
-        display: none
-      }
-    </style>
-<script type="text/javascript">
-      var toggle = function(id) {
-        toggleDiv = id.parentNode.parentNode
-        if (toggleDiv.classList.contains('toggleon')) {
-          toggleDiv.classList.remove('toggleon');
-          toggleDiv.classList.add('toggleoff');
-        }
-        else {
-          toggleDiv.classList.remove('toggleoff');
-          toggleDiv.classList.add('toggleon');
-        }
-      };
-    </script><div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -1508,6 +1485,18 @@ MathJax.Hub.Config({
             <script src="assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
     moment.locale("en");
     fancydates(0, "YYYY-MM-DD HH:mm");
-    </script><!-- end fancy dates -->
+    </script><!-- end fancy dates --><script type="text/javascript">
+      var toggle = function(id) {
+        toggleDiv = id.parentNode.parentNode
+        if (toggleDiv.classList.contains('toggleon')) {
+          toggleDiv.classList.remove('toggleon');
+          toggleDiv.classList.add('toggleoff');
+        }
+        else {
+          toggleDiv.classList.remove('toggleoff');
+          toggleDiv.classList.add('toggleon');
+        }
+      };
+    </script>
 </body>
 </html>

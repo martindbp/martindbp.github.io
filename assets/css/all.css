@@ -1016,7 +1016,13 @@ a.pagination-item:hover {
   background-color: #f9f9f9;
 }
 
-.cell .input_prompt {
+.toggleon .showbutton {
   display: none;
+}
+.toggleoff .hidebutton {
+  display: none;
+}
+.toggleoff .cellwrapper {
+  display: none
 }
 
