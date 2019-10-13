@@ -7,22 +7,30 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://martindbp.com/</loc>
-  <lastmod>2019-09-19T11:43:00Z</lastmod>
+  <lastmod>2019-10-13T13:19:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/2019/</loc>
-  <lastmod>2019-09-10T16:33:00Z</lastmod>
+  <lastmod>2019-10-10T11:35:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/archive.html</loc>
-  <lastmod>2019-09-19T09:35:00Z</lastmod>
+  <lastmod>2019-10-13T13:18:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/categories/</loc>
-  <lastmod>2019-09-10T16:23:00Z</lastmod>
+  <lastmod>2019-10-10T11:35:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://martindbp.com/pages/</loc>
+  <lastmod>2019-10-13T13:18:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://martindbp.com/posts/can-i-say-this/</loc>
+  <lastmod>2019-10-10T11:35:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/posts/chinese-placement-test/</loc>
-  <lastmod>2019-09-18T13:13:00Z</lastmod>
+  <lastmod>2019-10-10T11:35:00Z</lastmod>
  </url>
 </urlset>
