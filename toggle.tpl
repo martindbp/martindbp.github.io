@@ -11,13 +11,15 @@
         {% if not 'toggle_input' in tags %}
           {{ super() }}
         {% else %}
+          {% set cell_text = super() %}
+          {% set code_lines = cell_text.split('\n') | length %}
           <div class="{{'toggleon' if 'input_on' in tags else 'toggleoff'}}">
               <div style="display: flex; justify-content: flex-start">
-                <a class='showbutton' onclick="toggle(this)" style="cursor: pointer">show code</a>
+                <a class='showbutton' onclick="toggle(this)" style="cursor: pointer">show code ({{ code_lines }} line{{'s' if code_lines > 1 else ''}})</a>
                 <a class='hidebutton' onclick="toggle(this)" style="cursor: pointer">hide code</a>
               </div>
             <div class="cellwrapper">
-              {{ super() }}
+              {{ cell_text }}
             </div>
           </div>
         {% endif %}
