@@ -85,8 +85,8 @@ MathJax.Hub.Config({
 <h3 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">¶</a>
 </h3>
 <p>As it turns out, most people are not very inclined to teaching. I'm learning Chinese, my wife <em>is</em> Chinese, seems like a match made in heaven. Except that she has no patience whatsoever with my broken Chinese (though she's wonderful in many other ways). Whenever I ask how to say something in Chinese, she anwers with either "I don't know" or "you can't say that (followed by no explanation)". The only way I can get anything out of her is by trying to say something in Chinese and asking whether it sounds right or not. This is less mentally taxing for her than actually having to translate from English, which I understand, especially for two languages so dissimilar.</p>
-<p>Now I'm thinking, with the recent advances in Natural Language Processing with Deep Learning, maybe I can create something to replace my unwilling wife. The academic name for this task seems to be "Linguistic Acceptability". Exactly what this includes seems to be up for debate.  For example, "the mouse ate the cat" is perfectly grammatical, although highly unlikey. Then there are sentences which are grammatically fine but seem logically impossible, like "the cat is a bus". This sentence makes no sence <em>unless</em> you've watched the movie Totoro, which features a... cat that is also a bus. Since this seems like a very difficult problem, I'll be focusing more on distinguishing grammatical vs. ungrammatical rather than sensical vs. nonsensical.</p>
-<p>My hope is that using a model that can tell us whether a sentence is grammatical or not, we can use it not only for that purpose, but also for <em>generating</em> grammatical sentences in interesting ways such as <em>correcting</em> an ungrammatical sentence or generating sentences with specific words in them.</p>
+<p>Now I'm thinking, with the recent advances in Natural Language Processing with Deep Learning, maybe I can create something to replace my unwilling wife. The academic name for this task seems to be "Linguistic Acceptability". Exactly what this includes seems to be up for debate.  For example, "the mouse ate the cat" is perfectly grammatical, although highly unlikey. Then there are sentences which are grammatical but seem logically impossible, like "the cat is a bus". This sentence makes no sense <em>unless</em> you've watched the movie Totoro, which features a... cat that is also a bus. Since this seems like a very difficult problem, I'll be focusing more on distinguishing grammatical vs. ungrammatical rather than sensical vs. nonsensical.</p>
+<p>My hope is that using a model that can tell us whether a sentence is grammatical or not, we can use it not only for that purpose, but also for <em>generating</em> grammatical sentences in interesting ways such as correcting an ungrammatical sentence or generating sentences with specific words in them.</p>
 <h3 id="Defining-the-problem">Defining the problem<a class="anchor-link" href="#Defining-the-problem">¶</a>
 </h3>
 <p>Recent Deep Learning architectures like BERT and GPT-2 basically train a <em>language model</em> or LM, i.e. given the surrounding context, they try to predict the missing word. In GPT-2s case, it predicts the next word given all the <em>previous</em> words in the sentence, while BERT predicts a missing word (a cloze) given both the words before and after it (the B in BERT stands for bidirectional). As such, GPT-2 works better as a language model, defining the joint probability over a sequence of words, while BERT's masked LM is less straight forward to use as such. As a reminder, the joint probability can be refactored recursively using the chain rule:</p>
@@ -120,10 +120,10 @@ $$P(w_{1:n}) = P(w_n | w_{1:n-1})P(w_{1:n-1}) = P(w_n | w_{1:n-1}) \cdot \ldots 
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span> wget --quiet --mirror --convert-links --adjust-extension --follow-tags<span class="o">=</span>a --no-parent resources.allsetlearning.com/chinese/grammar/
 <span class="o">!</span> grep -r -e <span class="s1">'class="x"'</span> resources.allsetlearning.com/chinese/**/* <span class="p">|</span><span class="err">\</span>
   <span class="n">sed</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'s/&lt;li class="x"&gt;//g'</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'s/&lt;span .*//g'</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'s/&lt;\/*[a-z]*&gt;//g'</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'s/ //g'</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'s/:.*→/:/g'</span> \
-  <span class="o">&gt;</span> <span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">gdrive</span><span class="o">/</span><span class="n">My</span>\ <span class="n">Drive</span><span class="o">/</span><span class="n">Colab</span>\ <span class="n">Notebooks</span><span class="o">/</span><span class="n">allset_negative_examples</span><span class="o">.</span><span class="n">txt</span>
+  <span class="o">&gt;</span> <span class="s2">"$cache_path/allset_negative_examples.txt"</span>
 <span class="o">!</span> grep -r -e <span class="s1">'class="o"'</span> resources.allsetlearning.com/chinese/**/* <span class="p">|</span><span class="err">\</span>
   <span class="n">sed</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'s/&lt;li class="o"&gt;//g'</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'s/&lt;span .*//g'</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'s/&lt;\/*[a-z]*&gt;//g'</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'s/ //g'</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'s/:.*→/:/g'</span> \
-  <span class="o">&gt;</span> <span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">gdrive</span><span class="o">/</span><span class="n">My</span>\ <span class="n">Drive</span><span class="o">/</span><span class="n">Colab</span>\ <span class="n">Notebooks</span><span class="o">/</span><span class="n">allset_positive_examples</span><span class="o">.</span><span class="n">txt</span>
+  <span class="o">&gt;</span> <span class="s2">"$cache_path/allset_positive_examples.txt"</span>
 </pre></div>
 
     </div>
@@ -167,6 +167,7 @@ $$
 L(S) = -\frac{1}{N}\sum_{i=1}^{N}{\log(P(w_i  | w_{1:i-1}, w_{i+1:N}))}
 $$
 Then we can perform take a correct sentence $S_c$ and perform a random mutation to get $S_m$. If $L(S_m) - L(S_c) &gt; \epsilon$ we consider it to be unacceptable.</p>
+<p>Note that even if we could use the bidirectional probabilities/losses to directly do classification, this is something we'd like to avoid since calculating this loss requires a forward pass for <em>every</em> token in the sentence. Using these expensively generated examples to train a classifier let's us bypass this problem.</p>
 <h4 id="Hard-Negatives">Hard Negatives<a class="anchor-link" href="#Hard-Negatives">¶</a>
 </h4>
 <p>This way we can generate unacceptable sentences from any acceptable one. Now since there are many possible ways to mutate a sentence that increases the loss more than $\epsilon$, we can pick the minimal one that passes this threshold. This is similar to <em>hard negative mining</em> where if you already have a model, you can improve it by sampling hard negatives and retraining the model. This is common in image classification and localization where any part of an image <em>not</em> containing the specified object are potential negative examples. Then it makes sense to pick the ones that are misclassified or get high losses from the initial model.</p>
@@ -184,7 +185,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 <p>While we want to mutate the sentences to get unacceptable ones, there is some degree of unacceptability, and we want to generate ones that are <em>hard</em>, i.e. just barely unacceptable. Therefore I exclude random permutations since they are very unlikely to produce something close to acceptability.</p>
 <p>Similarly for insertions and word replacements, it makes more sense to sample common words more frequently than rare words since the language has a very long tail of very infrequent words.</p>
 <p>Below is the code for loading the Tatoeba dataset and generating hard negatives.
-(NOTE: this is <em>a lot</em> of note very interesting code, but it is runnable if you run this in a Jupyter Notebook or Google Colab environment)</p>
+(NOTE: this is <em>a lot</em> of not very interesting code, but it is runnable if you run this in a Jupyter Notebook or Google Colab environment). Also worth mentioning is that the starting point for the PyTorch training was this <a href="https://mccormickml.com/2019/07/22/BERT-fine-tuning/">Colab Notebook</a>, which serves as a good tutorial for fine-tuning BERT for sequence classification.</p>
 <p>First, installing some pip packages:</p>
 
 </div>
@@ -460,7 +461,6 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
         <span class="n">mask_logits_exp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">mask_logits</span><span class="p">)</span>
         <span class="n">mask_token_probs</span> <span class="o">=</span> <span class="n">mask_logits_exp</span> <span class="o">/</span> <span class="n">mask_logits_exp</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
         <span class="n">mask_entropy</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">mask_token_probs</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">mask_token_probs</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-        <span class="n">mask_perplexity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">mask_entropy</span><span class="p">)</span>
         <span class="n">masked_token_index</span> <span class="o">=</span> <span class="n">indexed_sentence_tokens</span><span class="p">[</span><span class="n">curr_sentence</span><span class="p">][</span><span class="n">m</span><span class="p">]</span>
         <span class="c1"># Cross-Entropy Loss</span>
         <span class="n">curr_sentence_loss</span> <span class="o">+=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">mask_token_probs</span><span class="p">[</span><span class="n">masked_token_index</span><span class="p">])</span>
@@ -519,8 +519,8 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span> wget http://downloads.tatoeba.org/exports/sentences.tar.bz2
-<span class="o">!</span> bzip2 -d sentences.tar.bz2
-<span class="o">!</span> wget https://www.plecoforums.com/download/weibo_wordfreq-release_utf-8-txt.2603 -O weibo.txt
+<span class="o">!</span> bzip2 -dc sentences.tar.bz2 &gt; <span class="s2">"</span><span class="nv">$cache_path</span><span class="s2">/sentences.txt"</span>
+<span class="o">!</span> wget https://www.plecoforums.com/download/weibo_wordfreq-release_utf-8-txt.2603 -O <span class="s2">"</span><span class="nv">$cache_path</span><span class="s2">/weibo.txt"</span>
 </pre></div>
 
     </div>
@@ -568,7 +568,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">orig_sentences</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'sentences.tar'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cache_path</span><span class="o">+</span><span class="s1">'/sentences.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
   <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
       <span class="n">splits</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'</span><span class="se">\t</span><span class="s1">'</span><span class="p">)</span>
       <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
@@ -580,7 +580,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 
 <span class="n">words</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">counts</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'weibo.txt'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8-sig'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span> 
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cache_path</span><span class="o">+</span><span class="s1">'/weibo.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8-sig'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span> 
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
         <span class="n">word</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'</span><span class="se">\t</span><span class="s1">'</span><span class="p">)</span>
         <span class="n">tokenized_word</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
@@ -748,7 +748,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
         <span class="k">break</span>
 
 
-<span class="n">negatives_path</span> <span class="o">=</span> <span class="s1">'/content/gdrive/My Drive/Colab Notebooks/negatives.txt'</span>
+<span class="n">negatives_path</span> <span class="o">=</span> <span class="n">cache_path</span> <span class="o">+</span> <span class="s1">'/negatives.txt'</span>
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">negatives_path</span><span class="p">):</span>
   <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">negatives_path</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">hard_negatives</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
@@ -762,9 +762,9 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
   <span class="n">use_sentences</span> <span class="o">=</span> <span class="n">orig_sentences</span><span class="p">[:</span><span class="n">use_num</span><span class="p">]</span>
   <span class="n">hard_negatives</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_num</span> <span class="o">//</span> <span class="n">num_at_a_time</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">f</span><span class="s1">'negatives{i+1}.txt'</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">):</span>
       <span class="k">continue</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="s1">'negatives{i+1}.txt'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
       <span class="n">sentences</span> <span class="o">=</span> <span class="n">use_sentences</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">num_at_a_time</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">num_at_a_time</span><span class="p">]</span>
       <span class="k">for</span> <span class="n">negative</span> <span class="ow">in</span> <span class="n">generate_hard_negatives</span><span class="p">(</span><span class="n">sentences</span><span class="p">,</span> <span class="n">masked_lm_model</span><span class="p">,</span> <span class="n">debug_print</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">hard_negatives</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">negative</span><span class="p">)</span>
@@ -773,7 +773,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
   <span class="c1"># Concatenate all files to one</span>
   <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">negatives_path</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">n</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_num</span> <span class="o">//</span> <span class="n">num_at_a_time</span><span class="p">):</span>
-      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="s1">'negatives{i+1}.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">n</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 </pre></div>
 
@@ -921,7 +921,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we can train our first classification model on positive examples from the Tatoeba dataset and our generated hard negatives. Here I'll train the classifier with an increasing number of examples so we can plot the training and validation accuracies to see if we need more data:</p>
+<p>Now we can train our first classification model on positive examples from the Tatoeba dataset and our generated hard negatives. Here I'll train the classifier with an increasing number of examples to see if we need more data. Training an iterating is slow, so I prefer to keep it as small as possible for now.</p>
 
 </div>
 </div>
@@ -946,8 +946,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
         
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_base_path</span> <span class="o">=</span> <span class="s1">'/content/gdrive/My Drive/Colab Notebooks/'</span>
-<span class="n">model_path</span> <span class="o">=</span> <span class="n">model_base_path</span> <span class="o">+</span> <span class="s1">'self_supervised_classification_model.pt'</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_path</span> <span class="o">=</span> <span class="n">cache_path</span> <span class="o">+</span> <span class="s1">'/self_supervised_classification_model.pt'</span>
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">model_path</span><span class="p">):</span>
   <span class="n">classification_model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
@@ -1025,12 +1024,12 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">allset_negative_examples</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'/content/gdrive/My Drive/Colab Notebooks/allset_negative_examples.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cache_path</span><span class="o">+</span><span class="s1">'/allset_negative_examples.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
   <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
     <span class="n">filename</span><span class="p">,</span> <span class="n">sentence</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">':'</span><span class="p">)</span>
     <span class="n">allset_negative_examples</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
 <span class="n">allset_positive_examples</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'/content/gdrive/My Drive/Colab Notebooks/allset_positive_examples.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cache_path</span><span class="o">+</span><span class="s1">'/allset_positive_examples.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
   <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
     <span class="n">filename</span><span class="p">,</span> <span class="n">sentence</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">':'</span><span class="p">)</span>
     <span class="n">allset_positive_examples</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
@@ -1319,43 +1318,51 @@ Overall Self-Supervised:
         
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Again, need to split AllSet into train/test using GroupKFold</span>
-<span class="n">allset_train_idx</span><span class="p">,</span> <span class="n">allset_test_idx</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">GroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">allset_sentences</span><span class="p">,</span> <span class="n">allset_labels</span><span class="p">,</span> <span class="n">allset_groups</span><span class="p">))</span>
-<span class="n">allset_train</span> <span class="o">=</span> <span class="n">allset_sentences</span><span class="p">[</span><span class="n">allset_train_idx</span><span class="p">]</span>
-<span class="n">allset_train_labels</span> <span class="o">=</span> <span class="n">allset_labels</span><span class="p">[</span><span class="n">allset_train_idx</span><span class="p">]</span>
-<span class="n">allset_test</span> <span class="o">=</span> <span class="n">allset_sentences</span><span class="p">[</span><span class="n">allset_test_idx</span><span class="p">]</span>
-<span class="n">allset_test_labels</span> <span class="o">=</span> <span class="n">allset_labels</span><span class="p">[</span><span class="n">allset_test_idx</span><span class="p">]</span>
-
-<span class="n">ss_train</span><span class="p">,</span> <span class="n">ss_test</span><span class="p">,</span> <span class="n">ss_train_labels</span><span class="p">,</span> <span class="n">ss_test_labels</span> <span class="o">=</span>  <span class="n">train_test_split</span><span class="p">(</span>
-    <span class="n">orig_sentences</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">hard_negatives</span><span class="p">):</span><span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">hard_negatives</span><span class="p">)]</span> <span class="o">+</span> <span class="n">hard_negatives</span><span class="p">,</span>
-    <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">hard_negatives</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">hard_negatives</span><span class="p">),</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-
-<span class="n">upsample_times</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">hard_negatives</span><span class="p">)</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">allset_sentences</span><span class="p">)</span>
-<span class="n">all_train</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ss_train</span><span class="p">)</span> <span class="o">+</span> <span class="n">upsample_times</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">allset_train</span><span class="p">))</span>
-<span class="n">all_train_labels</span> <span class="o">=</span> <span class="p">(</span><span class="n">ss_train_labels</span> <span class="o">+</span> <span class="n">upsample_times</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">allset_train_labels</span><span class="p">))</span>
-
-<span class="n">all_train_dataloader</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_data</span><span class="p">(</span>
-    <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">'sentence'</span><span class="p">:</span> <span class="n">all_train</span><span class="p">,</span> <span class="s1">'label'</span><span class="p">:</span> <span class="n">all_train_labels</span><span class="p">}),</span>
-    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
-
-<span class="n">allset_test_dataloader</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_data</span><span class="p">(</span>
-    <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">'sentence'</span><span class="p">:</span> <span class="n">allset_test</span><span class="p">,</span> <span class="s1">'label'</span><span class="p">:</span> <span class="n">allset_test_labels</span><span class="p">}),</span>
-    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
-<span class="n">ss_test_dataloader</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_data</span><span class="p">(</span>
-    <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">'sentence'</span><span class="p">:</span> <span class="n">ss_test</span><span class="p">,</span> <span class="s1">'label'</span><span class="p">:</span> <span class="n">ss_test_labels</span><span class="p">}),</span>
-    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
-
-<span class="n">final_model</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">all_train_dataloader</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-                    <span class="n">model</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">),</span>
-                    <span class="n">debug_print</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">train_result</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">final_model</span><span class="p">,</span> <span class="n">all_train_dataloader</span><span class="p">)</span>
-<span class="n">allset_test_result</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">final_model</span><span class="p">,</span> <span class="n">allset_test_dataloader</span><span class="p">)</span>
-<span class="n">ss_test_result</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">final_model</span><span class="p">,</span> <span class="n">ss_test_dataloader</span><span class="p">)</span>
-<span class="n">print_stats</span><span class="p">(</span><span class="o">*</span><span class="n">train_result</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Train'</span><span class="p">)</span>
-<span class="n">print_stats</span><span class="p">(</span><span class="o">*</span><span class="n">allset_test_result</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'AllSet Test'</span><span class="p">)</span>
-<span class="n">print_stats</span><span class="p">(</span><span class="o">*</span><span class="n">ss_test_result</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Self-Supervised Test'</span><span class="p">)</span>
-<span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">final_model</span><span class="p">,</span> <span class="n">model_base_path</span><span class="o">+</span><span class="s1">'final_model.pt'</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">final_model_path</span> <span class="o">=</span> <span class="n">cache_path</span><span class="o">+</span><span class="s1">'/final_model.pt'</span> 
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">final_model_path</span><span class="p">):</span>
+  <span class="n">final_model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">final_model_path</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="c1"># Again, need to split AllSet into train/test using GroupKFold</span>
+  <span class="c1"># GroupKFold.split returns all cross-validation sets, but we'll just use the first</span>
+  <span class="n">allset_train_idx</span><span class="p">,</span> <span class="n">allset_test_idx</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">GroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">allset_sentences</span><span class="p">,</span> <span class="n">allset_labels</span><span class="p">,</span> <span class="n">allset_groups</span><span class="p">))</span>
+  <span class="n">allset_train</span> <span class="o">=</span> <span class="n">allset_sentences</span><span class="p">[</span><span class="n">allset_train_idx</span><span class="p">]</span>
+  <span class="n">allset_train_labels</span> <span class="o">=</span> <span class="n">allset_labels</span><span class="p">[</span><span class="n">allset_train_idx</span><span class="p">]</span>
+  <span class="n">allset_test</span> <span class="o">=</span> <span class="n">allset_sentences</span><span class="p">[</span><span class="n">allset_test_idx</span><span class="p">]</span>
+  <span class="n">allset_test_labels</span> <span class="o">=</span> <span class="n">allset_labels</span><span class="p">[</span><span class="n">allset_test_idx</span><span class="p">]</span>
+  
+  <span class="c1"># Next split the self-supervised data set into train/test as well</span>
+  <span class="n">ss_train</span><span class="p">,</span> <span class="n">ss_test</span><span class="p">,</span> <span class="n">ss_train_labels</span><span class="p">,</span> <span class="n">ss_test_labels</span> <span class="o">=</span>  <span class="n">train_test_split</span><span class="p">(</span>
+      <span class="n">orig_sentences</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">hard_negatives</span><span class="p">):</span><span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">hard_negatives</span><span class="p">)]</span> <span class="o">+</span> <span class="n">hard_negatives</span><span class="p">,</span>
+      <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">hard_negatives</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">hard_negatives</span><span class="p">),</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+  
+  <span class="c1"># Then combine both data sets, but with upsampling for AllSet so that they are</span>
+  <span class="c1"># of equal size</span>
+  <span class="n">upsample_times</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">hard_negatives</span><span class="p">)</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">allset_sentences</span><span class="p">)</span>
+  <span class="n">all_train</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ss_train</span><span class="p">)</span> <span class="o">+</span> <span class="n">upsample_times</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">allset_train</span><span class="p">))</span>
+  <span class="n">all_train_labels</span> <span class="o">=</span> <span class="p">(</span><span class="n">ss_train_labels</span> <span class="o">+</span> <span class="n">upsample_times</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">allset_train_labels</span><span class="p">))</span>
+  
+  <span class="n">all_train_dataloader</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_data</span><span class="p">(</span>
+      <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">'sentence'</span><span class="p">:</span> <span class="n">all_train</span><span class="p">,</span> <span class="s1">'label'</span><span class="p">:</span> <span class="n">all_train_labels</span><span class="p">}),</span>
+      <span class="n">test_size</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+  <span class="n">allset_test_dataloader</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_data</span><span class="p">(</span>
+      <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">'sentence'</span><span class="p">:</span> <span class="n">allset_test</span><span class="p">,</span> <span class="s1">'label'</span><span class="p">:</span> <span class="n">allset_test_labels</span><span class="p">}),</span>
+      <span class="n">test_size</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+  <span class="n">ss_test_dataloader</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">prepare_data</span><span class="p">(</span>
+      <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">'sentence'</span><span class="p">:</span> <span class="n">ss_test</span><span class="p">,</span> <span class="s1">'label'</span><span class="p">:</span> <span class="n">ss_test_labels</span><span class="p">}),</span>
+      <span class="n">test_size</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+  
+  <span class="n">final_model</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">all_train_dataloader</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                      <span class="n">model</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">),</span>
+                      <span class="n">debug_print</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  
+  <span class="n">train_result</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">final_model</span><span class="p">,</span> <span class="n">all_train_dataloader</span><span class="p">)</span>
+  <span class="n">allset_test_result</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">final_model</span><span class="p">,</span> <span class="n">allset_test_dataloader</span><span class="p">)</span>
+  <span class="n">ss_test_result</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">final_model</span><span class="p">,</span> <span class="n">ss_test_dataloader</span><span class="p">)</span>
+  <span class="n">print_stats</span><span class="p">(</span><span class="o">*</span><span class="n">train_result</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Train'</span><span class="p">)</span>
+  <span class="n">print_stats</span><span class="p">(</span><span class="o">*</span><span class="n">allset_test_result</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'AllSet Test'</span><span class="p">)</span>
+  <span class="n">print_stats</span><span class="p">(</span><span class="o">*</span><span class="n">ss_test_result</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Self-Supervised Test'</span><span class="p">)</span>
+  <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">final_model</span><span class="p">,</span> <span class="n">final_model_path</span><span class="p">)</span>
+  
 </pre></div>
 
     </div>

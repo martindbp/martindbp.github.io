@@ -337,7 +337,7 @@ tbody tr:nth-child(odd) th {
 }
 @media (min-width: 56em) {
   .container {
-    max-width: 45rem;
+    max-width: 55rem;
   }
 }
 /* Masthead
@@ -1033,4 +1033,7 @@ a.pagination-item:hover {
   width: auto;
 }
 
+.MathJax_Display {
+  margin-bottom: 10px !important;
+}
 
