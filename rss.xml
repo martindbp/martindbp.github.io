@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Mon, 14 Oct 2019 18:04:15 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>"Can I Say This In Chinese" with BERT (Part 1)</title><link>https://martindbp.com/posts/can-i-say-this/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;figure&gt;&lt;img src="https://martindbp.com/posts/can-i-say-this/images/chinese_placement.png"&gt;&lt;/figure&gt; &lt;div&gt;&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Wed, 16 Oct 2019 08:24:36 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>"Can I Say This In Chinese" with BERT (Part 1)</title><link>https://martindbp.com/posts/can-i-say-this/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;figure&gt;&lt;img src="https://martindbp.com/posts/can-i-say-this/images/chinese_placement.png"&gt;&lt;/figure&gt; &lt;div&gt;&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;&lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;h3 id="Introduction"&gt;Introduction&lt;a class="anchor-link" href="https://martindbp.com/posts/can-i-say-this/#Introduction"&gt;¶&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;As it turns out, most people are not very inclined to teaching. I'm learning Chinese, my wife &lt;em&gt;is&lt;/em&gt; Chinese, seems like a match made in heaven. Except that she has no patience whatsoever with my broken Chinese (though she's wonderful in many other ways). Whenever I ask how to say something in Chinese, she anwers with either "I don't know" or "you can't say that (followed by no explanation)". The only way I can get anything out of her is by trying to say something in Chinese and asking whether it sounds right or not. This is less mentally taxing for her than actually having to translate from English, which I understand, especially for two languages so dissimilar.&lt;/p&gt;
 &lt;p&gt;Now I'm thinking, with the recent advances in Natural Language Processing with Deep Learning, maybe I can create something to replace my unwilling wife. The academic name for this task seems to be "Linguistic Acceptability". Exactly what this includes seems to be up for debate.  For example, "the mouse ate the cat" is perfectly grammatical, although highly unlikey. Then there are sentences which are grammatical but seem logically impossible, like "the cat is a bus". This sentence makes no sense &lt;em&gt;unless&lt;/em&gt; you've watched the movie Totoro, which features a... cat that is also a bus. Since this seems like a very difficult problem, I'll be focusing more on distinguishing grammatical vs. ungrammatical rather than sensical vs. nonsensical.&lt;/p&gt;
 &lt;p&gt;My hope is that using a model that can tell us whether a sentence is grammatical or not, we can use it not only for that purpose, but also for &lt;em&gt;generating&lt;/em&gt; grammatical sentences in interesting ways such as correcting an ungrammatical sentence or generating sentences with specific words in them.&lt;/p&gt;
 &lt;h3 id="Defining-the-problem"&gt;Defining the problem&lt;a class="anchor-link" href="https://martindbp.com/posts/can-i-say-this/#Defining-the-problem"&gt;¶&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Recent Deep Learning architectures like BERT and GPT-2 basically train a &lt;em&gt;language model&lt;/em&gt; or LM, i.e. given the surrounding context, they try to predict the missing word. In GPT-2s case, it predicts the next word given all the &lt;em&gt;previous&lt;/em&gt; words in the sentence, while BERT predicts a missing word (a cloze) given both the words before and after it (the B in BERT stands for bidirectional). As such, GPT-2 works better as a language model, defining the joint probability over a sequence of words, while BERT's masked LM is less straight forward to use as such. As a reminder, the joint probability can be refactored recursively using the chain rule:&lt;/p&gt;
-$$P(w_{1:n}) = P(w_n | w_{1:n-1})P(w_{1:n-1}) = P(w_n | w_{1:n-1}) \cdot \ldots \cdot P(w_2 | w_1)P(w_1)$$&lt;p&gt;Each of these factors is exactly what we get out of GPT-2, which means if we run inference and multiply the factors we get the joint probability of the whole sentence. BERT on the other hand gives us $P(w_k | w_{1:k-1}, w_{k+1:n})$ which is harder to intepret. There is research exploring ways of getting a joint probability model out of BERT &lt;a href="https://www.aclweb.org/anthology/W19-2304"&gt;using MRFs (Markov Random Fields)&lt;/a&gt;, but I'd like to keep things simple for this little project.&lt;/p&gt;
+$$P(w_{1:n}) = P(w_n | w_{1:n-1})P(w_{1:n-1}) = P(w_n | w_{1:n-1}) \cdot \ldots \cdot P(w_2 | w_1)P(w_1)$$&lt;p&gt;Each of these factors is exactly what we get out of GPT-2, which means if we run inference and multiply the factors we get the joint probability, or actually more of an unormalized likelihood, of the whole sentence. BERT on the other hand gives us $P(w_k | w_{1:k-1}, w_{k+1:n})$ which is harder to intepret. There is research exploring ways of getting a joint probability model out of BERT &lt;a href="https://www.aclweb.org/anthology/W19-2304"&gt;using MRFs (Markov Random Fields)&lt;/a&gt;, but I'd like to keep things simple for this little project.&lt;/p&gt;
 &lt;p&gt;Using GPT-2 will be difficult, since training it from scratch, having 1.5 &lt;em&gt;billion&lt;/em&gt; weights, requires a &lt;a href="https://blog.usejournal.com/opengpt-2-we-replicated-gpt-2-because-you-can-too-45e34e6d36dc"&gt;cluster of GPUs and roughly $50k&lt;/a&gt;. So I'm constrained to pre-trained versions, of which there is none for Chinese AFAIK. The Python library pytorch-transformers &lt;em&gt;does&lt;/em&gt; however have a pre-trained BERT for Chinese.&lt;/p&gt;
 &lt;h4 id="How-can-we-use-BERT?"&gt;How can we use BERT?&lt;a class="anchor-link" href="https://martindbp.com/posts/can-i-say-this/#How-can-we-use-BERT?"&gt;¶&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Being constrained by time and money leaves me no option but to use BERT at this point. While BERT can't be used as a language model per-se, we can perhaps use the output in some useful way.&lt;/p&gt;
 &lt;p&gt;We'd like to get a binary decision whether a sentence is acceptable or not. We could try to use the masked probability for each word in the sentence, but again, it will be difficult to find some absolute thresold to distinguish unlikely sentences from unacceptable ones. What we could do is to train a classifier based on BERT with a dataset of positive and negative examples. While there are such datasets for other languages (CoLA - Corpus of Linguistic Acceptablility), I have not found such a dataset for Chinese.&lt;/p&gt;
@@ -1280,31 +1280,6 @@ Overall Self-Supervised:
 &lt;div class="output"&gt;
 
         
-&lt;div class="output_area"&gt;
-
-    &lt;div class="prompt"&gt;&lt;/div&gt;
-
-
-&lt;div class="output_subarea output_stream output_stdout output_text"&gt;
-&lt;pre&gt;Train:
-	Matthews Correlaton Coefficient: 0.9928113288113345
-	Accuracy: 0.9963996843558888
-	Precision: 0.9937496995047839
-	Recall: 0.9992264926275078
-AllSet Test:
-	Matthews Correlaton Coefficient: 1.0
-	Accuracy: 1.0
-	Precision: 1.0
-	Recall: 1.0
-Self-Supervised Test:
-	Matthews Correlaton Coefficient: 0.9869869628581678
-	Accuracy: 0.9934725848563969
-	Precision: 0.9885462555066079
-	Recall: 0.998220640569395
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 

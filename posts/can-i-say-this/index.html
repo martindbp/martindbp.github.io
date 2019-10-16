@@ -90,7 +90,7 @@ MathJax.Hub.Config({
 <h3 id="Defining-the-problem">Defining the problem<a class="anchor-link" href="#Defining-the-problem">¶</a>
 </h3>
 <p>Recent Deep Learning architectures like BERT and GPT-2 basically train a <em>language model</em> or LM, i.e. given the surrounding context, they try to predict the missing word. In GPT-2s case, it predicts the next word given all the <em>previous</em> words in the sentence, while BERT predicts a missing word (a cloze) given both the words before and after it (the B in BERT stands for bidirectional). As such, GPT-2 works better as a language model, defining the joint probability over a sequence of words, while BERT's masked LM is less straight forward to use as such. As a reminder, the joint probability can be refactored recursively using the chain rule:</p>
-$$P(w_{1:n}) = P(w_n | w_{1:n-1})P(w_{1:n-1}) = P(w_n | w_{1:n-1}) \cdot \ldots \cdot P(w_2 | w_1)P(w_1)$$<p>Each of these factors is exactly what we get out of GPT-2, which means if we run inference and multiply the factors we get the joint probability of the whole sentence. BERT on the other hand gives us $P(w_k | w_{1:k-1}, w_{k+1:n})$ which is harder to intepret. There is research exploring ways of getting a joint probability model out of BERT <a href="https://www.aclweb.org/anthology/W19-2304">using MRFs (Markov Random Fields)</a>, but I'd like to keep things simple for this little project.</p>
+$$P(w_{1:n}) = P(w_n | w_{1:n-1})P(w_{1:n-1}) = P(w_n | w_{1:n-1}) \cdot \ldots \cdot P(w_2 | w_1)P(w_1)$$<p>Each of these factors is exactly what we get out of GPT-2, which means if we run inference and multiply the factors we get the joint probability, or actually more of an unormalized likelihood, of the whole sentence. BERT on the other hand gives us $P(w_k | w_{1:k-1}, w_{k+1:n})$ which is harder to intepret. There is research exploring ways of getting a joint probability model out of BERT <a href="https://www.aclweb.org/anthology/W19-2304">using MRFs (Markov Random Fields)</a>, but I'd like to keep things simple for this little project.</p>
 <p>Using GPT-2 will be difficult, since training it from scratch, having 1.5 <em>billion</em> weights, requires a <a href="https://blog.usejournal.com/opengpt-2-we-replicated-gpt-2-because-you-can-too-45e34e6d36dc">cluster of GPUs and roughly $50k</a>. So I'm constrained to pre-trained versions, of which there is none for Chinese AFAIK. The Python library pytorch-transformers <em>does</em> however have a pre-trained BERT for Chinese.</p>
 <h4 id="How-can-we-use-BERT?">How can we use BERT?<a class="anchor-link" href="#How-can-we-use-BERT?">¶</a>
 </h4>
@@ -1396,31 +1396,6 @@ Overall Self-Supervised:
 <div class="output">
 
         
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Train:
-	Matthews Correlaton Coefficient: 0.9928113288113345
-	Accuracy: 0.9963996843558888
-	Precision: 0.9937496995047839
-	Recall: 0.9992264926275078
-AllSet Test:
-	Matthews Correlaton Coefficient: 1.0
-	Accuracy: 1.0
-	Precision: 1.0
-	Recall: 1.0
-Self-Supervised Test:
-	Matthews Correlaton Coefficient: 0.9869869628581678
-	Accuracy: 0.9934725848563969
-	Precision: 0.9885462555066079
-	Recall: 0.998220640569395
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
