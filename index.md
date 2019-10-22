@@ -13,3 +13,7 @@ Hi there, welcome to my little space on the interwebs! This is where I post rand
 
 * ["Can I Say This In Chinese" with BERT (Part 1)](posts/can-i-say-this/)
 * [Chinese Placement Test with Logistic Regression and Active Learning](posts/chinese-placement-test/)
+
+Github projects:
+
+* [Inter-Planetary Version Control: An implementation of a git-like DVCS on top of IPFS](https://github.com/martindbp/ipvc)
