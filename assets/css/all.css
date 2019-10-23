@@ -1037,3 +1037,7 @@ a.pagination-item:hover {
   margin-bottom: 10px !important;
 }
 
+.text_cell {
+  margin-top: 10px;
+}
+

@@ -13,6 +13,7 @@ Hi there, welcome to my little space on the interwebs! This is where I post rand
 
 * ["Can I Say This In Chinese" with BERT (Part 1)](posts/can-i-say-this/)
 * [Chinese Placement Test with Logistic Regression and Active Learning](posts/chinese-placement-test/)
+* [Are parents picking more unique names for their children?](posts/name-statistics/)
 
 Github projects:
 
