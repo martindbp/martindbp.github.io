@@ -12,7 +12,7 @@
           {{ super() }}
         {% else %}
           {% set cell_text = super() %}
-          {% set code_lines = cell_text.split('\n') | length %}
+          {% set code_lines = (cell_text.split('\n') | length) - 11 %}
           <div class="{{'toggleon' if 'input_on' in tags else 'toggleoff'}}">
               <div style="display: flex; justify-content: flex-start">
                 <a class='showbutton' onclick="toggle(this)" style="cursor: pointer">show code ({{ code_lines }} line{{'s' if code_lines > 1 else ''}})</a>
