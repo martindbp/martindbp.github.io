@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>"Can I Say This In Chinese" with BERT (Part 1) | martindbp</title>
+<title>"Can I Say This In Chinese" with BERT | martindbp</title>
 <link href="../../assets/css/all.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
@@ -22,9 +22,9 @@ MathJax.Hub.Config({
 });
 </script><!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Martin Pettersson">
 <link rel="prev" href="../chinese-placement-test/" title="Chinese Placement Test with Logistic Regression and Active Learning" type="text/html">
-<link rel="next" href="../name-statistics/" title="Are parents picking more unique names for their children?" type="text/html">
+<link rel="next" href="../name-statistics/" title="Are parents picking less common names?" type="text/html">
 <meta property="og:site_name" content="martindbp">
-<meta property="og:title" content='"Can I Say This In Chinese" with BERT (Part 1)'>
+<meta property="og:title" content='"Can I Say This In Chinese" with BERT'>
 <meta property="og:url" content="https://martindbp.com/posts/can-i-say-this/">
 <meta property="og:description" content="Introduction¶As it turns out, most people are not very inclined to teaching. I'm learning Chinese, my wife is Chinese, seems like a match made in heaven. Except that she has no patience whatsoever wit">
 <meta property="og:image" content="https://martindbp.com/posts/can-i-say-this/images/chinese_placement.png">
@@ -62,7 +62,7 @@ MathJax.Hub.Config({
       <div class="container content" id="content">
         
 <article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/BlogPosting"><header><h1 class="post-title p-name entry-title" itemprop="headline">
-      <a href="https://martindbp.com/posts/can-i-say-this/" class="u-url">"Can I Say This In Chinese" with BERT (Part 1)</a>
+      <a href="https://martindbp.com/posts/can-i-say-this/" class="u-url">"Can I Say This In Chinese" with BERT</a>
 </h1>
         <div class="metadata">
         <meta itemprop="inLanguage" content="en">
@@ -87,7 +87,6 @@ MathJax.Hub.Config({
 </h3>
 <p>As it turns out, most people are not very inclined to teaching. I'm learning Chinese, my wife <em>is</em> Chinese, seems like a match made in heaven. Except that she has no patience whatsoever with my broken Chinese (though she's wonderful in many other ways). Whenever I ask how to say something in Chinese, she anwers with either "I don't know" or "you can't say that (followed by no explanation)". The only way I can get anything out of her is by trying to say something in Chinese and asking whether it sounds right or not. This is less mentally taxing for her than actually having to translate from English, which I understand, especially for two languages so dissimilar.</p>
 <p>Now I'm thinking, with the recent advances in Natural Language Processing with Deep Learning, maybe I can create something to replace my unwilling wife. The academic name for this task seems to be "Linguistic Acceptability". Exactly what this includes seems to be up for debate.  For example, "the mouse ate the cat" is perfectly grammatical, although highly unlikey. Then there are sentences which are grammatical but seem logically impossible, like "the cat is a bus". This sentence makes no sense <em>unless</em> you've watched the movie Totoro, which features a... cat that is also a bus. Since this seems like a very difficult problem, I'll be focusing more on distinguishing grammatical vs. ungrammatical rather than sensical vs. nonsensical.</p>
-<p>My hope is that using a model that can tell us whether a sentence is grammatical or not, we can use it not only for that purpose, but also for <em>generating</em> grammatical sentences in interesting ways such as correcting an ungrammatical sentence or generating sentences with specific words in them.</p>
 <h3 id="Defining-the-problem">Defining the problem<a class="anchor-link" href="#Defining-the-problem">¶</a>
 </h3>
 <p>Recent Deep Learning architectures like BERT and GPT-2 basically train a <em>language model</em> or LM, i.e. given the surrounding context, they try to predict the missing word. In GPT-2s case, it predicts the next word given all the <em>previous</em> words in the sentence, while BERT predicts a missing word (a cloze) given both the words before and after it (the B in BERT stands for bidirectional). As such, GPT-2 works better as a language model, defining the joint probability over a sequence of words, while BERT's masked LM is less straight forward to use as such. As a reminder, the joint probability can be refactored recursively using the chain rule:</p>
@@ -1547,26 +1546,6 @@ Overall Self-Supervised:
 </div>
 </div>
 </div>
-  
-  
-  
-    
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="What's-next?">What's next?<a class="anchor-link" href="#What's-next?">¶</a>
-</h2>
-<p>In the next post in this series, I'll investigate using this model to do some interesting things:</p>
-<ol>
-<li>Given an ungrammatical sentence, run gradient descent on the <em>input</em> to find a similar sentence that <em>is</em> grammatical</li>
-<li>Find a grammatical sentence of length N which contains a list of specified words</li>
-<li>Do the above, but restrain the sentence to use "simple" words, i.e. words with high frequency</li>
-</ol>
-</div>
-</div>
-</div>
 </div>
     </section><aside class="sharing no-print"><a href="#content" aria-label="Post beginning">
        <i class="fa fa-2x fa-fw fa-arrow-circle-up" aria-hidden="true" title="Post beginning"></i>
@@ -1574,11 +1553,11 @@ Overall Self-Supervised:
     <a href="https://martindbp.com/posts/chinese-placement-test/" rel="prev" title="Chinese Placement Test with Logistic Regression and Active Learning">
        <i class="fa fa-2x fa-fw fa-arrow-circle-left" aria-hidden="true" title="Previous post: Chinese Placement Test with Logistic Regression and Active Learning"></i>
     </a>
-    <a href="https://martindbp.com/posts/name-statistics/" rel="next" title="Next post: Are parents picking more unique names for their children?" aria-label="Next post: Are parents picking more unique names for their children?">
+    <a href="https://martindbp.com/posts/name-statistics/" rel="next" title="Next post: Are parents picking less common names?" aria-label="Next post: Are parents picking less common names?">
        <i class="fa fa-2x fa-fw fa-arrow-circle-right" aria-hidden="true"></i>
     </a>
     <span class="post-sharing">
-     <a href="http://twitter.com/share?text=%22Can+I+Say+This+In+Chinese%22+with+BERT+%28Part+1%29&amp;url=https%3A%2F%2Fmartindbp.com%2Fposts%2Fcan-i-say-this%2F" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" aria-label="Share on Twitter">
+     <a href="http://twitter.com/share?text=%22Can+I+Say+This+In+Chinese%22+with+BERT&amp;url=https%3A%2F%2Fmartindbp.com%2Fposts%2Fcan-i-say-this%2F" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" aria-label="Share on Twitter">
        <i class="fa fa-2x fa-fw fa-twitter-square" aria-hidden="true" title="Share on Twitter">
      </i></a>
      <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmartindbp.com%2Fposts%2Fcan-i-say-this%2F" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" aria-label="Share on Facebook">
@@ -1598,7 +1577,7 @@ Overall Self-Supervised:
         <script>
         var disqus_shortname ="martindbp",
             disqus_url="https://martindbp.com/posts/can-i-say-this/",
-        disqus_title="\"Can I Say This In Chinese\" with BERT (Part 1)",
+        disqus_title="\"Can I Say This In Chinese\" with BERT",
         disqus_identifier="cache/posts/can_i_say_this.html",
         disqus_config = function () {
             this.language = "en";
