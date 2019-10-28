@@ -5,4 +5,5 @@ output
 .*.swo
 .*.swp
 .ipynb_checkpoints/
+*.xlsx
 
