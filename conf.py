@@ -222,6 +222,7 @@ POSTS = (
     ("posts/*.md", "posts", "post.tmpl"),
     ("posts/*.txt", "posts", "post.tmpl"),
     ("posts/*.html", "posts", "post.tmpl"),
+    ("posts/minesweeper.ipynb", "posts", "minesweeper_post.tmpl"),
     ("posts/*.ipynb", "posts", "post.tmpl")
 )
 PAGES = (
@@ -229,6 +230,7 @@ PAGES = (
     ("pages/*.md", "", "page.tmpl"),
     ("pages/*.txt", "", "page.tmpl"),
     ("pages/*.html", "", "page.tmpl"),
+    ("pages/*.tex", "", "page.tmpl"),
     ("pages/*.ipynb", "", "story.tmpl")
 )
 
