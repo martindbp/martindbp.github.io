@@ -526,6 +526,82 @@ Where $N(i)$ is the neighborhood of square i.</p>
   
   
   
+    
+      
+        
+        
+
+        
+          
+          
+          <div class="toggleoff">
+              <div style="display: flex; justify-content: flex-start">
+                <a class="showbutton" onclick="toggle(this)" style="cursor: pointer">show code (17 lines)</a>
+                <a class="hidebutton" onclick="toggle(this)" style="cursor: pointer">hide code</a>
+              </div>
+            <div class="cellwrapper">
+              <div class="input">
+
+        
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">estimate_win_ratio</span><span class="p">(</span><span class="n">num_runs</span><span class="p">,</span> <span class="o">**</span><span class="n">board_kwargs</span><span class="p">):</span>
+  <span class="n">wins</span><span class="p">,</span> <span class="n">losses</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_runs</span><span class="p">):</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">MinesweeperBoard</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="o">**</span><span class="n">board_kwargs</span><span class="p">)</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">dead</span> <span class="ow">and</span> <span class="n">step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># Lost on first guess</span>
+      <span class="k">continue</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">wins</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">dead</span> <span class="k">else</span> <span class="mi">0</span>
+      <span class="n">losses</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">dead</span> <span class="k">else</span> <span class="mi">0</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">wins</span> <span class="o">/</span> <span class="p">(</span><span class="n">wins</span> <span class="o">+</span> <span class="n">losses</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">wins</span> <span class="o">/</span> <span class="p">(</span><span class="n">wins</span> <span class="o">+</span> <span class="n">losses</span><span class="p">)</span>
+    
+<span class="n">num_runs</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Win ratios for strategies over </span><span class="si">{num_runs}</span><span class="s1"> runs:'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Random lowest probability mine: {estimate_win_ratio(num_runs, difficulty="expert", max_solutions=2000, prob_pick_strategy="random")}'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Max zero probability: {estimate_win_ratio(num_runs, difficulty="expert", max_solutions=2000, prob_pick_strategy="prob_zero")}'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+            </div>
+          </div>
+        
+    
+
+    
+      
+        
+        
+        
+          
+<div class="output_wrapper">
+<div class="output">
+
+        
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Win ratios for strategies over 10000 runs:
+Random lowest probability mine: 0.4014
+Max zero probability: 0.4945
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+        
+    
+  
   
   
     
