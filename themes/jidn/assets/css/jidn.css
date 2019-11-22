@@ -965,3 +965,7 @@ a.pagination-item:hover {
 .text_cell {
   margin-top: 10px;
 }
+
+.listtitle {
+  margin-left: 10px;
+}
