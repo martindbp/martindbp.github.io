@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Fri, 22 Nov 2019 19:50:12 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Solving Minesweeper</title><link>https://martindbp.com/posts/minesweeper/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;figure&gt;&lt;img src="https://martindbp.com/images/minesweeper.png"&gt;&lt;/figure&gt; &lt;div&gt;&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Mon, 25 Nov 2019 09:31:11 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Solving Minesweeper</title><link>https://martindbp.com/posts/minesweeper/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;figure&gt;&lt;img src="https://martindbp.com/images/minesweeper.png"&gt;&lt;/figure&gt; &lt;div&gt;&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;&lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;Many years ago I took a class in Artificial Intelligence, in which the final group project was to build a program that played Minesweeper (although this would hardly be considered AI today!). Like most group projects everybody prioritized other classes, me included. Eventually I tried to pull an all-nighter to implement it, in a language I had just "learned": C++. Never doing that again. But I've always wanted to actually finish it, so here it goes. This time I'm using Python, numpy, and other libraries which makes the task much easier. I'll try to do things without looking at other implementations, because where's the fun in that?&lt;/p&gt;
@@ -313,7 +313,7 @@
 &lt;p&gt;Well, we know how many mines there are in total and how many we've flagged, let's call those $M_t$ and $M_f$ respectively. Then we also have the probabilities for each edge square being a mine $P(S_i = mine)$. Then we have the number of "inner" closed squares, $N$.&lt;/p&gt;
 &lt;p&gt;The &lt;em&gt;expected&lt;/em&gt;, or average number of mines in the edge is simply the sum of the probabilities: $\sum_{i} P(S_i = mine)$. Again, it's possible that some configurations have more mines than others, so this estimate doesn't have to be a round integer.&lt;/p&gt;
 &lt;p&gt;The final probability for the "inner" closed squares is then:
-$$max(\frac{M_t - M_f - \sum_{i} P(S_i = mine)}{N}, 0)$$&lt;/p&gt;
+$$\frac{max(M_t - M_f - \sum_{i} P(S_i = mine), 0)}{N}$$&lt;/p&gt;
 &lt;p&gt;Let's calculate it for the case above:
 $$\frac{10 - 4 - (6*0.33 + 4*0.67)}{8} = 0.1675$$&lt;/p&gt;
 &lt;p&gt;Using these inner probabilities, we can now pick the lowest probability square overall, not only those at the edge.&lt;/p&gt;
@@ -424,7 +424,7 @@ Where $N(i)$ is the neighborhood of square i.&lt;/p&gt;
 &lt;/div&gt;&lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;This explains the common strategy of opening the corners first, since the difference is quite big for this beginner board: 22% vs 51% chance of being zero. This strategy of course also applies later in the game, but then incorporates the mine probabilities from the configuration search.&lt;/p&gt;
-&lt;p&gt;We can test the different strategies by running the solver 10,000 times and checking the win ratios:&lt;/p&gt;
+&lt;p&gt;We can test the different strategies by running the solver on a large number of boards and comparing the win ratios:&lt;/p&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
@@ -442,7 +442,7 @@ Where $N(i)$ is the neighborhood of square i.&lt;/p&gt;
           
           &lt;div class="toggleoff"&gt;
               &lt;div style="display: flex; justify-content: flex-start"&gt;
-                &lt;a class="showbutton" onclick="toggle(this)" style="cursor: pointer"&gt;show code (17 lines)&lt;/a&gt;
+                &lt;a class="showbutton" onclick="toggle(this)" style="cursor: pointer"&gt;show code (18 lines)&lt;/a&gt;
                 &lt;a class="hidebutton" onclick="toggle(this)" style="cursor: pointer"&gt;hide code&lt;/a&gt;
               &lt;/div&gt;
             &lt;div class="cellwrapper"&gt;
@@ -459,9 +459,10 @@ Where $N(i)$ is the neighborhood of square i.&lt;/p&gt;
     &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dead&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;step&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="c1"&gt;# Lost on first guess&lt;/span&gt;
       &lt;span class="k"&gt;continue&lt;/span&gt;
     &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-      &lt;span class="n"&gt;wins&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dead&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
-      &lt;span class="n"&gt;losses&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dead&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
-      &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;wins&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;wins&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;losses&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+      &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dead&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;losses&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+      &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;wins&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
   &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;wins&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;wins&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;losses&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     
 &lt;span class="n"&gt;num_runs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10000&lt;/span&gt;
@@ -514,7 +515,7 @@ Max zero probability: 0.4945
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;&lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;Using the max zero probability strategy is clearly better, by almost 10 percentage points.&lt;/p&gt;
+&lt;p&gt;Using the max zero probability strategy is clearly better, by almost 10 percentage points. Note that for these win rations I excluded runs that immediately hit mines.&lt;/p&gt;
 &lt;p&gt;Now, I don't think the algorithm is optimal quite yet. Have a look at this impasse, where we end up picking the corner square based on the reasoning above:&lt;/p&gt;
 
 &lt;/div&gt;
@@ -661,7 +662,7 @@ Max zero probability: 0.4945
           
           &lt;div class="toggleoff"&gt;
               &lt;div style="display: flex; justify-content: flex-start"&gt;
-                &lt;a class="showbutton" onclick="toggle(this)" style="cursor: pointer"&gt;show code (671 lines)&lt;/a&gt;
+                &lt;a class="showbutton" onclick="toggle(this)" style="cursor: pointer"&gt;show code (670 lines)&lt;/a&gt;
                 &lt;a class="hidebutton" onclick="toggle(this)" style="cursor: pointer"&gt;hide code&lt;/a&gt;
               &lt;/div&gt;
             &lt;div class="cellwrapper"&gt;
@@ -821,15 +822,14 @@ Max zero probability: 0.4945
     &lt;span class="c1"&gt;# Create an map of labeled empty regions&lt;/span&gt;
     &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;empty_regions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;neighboring_mine_count&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;connectivity&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-    &lt;span class="c1"&gt;# Create matrices for keeping track of the state as we search for allowed&lt;/span&gt;
-    &lt;span class="c1"&gt;# mine assignments&lt;/span&gt;
+    &lt;span class="c1"&gt;# Create 2D arrays for keeping track of the state of the board and our belief about it&lt;/span&gt;
     &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;opened&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zeros&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="c1"&gt;# Flagged as mine&lt;/span&gt;
     &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;flagged&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zeros&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;neighboring_mines_left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;neighboring_mine_count&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
     &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;neighboring_unresolved_left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ones&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'uint8'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prob_mine&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ones&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dead&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;False&lt;/span&gt; &lt;span class="c1"&gt;# Set to true if we hit a mine&lt;/span&gt;
+    
     &lt;span class="c1"&gt;# Variables used for visualization and debugging&lt;/span&gt;
     &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;iteration&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
     &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;frame_idx&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
