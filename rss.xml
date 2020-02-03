@@ -1,5 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Mon, 25 Nov 2019 09:31:11 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Solving Minesweeper</title><link>https://martindbp.com/posts/minesweeper/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;figure&gt;&lt;img src="https://martindbp.com/images/minesweeper.png"&gt;&lt;/figure&gt; &lt;div&gt;&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2020 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Mon, 03 Feb 2020 14:47:04 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Algernon Work Log</title><link>https://martindbp.com/posts/algernon-work-log/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;div&gt;&lt;h2&gt;2020-02-03&lt;/h2&gt;
+&lt;h4&gt;Bulk insert speedup&lt;/h4&gt;
+&lt;p&gt;Measured the speedup by using bulk insert for 110k words:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Before: 558s&lt;/li&gt;
+&lt;li&gt;After: 24s&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For a speedup of 20x! Well worth doing I think. &lt;/p&gt;
+&lt;h4&gt;Potential 7th HSK level&lt;/h4&gt;
+&lt;p&gt;Looking at the stats for HSK levels, and whether to create a level 7:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;HSK level 1 mean: 59673 std: 131535&lt;/li&gt;
+&lt;li&gt;HSK level 2 mean: 26994 std: 54312&lt;/li&gt;
+&lt;li&gt;HSK level 3 mean: 12393 std: 21252&lt;/li&gt;
+&lt;li&gt;HSK level 4 mean: 6872 std: 13899&lt;/li&gt;
+&lt;li&gt;HSK level 5 mean: 3599 std: 4798&lt;/li&gt;
+&lt;li&gt;HSK level 6 mean: 1294 std: 1918&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Since level 6 covers 0 frequency within a single standard deviation, conclusion to me is that it's best not to make another level.&lt;/p&gt;
+&lt;h4&gt;Item rank for recommendations and discovery&lt;/h4&gt;
+&lt;p&gt;Thinking about how we can rank items for recommendations / discovery. In a way the problem is similar to regular search engine rankings: the query is now the words in a user's vocabulary, and the documents are the items (i.e sentences, podcasts etc). The problem is that the crieria for ranking are very different. TF-IDF would make no sense, as we're not interested in specifically finding documents with the user's vocabulary in them, but documents whose out-of-vocab words are not too many, and not too difficult.&lt;/p&gt;
+&lt;p&gt;Another thing to look at would be collaborative filtering. You could see each item as a "thing" to be recommended, based on what similar users have added at a similar knowledge state. The problem is that once you have a new item, we won't know what to do with it.&lt;/p&gt;
+&lt;p&gt;I think the ideal solution would be to check how many out-of-vocab words and of what difficulty are in each item and rank based on that. The problem with this is this would be an O(number of items * number of users * average user vocab size) operation. With number of items number in the hundreds of thousans, and average user vocab in the hundreds or thousands, I don't think this is feasible unless you first filter down the possible items.&lt;/p&gt;
+&lt;p&gt;In order to filter down we could manually assign a difficulty value to each item (which is what I've done so far). I would however prefer to learn this mapping instead. We could reduce both the item difficulty and the user knowledge level to a single number that we can index and filter on. Let's say we use the histogram of dependent item difficulties in an item, and a histogram of user vocab item difficulties as the input, then we could learn a mapping to two float values. For this we'd need some actual data. Initially, I could use my own Anki history for this. With this history, I can see when I added a sentence and the knowledge level I had at that point in time. A simple thing to try would be to essientially do a single neuron layer without an activation for both histograms, and minimize the squared error between them:&lt;/p&gt;
+&lt;p&gt;$L = \sum_{t,u} (w_t \cdot (h_t + b_t) - w_u \cdot (h_u + b_u))^2$&lt;/p&gt;
+&lt;p&gt;where we project the item difficulty histogram $h_t$, translated by a bias $b_t$ to a single number using the weight vector $w_t$. Similarly for the user difficulty histogram. We can train this once and then fine-tune the user parameters $w_u, b_u$ as we go in order to provide a bit more personalized results, if e.g. the user tends to prefer easier or more difficult items.&lt;/p&gt;
+&lt;p&gt;The problem with my own dataset is that my proficiency level doesn't span very many levels, as I started using Anki after I'd done most of HSK3. Anyway, the solution that will be reached by the optimizer will be all zeroes for all parameters, which means all items and user states will be mapped to zero and there will be zero loss. To avoid that we can add a negative regularizer on the parameters, pushing them away from zero, but that would probably mean that both the item and user state will be mapped to some other non-zero value. A simple trick might be to add a negative regularizer of the standard deviation of the resulting scores as this would penalize narrow distributions:
+$$v_t^i = w_t \cdot (h_t^i + b_t)$$
+$$v_u^i = w_u \cdot (h_u^i + b_u)$$
+$$L = \sum_{i \in D}[(v_t^i - v_u^i)^2] - \beta Var_{i \in D}(v_t^i) - \beta Var_{i \in D}(v_u^i)$$
+where D is the dataset of pairs of histograms of items and user knowledge states.&lt;/p&gt;
+&lt;h4&gt;Bugs&lt;/h4&gt;
+&lt;p&gt;I noticed "common knowledge" words/expressions like "happy birthday" has a very low frequency in the corpus. I might want to go through Chinesepod lessons and mark words with the level of the lesson, if the word previously has a high level due to being infrequent.&lt;/p&gt;
+&lt;p&gt;I also saw 还 being linked to huan2 instead of hai2, and some other examples like that I need to look into. Also 的-&amp;gt;di1.&lt;/p&gt;
+&lt;h4&gt;UI&lt;/h4&gt;
+&lt;p&gt;Started on a common ItemListView with template that simplifies creating a list view for each type of item.&lt;/p&gt;
+&lt;h2&gt;2020-02-02&lt;/h2&gt;
+&lt;p&gt;Implemented the bulk insert of items. It was a bunch of work but should come in handy throughout the project. Still working on the link finding generalization. One problem with reusing the link finding for individual words is that the Jieba segmenter returns the full word, and we want to use the sub-words if they do exist.&lt;/p&gt;
+&lt;p&gt;Found one problem with the current "greedy" linker for words such as "试试看". Tokenizing with Jieba in search mode produces the full word, 试看 and 试试. The greedy matching will pick 试试 for the first two character slots, and then it won't be able to match anything else, since only 看 is left. To make this work we'd need to do another word lookup rather than using the tokens found by Jieba.&lt;/p&gt;
+&lt;h2&gt;2020-02-01&lt;/h2&gt;
+&lt;p&gt;Generalizing finding links between sentences-&amp;gt;words and compound words -&amp;gt; words. Previously had separate logic for this which is unnecessary. Generally, the procedure is to segment the text with Jieba, and linking with database Words, disambiguated with the pinyin and translation if supplied.&lt;/p&gt;
+&lt;p&gt;Would like to speed up the inserting of words into the database, since there are 110k of them it's very slow. But since Django doesn't support bulk_create for linked tables, there's not much we can do, unless we write the query manually. Maybe it's worth optimizing because I have to rerun &lt;code&gt;import_chinese_data&lt;/code&gt; everytime I update the code.&lt;/p&gt;
+&lt;h2&gt;2020-01-31&lt;/h2&gt;
+&lt;p&gt;Working on setting a difficulty level for all the items in the database. At first my idea was to set the word difficulty based on frequency, but normalizing the range of frequencies gets rather complicated. For now I'll use the HSK level if set/known, otherwise I'll determine a "pseudo" HSK level based on which level the word frequency matches best. So for all HSK levels, I fetch all the words for that level and calculate mean and standard deviation of their frequencies, estimating the parameters of their normal distribution. I then go through each word without an HSK level, but with a frequency, and pick the maximum likelihood distribution. In the future maybe it's best to add a level 7, where we can put words that are very rare.&lt;/p&gt;
+&lt;h2&gt;No more logs&lt;/h2&gt;
+&lt;p&gt;Unfortunately I didn't start logging my work from the start, but as they say, the best time to plant a tree was 10 years ago, the next best is today.&lt;/p&gt;&lt;/div&gt;</description><guid>https://martindbp.com/posts/algernon-work-log/</guid><pubDate>Sat, 01 Feb 2020 13:06:58 GMT</pubDate></item><item><title>Introducing Algernon</title><link>https://martindbp.com/posts/introducing-algernon/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;div&gt;&lt;h3&gt;What is it?&lt;/h3&gt;
+&lt;p&gt;Algernon is an open data, open source web-based tool for learning and remembering things, a companion you can count on to help with continuous learning throughout your life and career.&lt;/p&gt;
+&lt;h3&gt;Why (what's the problem?)&lt;/h3&gt;
+&lt;p&gt;The online educational landscape right now consists of a bunch of walled gardens, disconnected learning resources and various flashcard tools.
+Algernon sits somewhere between open source flashcard tools like Anki and walled gardens such as Coursera, Duolingo and Memrise, while leveraging other resources that are out there.&lt;/p&gt;
+&lt;h4&gt;The downsides of Walled Gardens&lt;/h4&gt;
+&lt;p&gt;The upside of walled gardens is the curated content, but downsides are&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Your data is not portable: you cannot take your data with you, so there is no way to integrate what you have learned through various services&lt;/li&gt;
+&lt;li&gt;The expectation that the service is the be all end all of its particular domain. When the service is out of content, there is usually no way for you to add your own or continue your study.&lt;/li&gt;
+&lt;li&gt;If the service would go down or change significantly, there is nothing you can do about it. This is a problem if you're learning for the long term, i.e. 10+ years.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;The downsides of Flashcard apps&lt;/h4&gt;
+&lt;p&gt;There are many apps and services for studying and making flashcards. Some are offline apps such as Anki, Mnemosyne, SuperMemo, but there are also many web-based such as Quizlet.&lt;/p&gt;
+&lt;p&gt;The first downside of these tools is the fact that they're based on the concept of flashcards and decks, which I think is inherently limiting. While I personally use Anki and I like it very much, the fact that there are no connections between cards is a daily annoyance to me, especially for language learning. The problem is that different cards &lt;em&gt;intefere&lt;/em&gt; with each other in the spaced-repetition scheduling. For example, I have a mix of word and sentence translation cards, and it often happens that I get a sentence translation card, and then right after I get the word translation card for one of the words in that sentence. At that point I'm already primed to know the answer, but that doesn't mean I would have been able to answer it if it hadn't been for that sentence showing up right before. This messes up the &lt;em&gt;model&lt;/em&gt; of my memory of that word. That is just one example, but there are tons of reasons why one card can affect another.&lt;/p&gt;
+&lt;p&gt;The second downside which is related to the first one, is that there is no source of truth in all the unstructured data of flashcards and decks. In Anki, I can download shared decks made by other people, but there is no way to remove duplicate cards unless they are exactly identical. And the fact that everyone makes their own underlying note structure that generates the cards means there is no standard way to talk about a piece of knowledge.&lt;/p&gt;
+&lt;h4&gt;Other resources&lt;/h4&gt;
+&lt;p&gt;On the other end, there are a &lt;em&gt;ton&lt;/em&gt; of free (and paid) resources for learning stuff on the web, things like blogs, wikis, open data sets and Youtube videos just to mention a few. If you want to study these in an effective way, you have to do a lot of manual work to get them into your SRS app, or set up your own manual system of study.&lt;/p&gt;
+&lt;h2&gt;How: on a high level&lt;/h2&gt;
+&lt;p&gt;The two main parts of Algernon are the Knowledge Base and the Memory Model.&lt;/p&gt;
+&lt;h3&gt;Knowledge Base&lt;/h3&gt;
+&lt;p&gt;The knowledge base represents the single source of truth, a carefully structured database for various hand-picked domains from which exercises are generated.
+However, also allow unstructured data for those domains that are not yet incorporated.&lt;/p&gt;
+&lt;p&gt;The knowledge base will consist of&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Sources with permissive licenses, such as open datasets and Creative Commons content.&lt;/li&gt;
+&lt;li&gt;Links to indexed web resources covered by copyrights. Just like a search engine that indexes based on keywords, we'll index based on concepts tied to the knowledge base.&lt;/li&gt;
+&lt;li&gt;If all goes well: Additions and edits by the community of users.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Memory Model&lt;/h3&gt;
+&lt;p&gt;Using the knowledge base and user responses to exercises generated from it, we build an integrated memory model that takes into account the interactions between items in the knowledge base.&lt;/p&gt;
+&lt;p&gt;Using the model, we make the knowledge base searchable based on difficulty, providing tailored recommendations for the specific user. Eventually, we can see what &lt;em&gt;kind&lt;/em&gt; of exercise would be most benefitial. For example, if I'm having trouble remembering a specific word, it might make sense to add more exercises with sentences containing that word rather than pounding on the word without the right context.&lt;/p&gt;
+&lt;h2&gt;How: on a technical level&lt;/h2&gt;
+&lt;p&gt;Algernon will primarily be a web-based service, because making apps with a cross-platform codebase, dependencies and UIs is not something I have the skill or time for. Making it web-based also means that iterating and pushing out new versions will be much easier. I also envision this project using a lot of machine learning, which is most conveniently implemented in my go-to programming language: Python.&lt;/p&gt;
+&lt;h3&gt;Openness and freedom&lt;/h3&gt;
+&lt;p&gt;I want this to be a tool you can depend on for a long time, which is why I think it's important that it's open source. Even if I can't provide free hosting, the user should always have the option of hosting it themselves. &lt;/p&gt;
+&lt;p&gt;The openness goes for the data as well, not only the knowledge base (as far as it's legally possible to share), but also the user's personal memory model, which should be easy to export.&lt;/p&gt;&lt;/div&gt;</description><guid>https://martindbp.com/posts/introducing-algernon/</guid><pubDate>Thu, 19 Dec 2019 13:06:58 GMT</pubDate></item><item><title>Solving Minesweeper</title><link>https://martindbp.com/posts/minesweeper/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;figure&gt;&lt;img src="https://martindbp.com/images/minesweeper.png"&gt;&lt;/figure&gt; &lt;div&gt;&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;&lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;Many years ago I took a class in Artificial Intelligence, in which the final group project was to build a program that played Minesweeper (although this would hardly be considered AI today!). Like most group projects everybody prioritized other classes, me included. Eventually I tried to pull an all-nighter to implement it, in a language I had just "learned": C++. Never doing that again. But I've always wanted to actually finish it, so here it goes. This time I'm using Python, numpy, and other libraries which makes the task much easier. I'll try to do things without looking at other implementations, because where's the fun in that?&lt;/p&gt;
