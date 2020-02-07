@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2020 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Mon, 03 Feb 2020 14:47:04 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Algernon Work Log</title><link>https://martindbp.com/posts/algernon-work-log/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;div&gt;&lt;h2&gt;2020-02-03&lt;/h2&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2020 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Fri, 07 Feb 2020 17:28:46 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Algernon Work Log</title><link>https://martindbp.com/posts/algernon-work-log/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;div&gt;&lt;h2&gt;2020-02-07&lt;/h2&gt;
+&lt;h4&gt;Database&lt;/h4&gt;
+&lt;p&gt;There is a problem with the  frequency data for homonyms. E.g the word 都 can be dou1 (both/all) which is very common, or du1 (capital) which is fairly common, but the frequency information I'm using from Jieba includes all homonyms of a word. This becomes a problem when I generate the word links for a sentence, as if there are multiple matches I pick the highest frequency one. So far I've been dealing with this problem by overriding the frequency, usually setting it to 0 for the less common homonym. The problem with this is that I now calculate the difficulty based on this frequency, so I have to be a bit more careful. Therefore, I'll try to override using a compound word, e.g for 重 zhong4/heavy, there is the less common chong2/repeat. But "repeat" is usually a two character word "重复", so we can take the frequency from that word instead of setting it to some arbitrary number. For other words, it might be better to set the frequency based on the HSK level it would end up in.&lt;/p&gt;
+&lt;h4&gt;UI&lt;/h4&gt;
+&lt;p&gt;Abstracted the item table to be reusable for both item lists, and the list of links on the item view.&lt;/p&gt;
+&lt;h2&gt;2020-02-06&lt;/h2&gt;
+&lt;h4&gt;Database&lt;/h4&gt;
+&lt;p&gt;I think I have to mark some external media as "lesson" which includes explanations, vs. "dialogue/story" which is just Chinese. Chinesepod audio already has this distinction.&lt;/p&gt;
+&lt;p&gt;Found some new sites worth indexing:
+Lots of articles for reading and audio: https://www.chinesereadersguild.com
+Reading practice: http://chinesereadingpractice.com
+Picture books for children: http://mandarinforme.com&lt;/p&gt;
+&lt;p&gt;Added an index to the difficulty field.&lt;/p&gt;
+&lt;h2&gt;2020-02-05&lt;/h2&gt;
+&lt;p&gt;Gave all Chinese models a "Zh" prefix and renamed "mandarin" to "zh", just to have a shorter namespace.&lt;/p&gt;
+&lt;p&gt;Thinking about how to calculate difficulty for crawled websites where the word source is just a list of words rather than the whole transcript. The problem is that only the difficulty words are usually listed.&lt;/p&gt;
+&lt;p&gt;When I tried calculating the difficulty for ChinesePod podcasts, the interesting thing was that I can see on the titles, which include the difficulty level, whether the calculated difficulty sorts the podcasts in the same order. Turns out just sorting it based on audio duration, or the sum of all the sentence difficulties (which in turn are the sum of the word difficulties) worked best. Using the average sentence difficulty did not work very well. Will have to investigate further why this is. It could be that words are put in a higher level than they should be.&lt;/p&gt;
+&lt;h4&gt;Bugs&lt;/h4&gt;
+&lt;p&gt;Fixed sources not working for external media.&lt;/p&gt;
+&lt;p&gt;Saw that many external media podcasts didn't have a duration. Seems like I filtered on file ending with .mp3, but some urls had a query string attached, so fixed this and rerun the crawling of all sites to make sure I get the duration.&lt;/p&gt;
+&lt;h4&gt;Database&lt;/h4&gt;
+&lt;p&gt;Contemplating adding the media URL to the database for external media. While it should be legal to link to publically available resources on the web, I also don't want to hurt the businesses by reducing their ad revenue or exposure by the visit a user would have brought. One mitigation might be to require the user to visit the site before showing the link to the media.&lt;/p&gt;
+&lt;h2&gt;2020-02-04&lt;/h2&gt;
+&lt;h4&gt;Bugs&lt;/h4&gt;
+&lt;p&gt;Fixed some bad word links which was partly due to a bug, and partly the wrong homonyms being picked due to missing frequency information. It is really easier finding these bugs now that I have some kind of visualization of the data.&lt;/p&gt;
+&lt;h4&gt;UI&lt;/h4&gt;
+&lt;p&gt;Abstracted the ItemView, ItemListView and templates for both sentences and media. Combine the hanzi and pinyin fields to one switchable field since they take up so much space and you usually only need one.&lt;/p&gt;
+&lt;h2&gt;2020-02-03&lt;/h2&gt;
 &lt;h4&gt;Bulk insert speedup&lt;/h4&gt;
 &lt;p&gt;Measured the speedup by using bulk insert for 110k words:&lt;/p&gt;
 &lt;ul&gt;
@@ -23,18 +50,22 @@
 &lt;p&gt;Another thing to look at would be collaborative filtering. You could see each item as a "thing" to be recommended, based on what similar users have added at a similar knowledge state. The problem is that once you have a new item, we won't know what to do with it.&lt;/p&gt;
 &lt;p&gt;I think the ideal solution would be to check how many out-of-vocab words and of what difficulty are in each item and rank based on that. The problem with this is this would be an O(number of items * number of users * average user vocab size) operation. With number of items number in the hundreds of thousans, and average user vocab in the hundreds or thousands, I don't think this is feasible unless you first filter down the possible items.&lt;/p&gt;
 &lt;p&gt;In order to filter down we could manually assign a difficulty value to each item (which is what I've done so far). I would however prefer to learn this mapping instead. We could reduce both the item difficulty and the user knowledge level to a single number that we can index and filter on. Let's say we use the histogram of dependent item difficulties in an item, and a histogram of user vocab item difficulties as the input, then we could learn a mapping to two float values. For this we'd need some actual data. Initially, I could use my own Anki history for this. With this history, I can see when I added a sentence and the knowledge level I had at that point in time. A simple thing to try would be to essientially do a single neuron layer without an activation for both histograms, and minimize the squared error between them:&lt;/p&gt;
-&lt;p&gt;$L = \sum_{t,u} (w_t \cdot (h_t + b_t) - w_u \cdot (h_u + b_u))^2$&lt;/p&gt;
+&lt;p&gt;$$L = \sum_{t,u} (w_t \cdot (h_t + b_t) - w_u \cdot (h_u + b_u))^2$$&lt;/p&gt;
 &lt;p&gt;where we project the item difficulty histogram $h_t$, translated by a bias $b_t$ to a single number using the weight vector $w_t$. Similarly for the user difficulty histogram. We can train this once and then fine-tune the user parameters $w_u, b_u$ as we go in order to provide a bit more personalized results, if e.g. the user tends to prefer easier or more difficult items.&lt;/p&gt;
 &lt;p&gt;The problem with my own dataset is that my proficiency level doesn't span very many levels, as I started using Anki after I'd done most of HSK3. Anyway, the solution that will be reached by the optimizer will be all zeroes for all parameters, which means all items and user states will be mapped to zero and there will be zero loss. To avoid that we can add a negative regularizer on the parameters, pushing them away from zero, but that would probably mean that both the item and user state will be mapped to some other non-zero value. A simple trick might be to add a negative regularizer of the standard deviation of the resulting scores as this would penalize narrow distributions:
 $$v_t^i = w_t \cdot (h_t^i + b_t)$$
 $$v_u^i = w_u \cdot (h_u^i + b_u)$$
 $$L = \sum_{i \in D}[(v_t^i - v_u^i)^2] - \beta Var_{i \in D}(v_t^i) - \beta Var_{i \in D}(v_u^i)$$
 where D is the dataset of pairs of histograms of items and user knowledge states.&lt;/p&gt;
+&lt;p&gt;Perhaps running each value through the logistic funcion, in a sense turning it into logistic regression,
+might be a good way to keep the values within bounds [0-1].&lt;/p&gt;
 &lt;h4&gt;Bugs&lt;/h4&gt;
 &lt;p&gt;I noticed "common knowledge" words/expressions like "happy birthday" has a very low frequency in the corpus. I might want to go through Chinesepod lessons and mark words with the level of the lesson, if the word previously has a high level due to being infrequent.&lt;/p&gt;
 &lt;p&gt;I also saw 还 being linked to huan2 instead of hai2, and some other examples like that I need to look into. Also 的-&amp;gt;di1.&lt;/p&gt;
 &lt;h4&gt;UI&lt;/h4&gt;
 &lt;p&gt;Started on a common ItemListView with template that simplifies creating a list view for each type of item.&lt;/p&gt;
+&lt;h4&gt;Screenshot&lt;/h4&gt;
+&lt;p&gt;&lt;a href="https://martindbp.com/images/Screenshot_2020-02-03%20Algernon.png"&gt;screenshot&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;2020-02-02&lt;/h2&gt;
 &lt;p&gt;Implemented the bulk insert of items. It was a bunch of work but should come in handy throughout the project. Still working on the link finding generalization. One problem with reusing the link finding for individual words is that the Jieba segmenter returns the full word, and we want to use the sub-words if they do exist.&lt;/p&gt;
 &lt;p&gt;Found one problem with the current "greedy" linker for words such as "试试看". Tokenizing with Jieba in search mode produces the full word, 试看 and 试试. The greedy matching will pick 试试 for the first two character slots, and then it won't be able to match anything else, since only 看 is left. To make this work we'd need to do another word lookup rather than using the tokens found by Jieba.&lt;/p&gt;
