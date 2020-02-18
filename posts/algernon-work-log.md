@@ -8,6 +8,72 @@
 .. type: text
 .. has_math: true
 
+# 2020-02-18
+Shaved 33 seconds off importin my Anki collection by optimizing the previously implemented bulk_create. Instead of fetching all the sentences and then their words I instead fetch all the sentence words in one query.
+
+### UI
+Now displaying known/unkown sentence words if logged in using the stats in ZhUserWordSummary.
+
+### Database
+Investigating again why item listing is so slow. Notices that listing sentences does a sort on disk in PostgresSQL. This is due to the table not fitting in working memory, which is set to 4 Mb. We can increase it by setting work_mem higher in PostgreSQL: `alter database algernon set work_mem='64MB';`. The downside is that each query might take this much memory... And it doesn't seem to speed up the query a whole lot, just ~20% (100ms -> 80ms).
+
+Been trying very hard to profile what takes so long besides the SQL queries. Managed to find the profiling bar in Django Debug Toolbar, but the granularity is quite low. It seems like Django spends a ton of time iterating over and post-processing the result for the database queries. I cannot fathom why this takes any significant amount of time. I guess I'll have to solve this with caching.
+
+# 2020-02-16
+Implemented the populating of ZhUserWordSummary as a bulk_create Manager method instead of a signal, in order to allow bulk processing and speeding things up. It's still quite slow but better than the first implementation.
+
+
+# 2020-02-15
+Tried using PostgreSQL triggers to automatically populate a ZhUserWordSummary database from added reviews in the ReviewLog table, but decided to use django triggers instead because they're versioned more easily and require no database migrations, although they are slower since they need separate database queries. Another upside is being able to run ML model inference which will be hard in SQL.
+
+# 2020-02-14
+
+### Database
+Trying to make import_chinese_data faster to speed up development. Tried caching the mp3 file metadata instead of reading it every time, but it seems like the biggest problem was actually calculating the levenshtein distance between transcript and transcribed. Might be worth converting it to Cython to speed it up, since this step now takes 8 minutes. On second thought, it probably most of its time in the supplied substitution_cost function. After profiling it seems not to be the case.
+
+I tried optimizing the function with Cython, but not able to get any speedup, pausing this for now. Opt for just caching the resulting timings instead, because that algorithm rarely changes. This improved the time from 8 minutes to 2m22s.
+
+# 2020-02-12
+
+### Database
+Found a case where the Jieba segmentation is wrong: 下週 is split in to 下 and 週, while the compound is in the dictionary. I might have to go back to overriding the segmentation if there exists words in the dictionary that encompass several of the segments. I remember cases where this didn't work though, so might have to add a white list instead.
+Another case: 暱称 - nickname
+
+### UI
+Finished level highlighting for words, both in hanzi and pinyin.
+
+Working on displaying the user knowledge level for each word instead of difficulty level. Will need to make a crazy expensive join that we'll obviously have to cache somehow.
+
+
+# 2020-02-11
+
+### UI
+Working on a way to visualize the difficulty of a (external) media item, both for anonymous and logged in users. Considering a histogram over HSK levels. The problem with that is that lvl just by virtue of Zipf's law the earlier levels will always contain most of the vocabulary. But maybe it's worth a try, just to see if it's useful. For logged in users the histogram would instead be over levels of user knowledge.
+
+Converted "normalized" pinyin with numbers to diacriticals for the UI.
+
+Added per-word color highlighting for the hanzi field in sentences list. This surfaced quite a number of problems with the HSK level / difficulty level of words:
+
+1. We probably want to sort out pronouns like names (probably not countries/cities though), since they are rare in the corpus and affect the difficulty of the sentence.
+2. If there is no frequency for a word, we currently use the minimum frequency of the linked words. However, in many cases there are no such linked words, since they may not be in the dictionary. In those cases we probably want to assign a frequency for those words based on the compound words it appears in.
+
+### Database
+There are pure dialogues, short stories and other readings on ilovelearningchinese.com that I should index. Need a new model for reading material.
+
+I added has_dialogue and has_lesson fields to Media and ExternalMedia so that we can filter on those in the future, for when you want just dialouge without tons of explanation.
+
+
+# 2020-02-09
+
+Adding a file hash field to the item model, and renaming source_pointer to source_file_id. For now I'm using the first 64 bits of the md5 hash and store them as integer fields. With those two fields will help with updating items when the source material updates, or we've updated the algorithms, but can't regenerate the database from a clean slate.
+
+# 2020-02-08
+
+### UI
+Implemented ability to combine two or more fields into one switchable column. This is conventient for combining hanzi and pinyin. The preference is saved in a cookie.
+
+I noticed the sentences list view loading fairly slow and turned on the Django debug toolbar. I reduced the number of requests by prefetching/selecting links and source. But I noticed just getting the number of items in the table for pageination took 12ms!. It turns out Postgres doesn't keep a count metadata for tables, so a SELECT COUNT(*) FROM table_name; has to go through the whole table. Wow. There seems to be a way to get an approximate count, but it's only updated when running certain commands. The better solution instead seems to be using a Django signal to keep a count in a separate table.
+
 # 2020-02-07
 
 ### Database
@@ -32,14 +98,14 @@ Added an index to the difficulty field.
 
 Gave all Chinese models a "Zh" prefix and renamed "mandarin" to "zh", just to have a shorter namespace.
 
-Thinking about how to calculate difficulty for crawled websites where the word source is just a list of words rather than the whole transcript. The problem is that only the difficulty words are usually listed.
+Thinking about how to calculate difficulty for indexed websites where the word source is just a list of words rather than the whole transcript. The problem is that only the difficulty words are usually listed.
 
 When I tried calculating the difficulty for ChinesePod podcasts, the interesting thing was that I can see on the titles, which include the difficulty level, whether the calculated difficulty sorts the podcasts in the same order. Turns out just sorting it based on audio duration, or the sum of all the sentence difficulties (which in turn are the sum of the word difficulties) worked best. Using the average sentence difficulty did not work very well. Will have to investigate further why this is. It could be that words are put in a higher level than they should be.
 
 ### Bugs
 Fixed sources not working for external media.
 
-Saw that many external media podcasts didn't have a duration. Seems like I filtered on file ending with .mp3, but some urls had a query string attached, so fixed this and rerun the crawling of all sites to make sure I get the duration.
+Saw that many external media podcasts didn't have a duration. Seems like I filtered on file ending with .mp3, but some urls had a query string attached, so fixed this and rerun the indexing of all sites to make sure I get the duration.
 
 ### Database
 Contemplating adding the media URL to the database for external media. While it should be legal to link to publically available resources on the web, I also don't want to hurt the businesses by reducing their ad revenue or exposure by the visit a user would have brought. One mitigation might be to require the user to visit the site before showing the link to the media.

@@ -7,6 +7,8 @@
 .. description: 
 .. type: text
 
+![](/images/algernon_venndiagram.png "Venn Diagram")
+
 ## What is it?
 Algernon is an open data, open source web-based tool for learning and remembering things, a companion you can count on to help with continuous learning throughout your life and career.
 
