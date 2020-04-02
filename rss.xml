@@ -1,8 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2020 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Tue, 18 Feb 2020 13:55:21 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Algernon Work Log</title><link>https://martindbp.com/posts/algernon-work-log/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;div&gt;&lt;h2&gt;2020-02-18&lt;/h2&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2020 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Thu, 02 Apr 2020 19:16:22 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Algernon Work Log</title><link>https://martindbp.com/posts/algernon-work-log/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;div&gt;&lt;h2&gt;2020-02-28 - 2020-04-02&lt;/h2&gt;
+&lt;p&gt;Well, things have been... interesting. I started working full time so I'll have less time to work on Algernon, but I try to squeeze in some time here and there. And, well, Corona happened. I've been in self-imposed quarantine for the past 5 weeks, first at home and then at my parents house. Getting any kind of work done with a 2-yearold around is challenging, even with babysitting help, but sometimes I get a few hours on the weekend, or on a rare day when I feel I've gotten enough done at my day job I'll allow myself to code a bit on Algernon. I've taken one big leap, and that is to move the UI away from Django templates+JQuery+Bootstrap to Vue.js Vuetify instead. The speed of developing an interactive is just orders of magnitue better with Vue.js, and I picked it over React and others because if I stick to modern browsers I don't even need a build system. The whole pile of complexity that is JS build systems, webpack, transpilers and NPM is something I want to avoid unless it's absolutely necessary.&lt;/p&gt;
+&lt;p&gt;Here's the result after porting one item list view to Vue.js:
+&lt;a href="https://martindbp.com/images/Screenshot_2020-02-04%20Algernon.png"&gt;screenshot&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Another benefit of using Vue.js and no build system is that it's perfect for enabling customization. Users can create an exercise component in a single file and upload it to be used in the application, and I can just include it directly. Naturally any user contributed code would have to go through review before others can see it.&lt;/p&gt;
+&lt;h2&gt;2020-02-28&lt;/h2&gt;
+&lt;p&gt;Thinking about what would be the optimal way to achieve "pinyin-guided" hanzi "word sense induction".&lt;/p&gt;
+&lt;p&gt;If the pinyin syllables perfectly match the hanzi characters, then it's easy: we just pick the word sense for each character that matches the pinyin.&lt;/p&gt;
+&lt;p&gt;But, we have many sentences where there are extra pinyin syllables such as, especially with numbers.
+我副100块钱了 may have the pinyin wo3 fu4 yi1bai3 kuai4qian2 le. Maybe there are other cases. What I can do is to search through all the sentences in the database and print the ones with differing number of hanzi characters and pinyin syllables in order to get a sense of the problem.&lt;/p&gt;
+&lt;p&gt;Doing this, I saw that it's not only a problem for numbers, but there are often other errors.&lt;/p&gt;
+&lt;p&gt;The problem then is a bit of a chicken and egg problem: we need to generate the pinyin from the hanzi in order to do get the levenshtein ops. A brute force way of doing it would be to generate all possible combinations of pinyin from the hanzi and pick the one with the smallest levenshtein distance, but this would quickly become intractable. A faster method might be to first generate a greedy pinyin, where we just select the least difficult pinyin for each word, then do levenshtein matching on the two, then assume that the "replace" operations constitute the corrections. For this to work we need to encode pinyin syllables into a single unicode character.&lt;/p&gt;
+&lt;h2&gt;2020-02-26&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Optimized the item page queries&lt;/li&gt;
+&lt;li&gt;Fixed a bug where in rare cases the sentence links were not in order which caused
+  sentences to have lots of extra text. Added an order by clause to fix it.&lt;/li&gt;
+&lt;li&gt;Display a '-' for None values in the tables&lt;/li&gt;
+&lt;li&gt;Fixed display difficulties when logged in vs anonymous. Use black for unknown words. Display explanation for the color codes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Thinking about what would be most useful to include in a word popover. I'm thinking edit and queue buttons, but instead of just an "I know this" button, have 1 colored button for each level so the user can easily specify a level. Then we can put this level as a special review in the review log, which can then be used to calculate an up to date level after further reviews.&lt;/p&gt;
+&lt;h2&gt;2020-02-23&lt;/h2&gt;
+&lt;p&gt;Added checks in cedict for "(name)" and marking those words as having POS=nr, then filtering out those words when calculating sentence difficulty, and graying them out in the UI. Generally people are not interested studying/remembering person names, while cities, countries and other place names you generally do.&lt;/p&gt;
+&lt;h2&gt;2020-02-22&lt;/h2&gt;
+&lt;p&gt;Once again I'm questioning whether to use full-stack Django with JQuery, or a front-end framework like React, Vue or Svelte. The pros of the first approach is:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Can use Django forms for editing items, which come with automatic validation and easy tie-in to models&lt;/li&gt;
+&lt;li&gt;Already have auth in place, which is easy with Django&lt;/li&gt;
+&lt;li&gt;Don't have to engage much with the JS ecosystem and build systems.&lt;/li&gt;
+&lt;li&gt;Routing works better than SPA&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The pros for using a front-end framework:
+1. Get a reusable REST api for other apps
+2. Sending less data over the wire (this is already a problem)
+3. More modern/repsonsive UI
+4. Exercise templates can be built as components in the framework&lt;/p&gt;
+&lt;p&gt;Possible compromise:
+* Keep the auth end-points outside of the SPA
+* Use an SPA everywhere else
+* Use Bootstrap components with the SPA so we can intermingle SPA and Django&lt;/p&gt;
+&lt;p&gt;For now, due to lack of time, I'll stay on course with boring tech. Perfect is the enemy of good. An imperfect released project is infinitely better than a perfect project that is never done.&lt;/p&gt;
+&lt;h2&gt;2020-02-21&lt;/h2&gt;
+&lt;h4&gt;Database&lt;/h4&gt;
+&lt;p&gt;Switching most on_delete=PROTECT to CASCADE, because I think that's what I really want, just wasn't sure how it all worked. It was getting messy having to delete dependencies in the right order.&lt;/p&gt;
+&lt;p&gt;I really need to clean up the prepare_text function. It has a few complications that make it complex:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;We segment sentences with jieba.posseg.cut, but some of the words don't have matches in our dictionary, so we need to break it down further with jieba.tokenize(..., mode='search').&lt;/li&gt;
+&lt;li&gt;If the input is a dictionary word, we want to break it down futher if it contains multiple other dictionary words&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Implemented choosing the link word based on the pinyin first, then tags, then the least difficult one.&lt;/p&gt;
+&lt;p&gt;I'm thinking it might be worth it to encode piyin syllables in binary, as unicode characters outside the ascii range. This would probably cut down on space by a factor of 4, and it could be useful for calculate string alignment between the pinyin supplied for a sentence and the pinyin from the hanzi.&lt;/p&gt;
+&lt;h2&gt;2020-02-20&lt;/h2&gt;
+&lt;p&gt;An interesting &lt;a href="https://use-the-index-luke.com/sql/dml/insert"&gt;quote&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nevertheless, the performance without indexes is so good that it can make sense to temporarily drop all indexes while loading large amounts of data—provided the indexes are not needed by any other SQL statements in the meantime. This can unleash a dramatic speed-up which is visible in the chart and is, in fact, a common practice in data warehouses.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;So maybe it would make sense to drop some indexes from import_chinese_data and import_anki_collection.&lt;/p&gt;
+&lt;h4&gt;Optimization&lt;/h4&gt;
+&lt;p&gt;So, I think I realized why loading the pages with a lot of words on it is slow, and why rendering is slow. It's because the generated HTML is 1.5 Mb! I guess all those spans with popover details really add up.&lt;/p&gt;
+&lt;h2&gt;2020-02-19&lt;/h2&gt;
+&lt;p&gt;After some more digging, it turns out that runnning an ORDER BY query on just the item table, with LIMIT and OFFSET takes only 10ms while just doing the join between the item and sentence table takes 70ms, and the ORDER BY another 70ms. So it seems like it would be better to not have the item fields in a separate table, but for each subclassed item table to duplicate the fields. Lesson learned: avoid joins! In that spirit I'll probably change the Source id to its name, which should be unique, and it's something that's useful to display in the UI.&lt;/p&gt;
+&lt;p&gt;The problem with getting rid of the items table is that Exercise refers to it with a foreign key. But we keep a item_table field there, because we still need to figure out which one to join with. So really it makes no difference if we remove the items table. When we do want to make a join between exercises and items, we'll just have to do it for one item table at a time.&lt;/p&gt;
+&lt;p&gt;Another upside, I can use bulk_create again without implementing my own! Interestingly enough, sorting by just difficulty now keeps the same internal order, so I don't have to sort by id.&lt;/p&gt;
+&lt;h2&gt;2020-02-18&lt;/h2&gt;
 &lt;p&gt;Shaved 33 seconds off importin my Anki collection by optimizing the previously implemented bulk_create. Instead of fetching all the sentences and then their words I instead fetch all the sentence words in one query.&lt;/p&gt;
 &lt;h4&gt;UI&lt;/h4&gt;
-&lt;p&gt;Now displaying known/unkown sentence words if logged in using the stats in ZhUserWordSummary.&lt;/p&gt;
+&lt;p&gt;Now displaying known/unkown sentence words if logged in using the stats in ZhUserWordSummary.
+&lt;a href="https://martindbp.com/images/Screenshot_2020-02-18%20Algernon.png"&gt;screenshot&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Surprisingly, the number of revs for a given word is much higher than I thought, probably due to them being in sentences. When setting the color it makes sense to set the limits for each level quite high, now 10, 25, 50, 100 revs respectively. These numbers seem to work for my Anki revs, but will have to make sure it generalizes.&lt;/p&gt;
+&lt;p&gt;Halfway implementing the word tooltip as a popover instead, with an "add to queue" and an "I know this" button shortcuts. Also refactoring the format_word to output both hanzi and pinyn in the same cell since iterating over all word links seems one reason the rendering is so slow.&lt;/p&gt;
 &lt;h4&gt;Database&lt;/h4&gt;
 &lt;p&gt;Investigating again why item listing is so slow. Notices that listing sentences does a sort on disk in PostgresSQL. This is due to the table not fitting in working memory, which is set to 4 Mb. We can increase it by setting work_mem higher in PostgreSQL: &lt;code&gt;alter database algernon set work_mem='64MB';&lt;/code&gt;. The downside is that each query might take this much memory... And it doesn't seem to speed up the query a whole lot, just ~20% (100ms -&amp;gt; 80ms).&lt;/p&gt;
 &lt;p&gt;Been trying very hard to profile what takes so long besides the SQL queries. Managed to find the profiling bar in Django Debug Toolbar, but the granularity is quite low. It seems like Django spends a ton of time iterating over and post-processing the result for the database queries. I cannot fathom why this takes any significant amount of time. I guess I'll have to solve this with caching.&lt;/p&gt;
@@ -115,14 +181,14 @@ might be a good way to keep the values within bounds [0-1].&lt;/p&gt;
 &lt;h2&gt;2020-01-31&lt;/h2&gt;
 &lt;p&gt;Working on setting a difficulty level for all the items in the database. At first my idea was to set the word difficulty based on frequency, but normalizing the range of frequencies gets rather complicated. For now I'll use the HSK level if set/known, otherwise I'll determine a "pseudo" HSK level based on which level the word frequency matches best. So for all HSK levels, I fetch all the words for that level and calculate mean and standard deviation of their frequencies, estimating the parameters of their normal distribution. I then go through each word without an HSK level, but with a frequency, and pick the maximum likelihood distribution. In the future maybe it's best to add a level 7, where we can put words that are very rare.&lt;/p&gt;
 &lt;h2&gt;No more logs&lt;/h2&gt;
-&lt;p&gt;Unfortunately I didn't start logging my work from the start, but as they say, the best time to plant a tree was 10 years ago, the next best is today.&lt;/p&gt;&lt;/div&gt;</description><guid>https://martindbp.com/posts/algernon-work-log/</guid><pubDate>Sat, 01 Feb 2020 13:06:58 GMT</pubDate></item><item><title>Introducing Algernon</title><link>https://martindbp.com/posts/introducing-algernon/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;img alt="" src="https://martindbp.com/images/algernon_venndiagram.png" title="Venn Diagram"&gt;&lt;/p&gt;
+&lt;p&gt;Unfortunately I didn't start logging my work from the start, but as they say, the best time to plant a tree was 10 years ago, the next best is today.&lt;/p&gt;&lt;/div&gt;</description><guid>https://martindbp.com/posts/algernon-work-log/</guid><pubDate>Sat, 01 Feb 2020 13:06:58 GMT</pubDate></item><item><title>Introducing Algernon</title><link>https://martindbp.com/posts/introducing-algernon/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;img alt="" src="https://martindbp.com/images/algernon_venndiagram.png" title="Algernon"&gt;&lt;/p&gt;
 &lt;h3&gt;What is it?&lt;/h3&gt;
-&lt;p&gt;Algernon is an open data, open source web-based tool for learning and remembering things, a companion you can count on to help with continuous learning throughout your life and career.&lt;/p&gt;
+&lt;p&gt;Algernon is an open source web-based tool for learning and remembering things, with an open community-edited database; a companion you can rely on to help with continuous learning throughout your life and career.&lt;/p&gt;
 &lt;h3&gt;Why (what's the problem?)&lt;/h3&gt;
 &lt;p&gt;The online educational landscape right now consists of a bunch of walled gardens, disconnected learning resources and various flashcard tools.
-Algernon sits somewhere between open source flashcard tools like Anki and walled gardens such as Coursera, Duolingo and Memrise, while leveraging other resources that are out there.&lt;/p&gt;
+Algernon will instead sit somewhere between open source flashcard tools like Anki, walled gardens such as Coursera, Duolingo and Memrise, and Wikipedia.&lt;/p&gt;
 &lt;h4&gt;The downsides of Walled Gardens&lt;/h4&gt;
-&lt;p&gt;The upside of walled gardens is the curated content, but downsides are&lt;/p&gt;
+&lt;p&gt;The upside of walled gardens is the curated content and systems specialized for a specific domain. But downsides are big:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Your data is not portable: you cannot take your data with you, so there is no way to integrate what you have learned through various services&lt;/li&gt;
 &lt;li&gt;The expectation that the service is the be all end all of its particular domain. When the service is out of content, there is usually no way for you to add your own or continue your study.&lt;/li&gt;
@@ -130,29 +196,29 @@ Algernon sits somewhere between open source flashcard tools like Anki and walled
 &lt;/ol&gt;
 &lt;h4&gt;The downsides of Flashcard apps&lt;/h4&gt;
 &lt;p&gt;There are many apps and services for studying and making flashcards. Some are offline apps such as Anki, Mnemosyne, SuperMemo, but there are also many web-based such as Quizlet.&lt;/p&gt;
-&lt;p&gt;The first downside of these tools is the fact that they're based on the concept of flashcards and decks, which I think is inherently limiting. While I personally use Anki and I like it very much, the fact that there are no connections between cards is a daily annoyance to me, especially for language learning. The problem is that different cards &lt;em&gt;intefere&lt;/em&gt; with each other in the spaced-repetition scheduling. For example, I have a mix of word and sentence translation cards, and it often happens that I get a sentence translation card, and then right after I get the word translation card for one of the words in that sentence. At that point I'm already primed to know the answer, but that doesn't mean I would have been able to answer it if it hadn't been for that sentence showing up right before. This messes up the &lt;em&gt;model&lt;/em&gt; of my memory of that word. That is just one example, but there are tons of reasons why one card can affect another.&lt;/p&gt;
-&lt;p&gt;The second downside which is related to the first one, is that there is no source of truth in all the unstructured data of flashcards and decks. In Anki, I can download shared decks made by other people, but there is no way to remove duplicate cards unless they are exactly identical. And the fact that everyone makes their own underlying note structure that generates the cards means there is no standard way to talk about a piece of knowledge.&lt;/p&gt;
+&lt;p&gt;The first downside of these tools is the fact that they're based on the concept of flashcards and decks, which I think is inherently limiting. While I personally use Anki and I like it very much, the fact that there are no connections between cards is a daily annoyance to me, especially for language learning. The problem is that different cards &lt;em&gt;interfere&lt;/em&gt; with each other in the spaced-repetition scheduling. For example, I have a mix of word and sentence translation cards for Chinese, and when a sentence card shows up in connection to a related word card, the &lt;em&gt;model&lt;/em&gt; that is used to predict my forgetting is &lt;em&gt;way&lt;/em&gt; off, because the sentence card &lt;em&gt;primed&lt;/em&gt; me to answer the subsequent word card correctly. That is just one example, but there are tons of cases where one card can affect your recall of another.&lt;/p&gt;
+&lt;p&gt;The second downside which is related to the first one, is that there is no source of truth in all the unstructured data of flashcards and decks. In Anki, I can download shared decks made by other people, but there is no way to remove duplicate cards unless they are exactly identical. And the fact that everyone makes their own underlying note structure that generates the cards means there is no standard way to refer to a piece of knowledge.&lt;/p&gt;
 &lt;h4&gt;Other resources&lt;/h4&gt;
-&lt;p&gt;On the other end, there are a &lt;em&gt;ton&lt;/em&gt; of free (and paid) resources for learning stuff on the web, things like blogs, wikis, open data sets and Youtube videos just to mention a few. If you want to study these in an effective way, you have to do a lot of manual work to get them into your SRS app, or set up your own manual system of study.&lt;/p&gt;
-&lt;h2&gt;How: on a high level&lt;/h2&gt;
+&lt;p&gt;On the other end, there are a &lt;em&gt;ton&lt;/em&gt; of free (and paid) resources for learning stuff on the web, things like blogs, podcasts, wikis, open data sets and Youtube videos just to mention a few. If you want to study these in an effective way, you have to do a lot of manual work to get them into your SRS app, or set up your own manual system of study.&lt;/p&gt;
+&lt;h3&gt;How: on a high level&lt;/h3&gt;
 &lt;p&gt;The two main parts of Algernon are the Knowledge Base and the Memory Model.&lt;/p&gt;
-&lt;h3&gt;Knowledge Base&lt;/h3&gt;
-&lt;p&gt;The knowledge base represents the single source of truth, a carefully structured database for various hand-picked domains from which exercises are generated.
-However, also allow unstructured data for those domains that are not yet incorporated.&lt;/p&gt;
-&lt;p&gt;The knowledge base will consist of&lt;/p&gt;
+&lt;h4&gt;Knowledge Base&lt;/h4&gt;
+&lt;p&gt;The knowledge base represents the single source of truth, a carefully structured database for various hand-picked domains from which exercises are generated.&lt;/p&gt;
+&lt;p&gt;The knowledge base consists of&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Sources with permissive licenses, such as open datasets and Creative Commons content.&lt;/li&gt;
-&lt;li&gt;Links to indexed web resources covered by copyrights. Just like a search engine that indexes based on keywords, we'll index based on concepts tied to the knowledge base.&lt;/li&gt;
-&lt;li&gt;If all goes well: Additions and edits by the community of users.&lt;/li&gt;
+&lt;li&gt;Sources with permissive licenses, such as open data-sets and Creative Commons content.&lt;/li&gt;
+&lt;li&gt;Links to indexed web resources covered by copyrights. Just like a search engine that indexes based on keywords, Algernon indexes based on concepts tied to the knowledge base.&lt;/li&gt;
+&lt;li&gt;If all goes well: Additions and corrections made by the community of users, similar to Wikipedia.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3&gt;Memory Model&lt;/h3&gt;
-&lt;p&gt;Using the knowledge base and user responses to exercises generated from it, we build an integrated memory model that takes into account the interactions between items in the knowledge base.&lt;/p&gt;
-&lt;p&gt;Using the model, we make the knowledge base searchable based on difficulty, providing tailored recommendations for the specific user. Eventually, we can see what &lt;em&gt;kind&lt;/em&gt; of exercise would be most benefitial. For example, if I'm having trouble remembering a specific word, it might make sense to add more exercises with sentences containing that word rather than pounding on the word without the right context.&lt;/p&gt;
-&lt;h2&gt;How: on a technical level&lt;/h2&gt;
-&lt;p&gt;Algernon will primarily be a web-based service, because making apps with a cross-platform codebase, dependencies and UIs is not something I have the skill or time for. Making it web-based also means that iterating and pushing out new versions will be much easier. I also envision this project using a lot of machine learning, which is most conveniently implemented in my go-to programming language: Python.&lt;/p&gt;
+&lt;h4&gt;Memory Model&lt;/h4&gt;
+&lt;p&gt;Using the knowledge base and user responses to its exercises, we can build an integrated memory model that takes into account the interactions between items in the knowledge base.&lt;/p&gt;
+&lt;p&gt;Using the model, we make the knowledge base searchable based on difficulty, providing tailored recommendations for each individual user. Eventually, we can see what &lt;em&gt;kind&lt;/em&gt; of exercise would be most beneficial at a certain point in time. For example, if I'm having trouble remembering a specific word, it might make sense to add more "higher-level" exercises containing that word (such as podcasts or reading exercises) rather than trying to cram the word into memory without the proper context.&lt;/p&gt;
+&lt;h3&gt;How: on a technical level&lt;/h3&gt;
+&lt;p&gt;Algernon will primarily be a web-based service, because making apps with a cross-platform code-base, dependencies and UIs is not something a single developer has the time for. Making it web-based also means that iterating and pushing out new versions will be faster and easier. I also envision this project using a lot of machine learning, which is most conveniently implemented in my go-to programming language: Python. Besides the use of machine learning, the project will be built using "boring", old, proven technologies such as Django, PostgreSQL and Bootstrap. The initial focus will be on making something that is useful rather than something pretty. I think the success of Anki validates this approach.&lt;/p&gt;
+&lt;p&gt;While the focus will not be on developing native apps, the API should be open and allow third-party apps to be built on top of it.&lt;/p&gt;
 &lt;h3&gt;Openness and freedom&lt;/h3&gt;
-&lt;p&gt;I want this to be a tool you can depend on for a long time, which is why I think it's important that it's open source. Even if I can't provide free hosting, the user should always have the option of hosting it themselves. &lt;/p&gt;
-&lt;p&gt;The openness goes for the data as well, not only the knowledge base (as far as it's legally possible to share), but also the user's personal memory model, which should be easy to export.&lt;/p&gt;&lt;/div&gt;</description><guid>https://martindbp.com/posts/introducing-algernon/</guid><pubDate>Thu, 19 Dec 2019 13:06:58 GMT</pubDate></item><item><title>Solving Minesweeper</title><link>https://martindbp.com/posts/minesweeper/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;figure&gt;&lt;img src="https://martindbp.com/images/minesweeper.png"&gt;&lt;/figure&gt; &lt;div&gt;&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;p&gt;I want this to be a tool you can depend on for a long time, which is why I think it's important that it's open source. Even if hosting is not free, the user should always have the option of hosting it themselves or with a third party, if the service was to go down for some reason.&lt;/p&gt;
+&lt;p&gt;The openness goes for the data as well, not only the knowledge base (as far as it's legally possible to share), but also the user's personal memory model which should be easy to export.&lt;/p&gt;&lt;/div&gt;</description><guid>https://martindbp.com/posts/introducing-algernon/</guid><pubDate>Thu, 19 Dec 2019 13:06:58 GMT</pubDate></item><item><title>Solving Minesweeper</title><link>https://martindbp.com/posts/minesweeper/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;figure&gt;&lt;img src="https://martindbp.com/images/minesweeper.png"&gt;&lt;/figure&gt; &lt;div&gt;&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;&lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;Many years ago I took a class in Artificial Intelligence, in which the final group project was to build a program that played Minesweeper (although this would hardly be considered AI today!). Like most group projects everybody prioritized other classes, me included. Eventually I tried to pull an all-nighter to implement it, in a language I had just "learned": C++. Never doing that again. But I've always wanted to actually finish it, so here it goes. This time I'm using Python, numpy, and other libraries which makes the task much easier. I'll try to do things without looking at other implementations, because where's the fun in that?&lt;/p&gt;

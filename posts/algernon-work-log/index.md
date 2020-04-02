@@ -8,11 +8,101 @@
 .. type: text
 .. has_math: true
 
+# 2020-02-28 - 2020-04-02
+Well, things have been... interesting. I started working full time so I'll have less time to work on Algernon, but I try to squeeze in some time here and there. And, well, Corona happened. I've been in self-imposed quarantine for the past 5 weeks, first at home and then at my parents house. Getting any kind of work done with a 2-yearold around is challenging, even with babysitting help, but sometimes I get a few hours on the weekend, or on a rare day when I feel I've gotten enough done at my day job I'll allow myself to code a bit on Algernon. I've taken one big leap, and that is to move the UI away from Django templates+JQuery+Bootstrap to Vue.js Vuetify instead. The speed of developing an interactive is just orders of magnitue better with Vue.js, and I picked it over React and others because if I stick to modern browsers I don't even need a build system. The whole pile of complexity that is JS build systems, webpack, transpilers and NPM is something I want to avoid unless it's absolutely necessary.
+
+Here's the result after porting one item list view to Vue.js:
+[screenshot](/images/Screenshot_2020-02-04 Algernon.png)
+
+Another benefit of using Vue.js and no build system is that it's perfect for enabling customization. Users can create an exercise component in a single file and upload it to be used in the application, and I can just include it directly. Naturally any user contributed code would have to go through review before others can see it.
+
+# 2020-02-28
+Thinking about what would be the optimal way to achieve "pinyin-guided" hanzi "word sense induction".
+
+If the pinyin syllables perfectly match the hanzi characters, then it's easy: we just pick the word sense for each character that matches the pinyin.
+
+But, we have many sentences where there are extra pinyin syllables such as, especially with numbers.
+我副100块钱了 may have the pinyin wo3 fu4 yi1bai3 kuai4qian2 le. Maybe there are other cases. What I can do is to search through all the sentences in the database and print the ones with differing number of hanzi characters and pinyin syllables in order to get a sense of the problem.
+
+Doing this, I saw that it's not only a problem for numbers, but there are often other errors.
+
+The problem then is a bit of a chicken and egg problem: we need to generate the pinyin from the hanzi in order to do get the levenshtein ops. A brute force way of doing it would be to generate all possible combinations of pinyin from the hanzi and pick the one with the smallest levenshtein distance, but this would quickly become intractable. A faster method might be to first generate a greedy pinyin, where we just select the least difficult pinyin for each word, then do levenshtein matching on the two, then assume that the "replace" operations constitute the corrections. For this to work we need to encode pinyin syllables into a single unicode character.
+
+# 2020-02-26
+
+* Optimized the item page queries
+* Fixed a bug where in rare cases the sentence links were not in order which caused
+  sentences to have lots of extra text. Added an order by clause to fix it.
+* Display a '-' for None values in the tables
+* Fixed display difficulties when logged in vs anonymous. Use black for unknown words. Display explanation for the color codes.
+
+Thinking about what would be most useful to include in a word popover. I'm thinking edit and queue buttons, but instead of just an "I know this" button, have 1 colored button for each level so the user can easily specify a level. Then we can put this level as a special review in the review log, which can then be used to calculate an up to date level after further reviews.
+
+# 2020-02-23
+Added checks in cedict for "(name)" and marking those words as having POS=nr, then filtering out those words when calculating sentence difficulty, and graying them out in the UI. Generally people are not interested studying/remembering person names, while cities, countries and other place names you generally do.
+
+# 2020-02-22
+Once again I'm questioning whether to use full-stack Django with JQuery, or a front-end framework like React, Vue or Svelte. The pros of the first approach is:
+
+1. Can use Django forms for editing items, which come with automatic validation and easy tie-in to models
+2. Already have auth in place, which is easy with Django
+3. Don't have to engage much with the JS ecosystem and build systems.
+4. Routing works better than SPA
+
+The pros for using a front-end framework:
+1. Get a reusable REST api for other apps
+2. Sending less data over the wire (this is already a problem)
+3. More modern/repsonsive UI
+4. Exercise templates can be built as components in the framework
+
+Possible compromise:
+* Keep the auth end-points outside of the SPA
+* Use an SPA everywhere else
+* Use Bootstrap components with the SPA so we can intermingle SPA and Django
+
+For now, due to lack of time, I'll stay on course with boring tech. Perfect is the enemy of good. An imperfect released project is infinitely better than a perfect project that is never done.
+
+# 2020-02-21
+
+### Database
+Switching most on_delete=PROTECT to CASCADE, because I think that's what I really want, just wasn't sure how it all worked. It was getting messy having to delete dependencies in the right order.
+
+I really need to clean up the prepare_text function. It has a few complications that make it complex:
+
+1. We segment sentences with jieba.posseg.cut, but some of the words don't have matches in our dictionary, so we need to break it down further with jieba.tokenize(..., mode='search').
+2. If the input is a dictionary word, we want to break it down futher if it contains multiple other dictionary words
+
+Implemented choosing the link word based on the pinyin first, then tags, then the least difficult one.
+
+I'm thinking it might be worth it to encode piyin syllables in binary, as unicode characters outside the ascii range. This would probably cut down on space by a factor of 4, and it could be useful for calculate string alignment between the pinyin supplied for a sentence and the pinyin from the hanzi.
+
+# 2020-02-20
+An interesting [quote](https://use-the-index-luke.com/sql/dml/insert):
+> Nevertheless, the performance without indexes is so good that it can make sense to temporarily drop all indexes while loading large amounts of data—provided the indexes are not needed by any other SQL statements in the meantime. This can unleash a dramatic speed-up which is visible in the chart and is, in fact, a common practice in data warehouses.
+
+So maybe it would make sense to drop some indexes from import_chinese_data and import_anki_collection.
+
+### Optimization
+So, I think I realized why loading the pages with a lot of words on it is slow, and why rendering is slow. It's because the generated HTML is 1.5 Mb! I guess all those spans with popover details really add up.
+
+
+# 2020-02-19
+After some more digging, it turns out that runnning an ORDER BY query on just the item table, with LIMIT and OFFSET takes only 10ms while just doing the join between the item and sentence table takes 70ms, and the ORDER BY another 70ms. So it seems like it would be better to not have the item fields in a separate table, but for each subclassed item table to duplicate the fields. Lesson learned: avoid joins! In that spirit I'll probably change the Source id to its name, which should be unique, and it's something that's useful to display in the UI.
+
+The problem with getting rid of the items table is that Exercise refers to it with a foreign key. But we keep a item_table field there, because we still need to figure out which one to join with. So really it makes no difference if we remove the items table. When we do want to make a join between exercises and items, we'll just have to do it for one item table at a time.
+
+Another upside, I can use bulk_create again without implementing my own! Interestingly enough, sorting by just difficulty now keeps the same internal order, so I don't have to sort by id.
+
 # 2020-02-18
 Shaved 33 seconds off importin my Anki collection by optimizing the previously implemented bulk_create. Instead of fetching all the sentences and then their words I instead fetch all the sentence words in one query.
 
 ### UI
 Now displaying known/unkown sentence words if logged in using the stats in ZhUserWordSummary.
+[screenshot](/images/Screenshot_2020-02-18 Algernon.png)
+
+Surprisingly, the number of revs for a given word is much higher than I thought, probably due to them being in sentences. When setting the color it makes sense to set the limits for each level quite high, now 10, 25, 50, 100 revs respectively. These numbers seem to work for my Anki revs, but will have to make sure it generalizes.
+
+Halfway implementing the word tooltip as a popover instead, with an "add to queue" and an "I know this" button shortcuts. Also refactoring the format_word to output both hanzi and pinyn in the same cell since iterating over all word links seems one reason the rendering is so slow.
 
 ### Database
 Investigating again why item listing is so slow. Notices that listing sentences does a sort on disk in PostgresSQL. This is due to the table not fitting in working memory, which is set to 4 Mb. We can increase it by setting work_mem higher in PostgreSQL: `alter database algernon set work_mem='64MB';`. The downside is that each query might take this much memory... And it doesn't seem to speed up the query a whole lot, just ~20% (100ms -> 80ms).
