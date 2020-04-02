@@ -26,32 +26,32 @@ The upside of walled gardens is the curated content and systems specialized for 
 ### The downsides of Flashcard apps
 There are many apps and services for studying and making flashcards. Some are offline apps such as Anki, Mnemosyne, SuperMemo, but there are also many web-based such as Quizlet.
 
-The first downside of these tools is the fact that they're based on the concept of flashcards and decks, which I think is inherently limiting. While I personally use Anki and I like it very much, the fact that there are no connections between cards is a daily annoyance to me, especially for language learning. The problem is that different cards _interfere_ with each other in the spaced-repetition scheduling. For example, I have a mix of word and sentence translation cards for Chinese, and when a sentence card shows up in connection to a related word card, the _model_ that is used to predict my forgetting is _way_ off, because the sentence card _primed_ me to answer the subsequent word card correctly. That is just one example, but there are tons of cases where one card can affect your recall of another.
+The first downside of these tools is the fact that they're based on the concept of flashcards and decks, which I think is inherently limiting. While I personally use Anki and I like it very much, the fact that there are no connections between cards is a daily annoyance to me, especially for language learning. The problem is that different cards _intefere_ with each other in the spaced-repetition scheduling. For example, I have a mix of word and sentence translation cards for Chinese, and when a sentence card shows up in connection to a related word card, the _model_ that is used to predict my forgetting is _way_ off, because the sentence card _primed_ me to answer the subsequent word card correctly. That is just one example, but there are tons of cases where one card can affect your recall of another.
 
 The second downside which is related to the first one, is that there is no source of truth in all the unstructured data of flashcards and decks. In Anki, I can download shared decks made by other people, but there is no way to remove duplicate cards unless they are exactly identical. And the fact that everyone makes their own underlying note structure that generates the cards means there is no standard way to refer to a piece of knowledge.
 
 ### Other resources
 On the other end, there are a _ton_ of free (and paid) resources for learning stuff on the web, things like blogs, podcasts, wikis, open data sets and Youtube videos just to mention a few. If you want to study these in an effective way, you have to do a lot of manual work to get them into your SRS app, or set up your own manual system of study.
 
-## How: on a high level
+# How: on a high level
 The two main parts of Algernon are the Knowledge Base and the Memory Model.
 
-### Knowledge Base
+## Knowledge Base
 The knowledge base represents the single source of truth, a carefully structured database for various hand-picked domains from which exercises are generated.
 
 The knowledge base consists of
 
-1. Sources with permissive licenses, such as open data-sets and Creative Commons content.
+1. Sources with permissive licenses, such as open datasets and Creative Commons content.
 2. Links to indexed web resources covered by copyrights. Just like a search engine that indexes based on keywords, Algernon indexes based on concepts tied to the knowledge base.
 3. If all goes well: Additions and corrections made by the community of users, similar to Wikipedia.
 
-### Memory Model
+## Memory Model
 Using the knowledge base and user responses to its exercises, we can build an integrated memory model that takes into account the interactions between items in the knowledge base.
 
-Using the model, we make the knowledge base searchable based on difficulty, providing tailored recommendations for each individual user. Eventually, we can see what _kind_ of exercise would be most beneficial at a certain point in time. For example, if I'm having trouble remembering a specific word, it might make sense to add more "higher-level" exercises containing that word (such as podcasts or reading exercises) rather than trying to cram the word into memory without the proper context.
+Using the model, we make the knowledge base searchable based on difficulty, providing tailored recommendations for each individual user. Eventually, we can see what _kind_ of exercise would be most benefitial at a certain point in time. For example, if I'm having trouble remembering a specific word, it might make sense to add more "higher-level" exercises containing that word (such as podcasts or reading exercises) rather than trying to cram the word into memory without the proper context.
 
-## How: on a technical level
-Algernon will primarily be a web-based service, because making apps with a cross-platform code-base, dependencies and UIs is not something a single developer has the time for. Making it web-based also means that iterating and pushing out new versions will be faster and easier. I also envision this project using a lot of machine learning, which is most conveniently implemented in my go-to programming language: Python. Besides the use of machine learning, the project will be built using "boring", old, proven technologies such as Django, PostgreSQL and Bootstrap. The initial focus will be on making something that is useful rather than something pretty. I think the success of Anki validates this approach.
+# How: on a technical level
+Algernon will primarily be a web-based service, because making apps with a cross-platform codebase, dependencies and UIs is not something a single developer has the time for. Making it web-based also means that iterating and pushing out new versions will be faster and easier. I also envision this project using a lot of machine learning, which is most conveniently implemented in my go-to programming language: Python. Besides the use of machine learning, the project will be built using "boring", old, proven technologies such as Django and PostgreSQL. The initial focus will be on making something that is useful rather than something pretty. I think the success of Anki validates this approach.
 
 While the focus will not be on developing native apps, the API should be open and allow third-party apps to be built on top of it.
 
