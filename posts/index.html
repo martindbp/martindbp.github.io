@@ -55,7 +55,50 @@ MathJax.Hub.Config({
         
 
 <div class="posts">
-    <article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="algernon-work-log/" class="u-url">Algernon Work Log</a></h1>
+    <article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="learning-log/" class="u-url">Learning log</a></h1>
+        <div class="metadata">
+            <p class="dateline"><a href="learning-log/" rel="bookmark"><time class="post-date published dt-published" datetime="2020-05-08T19:10:35+00:00" title="2020-05-08">2020-05-08</time></a></p>
+                <p class="commentline">
+        
+    <a href="learning-log/#disqus_thread" data-disqus-identifier="cache/posts/learning-log.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>This is a place where I put Youtube videos of classes I've watched, blog posts, books or other educational content I've read that I want to save for reference later.</p>
+<p># Missing semester: Cambrige
+This is a course covering various topics needed in the work life that are usually not covered at university. I find it good to sometimes go over fairly basic videos to see if I missed anything or to refersh my understanding.</p>
+<ul class="simple">
+<li>2020-05-08 [Lecture 4: Data Wrangling](<a class="reference external" href="https://www.youtube.com/watch?v=sz_dsktIjt4">https://www.youtube.com/watch?v=sz_dsktIjt4</a>)</li>
+<li>2020-05-09 [Lecture 1: The Shell](<a class="reference external" href="https://www.youtube.com/watch?v=Z56Jmr9Z34Q">https://www.youtube.com/watch?v=Z56Jmr9Z34Q</a>)</li>
+</ul>
+</div>
+    </div>
+    </article><article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="why-i-rarely-consume-native-content/" class="u-url">Why I rarely consume native content</a></h1>
+        <div class="metadata">
+            <p class="dateline"><a href="why-i-rarely-consume-native-content/" rel="bookmark"><time class="post-date published dt-published" datetime="2020-04-05T11:01:49+00:00" title="2020-04-05">2020-04-05</time></a></p>
+                <p class="commentline">
+        
+    <a href="why-i-rarely-consume-native-content/#disqus_thread" data-disqus-identifier="cache/posts/why-i-rarely-consume-content-in-my-native-language.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>I'm a native Swedish speaker, but I rarely consume content in Swedish. I suspect this confuses friends and family, and perhaps makes me look like a snob ("Oh, I don't watch (Swedish) TV"). It hasn't always been a conscious choice, but it's become one now.</p>
+<p>The answer is simple: it's just not very likely to be the best of its kind out there. Sweden has a population of roughly 10 million and there are 1.5 billion English speakers in the world. Content produced for the English market has to be much better to be noticed. Brilliant minds who get to apply themselves are presumably uniformly distributed in the developed world, in both science and art.</p>
+<p>And this to me seems to hold, as whenever I consume some Swedish content on a topic I'm already familiar with what I get is basically a watered-down retelling of an English-published source, 3 years later. Very rarely are the original thinkers Swedish.</p>
+<p>Therefore, I'll stick to English material unless:
+1. It's is something uniquely Swedish / cultural, e.g. comedy, music
+2. It looks like an outlier in terms of popularity, when it comes to entertainment
+3. It's by someone well respected internationally, e.g. Hans Rosling, Max Tegmark
+4. There is no English substitue</p>
+</div>
+    </div>
+    </article><article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="algernon-work-log/" class="u-url">Algernon Work Log</a></h1>
         <div class="metadata">
             <p class="dateline"><a href="algernon-work-log/" rel="bookmark"><time class="post-date published dt-published" datetime="2020-02-01T13:06:58+00:00" title="2020-02-01">2020-02-01</time></a></p>
                 <p class="commentline">
@@ -67,11 +110,84 @@ MathJax.Hub.Config({
 </div>
     </header><div class="e-content entry-content">
     <div>
+<h2>2020-05-06</h2>
+<p>I'm thinking more and more that I need a browser extension eventually. One case where it would be extra useful is with Viki Rakuten videos, which cannot be embedded. With an extension we could either hook into the subtitles as they're being displayed (and allow adding them to vocab), or display them somewhere else and sync the time. It would also enable users to view sites which don't allow iframe embedding.</p>
+<h2>2020-05-03</h2>
+<p>Trying to build small classifiers for hanzi word -&gt; pinyin. Before I relied mostly on the freqency in the ChinesePod transcripts, but I found a dataset called the The Lancaster Corpus of Mandarin Chinese which has hanzi as well as pinyin. Using this I can segement all the sentences and get examples of when a hanzi word is pronounced in different ways. With those examples I can train small decision tree on the POS tags generated from the Jieba segmentation.</p>
+<p>Here's the dataset
+https://ota.bodleian.ox.ac.uk/repository/xmlui/handle/20.500.12024/2474</p>
+<p>But after parsing and analyzing the data, there doesn't seem to be enough ambiguous cases to build classifiers for them, instead I'll manually check the POS tags in a window and decide which reading it should be.</p>
+<h2>2020-04-25</h2>
+<p>I decided to pause the indexing parsing for now and focus on using sentence translations to pick words and word translations.</p>
+<h2>2020-04-23</h2>
+<p>I found another great podcasts site and I wanted to index the content, but the 24 posts had 4 different layouts, and some are really hard to parse without special code. So I think it's time I build an indexing module that has very few assumptions about the layout. The only thing we should need to know is what combination of hanzi, pinyin and translations there is on the page. My plan is this: </p>
+<ol>
+<li>Filter out HTML elements which we know contain hanzi or pinyin. Treat the rest as potential translations.</li>
+<li>Use the Levenshtein code to align the three types of elements<ul>
+<li>Comparing hanzi and pinyin, use the Levenshtein distance using the same weighting function as I used for the chinesepod frequency database.</li>
+<li>Comparing hanzi and translation, use the percentage of dictionary word translations that can be found in the translation</li>
+<li>If all three are available, first work out the hanzi+pinyin to narrow down the word links, then cross reference with translation</li>
+</ul>
+</li>
+<li>Optionally provide selectors for where to look for content, if needed</li>
+</ol>
+<p>The assumptions for this to work are:</p>
+<ol>
+<li>Elements of a certain type (hanzi, pinyin or translation) are arranged sequentially on the page</li>
+<li>Matching elements of different types are delimited in the same way. E.g. if one element has two hanzi sentences, the corresponding pinyin element is assumed to have two sentences.</li>
+</ol>
+<h2>2020-04-18</h2>
+<p>Instead of going for the strategy below, I opted for building a character-reading frequency database instead. I have some vague memory of seenig a character reading frequency database, but can't find it anymore.</p>
+<p>What I decided to do was to use the ChinesePod transcripts, which have both hanzi, pinyin and translation, and simply get the pinyin reading frequencies from there. As it turns out though, there are frequent errors in the correspondence between the hanzi and the pinyin, but using the weighted Levenshtein distance I was able to align them and remove all errors (AFAIK).</p>
+<p>Now that I've written the code for aligning them, I can use it in the sentence indexing as well, so that we can pick the correct word based on the hanzi and pinyin, if pinyin is available. Next up I'll also use the translation to disambiguate. I also want to point to specific translations within that word whenever possible. My plan is to do some simple heuristic, such as:</p>
+<ul>
+<li>For each candidate chinese word<ul>
+<li>For each word translation<ul>
+<li>Remove things within parenthesis and other "extra" information</li>
+<li>Get the least frequent english word in the translation</li>
+<li>If that english word exists in the sentence translation, then pick it.</li>
+</ul>
+</li>
+<li>If several translations had matches, keep links to all of them</li>
+</ul>
+</li>
+<li>First go by pinyin if available, but then use translation as tie-breaker</li>
+</ul>
+<h2>2020-04-15</h2>
+<p>I've been having to manually correct the pinyin priority for many duo-yin-zi. The latest I found was 读 which got assigned dou4 rather than du2. Now that I've fixed so many of these, I think it's better to do some analysis and try to catch the unknown number of remaning errors. What I plan to do is: for each duo-yin-zi, find all compound words that contains the character, and order pronounciations by the frequency they appear in these words (and the frequency of those words).</p>
+<p>There are however characters that have the same readings but different translations. In this case we still need a manual tie-breaker. It turns out thought that most of these cases in CEDICT, one instance contains of the other.</p>
+<h2>2020-04-14</h2>
+<p>I went ahead and implemented both optimizations mentioned yesterday. Might be a premature optimization, but I think it really helps that each search is 5ms instead of 40ms because I can see this being a bottleneck as people are typing in search queries or browsing around the tables. And the optimizations will work for any item type.</p>
+<h2>2020-04-13</h2>
+<p>There were lots of little issues with search match highlighting but I finally got it working, here's a screenshot:
+<a href="../images/Screenshot_2020-04-13%20Algernon.png">screenshot</a></p>
+<p>While profiling the search queries I noticed that counting up the items takes like 90% of the time. It makes sense, since Postgres has to go through every single match to count them up. However, when actually fetching the matching items, it's usually much faster since we have e.g. LIMIT 25. This is true when fetching the first few pages, but as you go through the pages to the end with OFFSET, the time it takes to fetch them approaches the counting time. But now I see two optimizations that could be done:</p>
+<ol>
+<li>Cache the number of items for a query, or just calculate it once by order of the front-end. This should then save 90-50% of the time for fetching different pages of that search query.</li>
+<li>Wait to calculate the total number before the user requests a different page than the first one. This one might be tricky since we need to know the total number of pages to do pageination, but since I'm mainly using a slider for that, I could "hide" the fact that I don't know how many pages there are, until the user actually clicks somewhere else on that slider.</li>
+</ol>
+<p>The combination of 1 and 2 means that we reduce the load for lots of unecessary queries (due to misspelling, spurious requests during typing etc), and then only do the count once when the user is looking through the results.</p>
+<p>For non search queries I could also keep a record of the number of items in each table.</p>
+<h2>2020-04-10</h2>
+<p>I have an interesting problem aligning search matches in normalized pinyin, e.g "wo3 xi3huan", with the diacritical version "wǒ xǐhuan", since they are of differing length. Let's say the search term is "xi" and we find a match in the normalized pinyin, how do we get the range of the match in the diacritical version?</p>
+<p>I was thinking this should be pretty easy, but then what if we search for "3 xi"? Then the 3 will match the tone of "wo", but we'll probably not want to highlight "wo" because of that. I'm thinking it might be better to keep the tonal numbers in the converted diacritical text, but just hide them on the front-end. Then all the indices are the same.</p>
+<p>What I ended up doing is sending pinyiny with diacritical marks <em>and</em> tonal numbers to the front-end, and then filtering out the tonal numbers there. That way the indices from the search lines up when I do the search match highlighting.</p>
+<h2>2020-04-04</h2>
+<p>I added text search on the fields in the items table using Django's contains/icontains filtering and full-text search. To speed it up I added Trigram GIN indexes.</p>
+<p>I considered using full-text search for the translation field, but for this use case I realized it's a bad fit since we actually care about word ordering, we don't want stemming (since you might want to find uses of a specific word tense etc). However, a simple %LIKE% query also doesn't work well, since searching for "ok", will match "he looked left". I think first trying startswith=text, and then contains=f' {text}' will work well enough.</p>
 <h2>2020-02-28 - 2020-04-02</h2>
-<p>Well, things have been... interesting. I started working full time so I'll have less time to work on Algernon, but I try to squeeze in some time here and there. And, well, Corona happened. I've been in self-imposed quarantine for the past 5 weeks, first at home and then at my parents house. Getting any kind of work done with a 2-yearold around is challenging, even with babysitting help, but sometimes I get a few hours on the weekend, or on a rare day when I feel I've gotten enough done at my day job I'll allow myself to code a bit on Algernon. I've taken one big leap, and that is to move the UI away from Django templates+JQuery+Bootstrap to Vue.js Vuetify instead. The speed of developing an interactive is just orders of magnitue better with Vue.js, and I picked it over React and others because if I stick to modern browsers I don't even need a build system. The whole pile of complexity that is JS build systems, webpack, transpilers and NPM is something I want to avoid unless it's absolutely necessary.</p>
+<p>Well, things have been... interesting lately. I started working full time so I'll have less time to work on this, but I try to squeeze in some time here and there. And, well, Corona happened. I've been in self-imposed quarantine for the past 5 weeks, first at home and then at my parents house on the country-side. Getting any kind of work done with a 2-year-old around is challenging, even with babysitting help, but sometimes I get a few hours on the weekend, or on a rare day when I feel I've gotten enough done at my day job I'll allow myself to code a bit on this project. I've taken one big leap, and that is to move the UI away from Django templates+JQuery+Bootstrap to Vue.js Vuetify instead. The speed of developing an interactive is just orders of magnitue better with Vue.js, and I picked it over React and others because if I stick to modern browsers I don't even need a build system. The whole pile of complexity that is JS build systems, webpack, transpilers and NPM is something I want to avoid unless it's absolutely necessary.</p>
 <p>Here's the result after porting one item list view to Vue.js:
-<a href="../images/Screenshot_2020-02-04%20Algernon.png">screenshot</a></p>
+<a href="../images/Screenshot_2020-04-02%20Algernon.png">screenshot</a></p>
 <p>Another benefit of using Vue.js and no build system is that it's perfect for enabling customization. Users can create an exercise component in a single file and upload it to be used in the application, and I can just include it directly. Naturally any user contributed code would have to go through review before others can see it.</p>
+<p>For now I'm focusing on the sentence table and have a bunch of things to do:</p>
+<ul>
+<li>Separate the user review data to a separate end-point from the items. While this will require two API calls instead of one, it enables caching the items since they are the same for all users. In order to reduce load I can then only invalidate the cache at a set interval, even if there are changes to some items or added items. As the data solidifies over time it becomes less important to keep it completely up to date for the table/search. Of course, the more search options there are, the worse caching will work, but if we can cache the most common types, e.g. just plain search without any options maybe it will still help.</li>
+<li>Related to above, the user review end-point I think can return the whole data set, or the data that changed since time t, which we can keep consistent on the front-end. It's also not mission critical in case it's not consistent since it'll only be used for search. If a user has 10k reviewed items, and we send the first 64-bit bits instead of the full 256-bit UUID, then we could get away with 10k*(64+16) = 800 Kb, which is not too bad. 16-bit for the number of reviews.</li>
+<li>Implement text-search</li>
+<li>Filter by word-link</li>
+<li>Filter by source</li>
+</ul>
 <h2>2020-02-28</h2>
 <p>Thinking about what would be the optimal way to achieve "pinyin-guided" hanzi "word sense induction".</p>
 <p>If the pinyin syllables perfectly match the hanzi characters, then it's easy: we just pick the word sense for each character that matches the pinyin.</p>

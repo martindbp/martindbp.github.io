@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://martindbp.com/</loc>
-  <lastmod>2020-02-14T08:45:00Z</lastmod>
+  <lastmod>2020-05-22T13:53:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/2019/</loc>
@@ -19,7 +19,7 @@
  </url>
  <url>
   <loc>https://martindbp.com/archive.html</loc>
-  <lastmod>2020-02-18T13:55:00Z</lastmod>
+  <lastmod>2020-05-22T13:53:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/categories/</loc>
@@ -27,7 +27,7 @@
  </url>
  <url>
   <loc>https://martindbp.com/posts/</loc>
-  <lastmod>2020-02-14T08:45:00Z</lastmod>
+  <lastmod>2020-05-22T13:53:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/posts/algernon-work-log/</loc>
@@ -46,11 +46,19 @@
   <lastmod>2020-01-01T10:05:00Z</lastmod>
  </url>
  <url>
+  <loc>https://martindbp.com/posts/learning-log/</loc>
+  <lastmod>2020-05-22T13:53:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://martindbp.com/posts/minesweeper/</loc>
   <lastmod>2020-02-04T08:32:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/posts/name-statistics/</loc>
   <lastmod>2020-02-04T08:32:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://martindbp.com/posts/why-i-rarely-consume-native-content/</loc>
+  <lastmod>2020-04-19T15:27:00Z</lastmod>
  </url>
 </urlset>
