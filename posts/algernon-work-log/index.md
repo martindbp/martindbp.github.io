@@ -8,6 +8,12 @@
 .. type: text
 .. has_math: true
 
+# 2020-06-13
+I've been thinking about knowledge tracing and what it is we want to predict really. In the past I was thinking about it in terms of wanting to assign a probability for the person to correctly complete an exercise at a given point in time.  Ideally however, we actually the whole probability distribution of all possible answers, as a function of time. The probability for the _correct_ answer is just a special case of the having the full distribution. This would for example help with clearning up confusions or misunderstandings.
+
+On another note, I want to add the grammar rules from the AllSet Learning Grammar wiki as separate items. I think most
+of the rules can be hard-coded for segmentation, but it will be a lot of manual work.
+
 # 2020-05-06
 I'm thinking more and more that I need a browser extension eventually. One case where it would be extra useful is with Viki Rakuten videos, which cannot be embedded. With an extension we could either hook into the subtitles as they're being displayed (and allow adding them to vocab), or display them somewhere else and sync the time. It would also enable users to view sites which don't allow iframe embedding.
 
