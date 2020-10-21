@@ -10,7 +10,7 @@
 ![](/images/algernon_venndiagram.png "Algernon")
 
 ## What is it?
-Algernon is an open source web-based tool and browser plugin for learning and remembering things, with an open community-edited database; a companion you can rely on to help with continuous learning throughout your life and career.
+Algernon is an open source web-based tool and browser extension for learning and remembering things, with an open community-edited database; a companion you can rely on to help with continuous learning throughout your life and career.
 
 ## Why (what's the problem?)
 The online educational landscape right now consists of a bunch of walled gardens, disconnected learning resources and various flashcard tools.
@@ -31,7 +31,7 @@ The first downside of these tools is the fact that they're based on the concept 
 The second downside which is related to the first one, is that there is no source of truth in all the unstructured data of flashcards and decks. In Anki, I can download shared decks made by other people, but there is no way to remove duplicate cards unless they are exactly identical. And the fact that everyone makes their own underlying note structure that generates the cards means there is no standard way to refer to a piece of knowledge.
 
 ### Other resources
-On the other end, there are a _ton_ of free (and paid) resources for learning stuff on the web, things like blogs, podcasts, wikis, open data sets and Youtube videos just to mention a few. If you want to study these in an effective way, you have to do a lot of manual work to get them into your SRS app, or set up your own manual system of study. Here, I want to index this content just like a search engine indexes the whole web. Some data sets may need to be processed and indexed manually, but for most cases, the browser plugin will facilitate the importing of content from any web-site.
+On the other end, there are a _ton_ of free (and paid) resources for learning stuff on the web, things like blogs, podcasts, wikis, open data sets and Youtube videos just to mention a few. If you want to study these in an effective way, you have to do a lot of manual work to get them into your SRS app, or set up your own manual system of study. Here, I want to index this content just like a search engine indexes the whole web. Some data sets may need to be processed and indexed manually, but for most cases, the browser extension will facilitate the importing of content from any web-site.
 
 ## How: on a high level
 The two main parts of Algernon are the Knowledge Base and the Memory Model.
