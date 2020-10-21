@@ -10,7 +10,7 @@
 ![](/images/algernon_venndiagram.png "Algernon")
 
 ## What is it?
-Algernon is an open source web-based tool for learning and remembering things, with an open community-edited database; a companion you can rely on to help with continuous learning throughout your life and career.
+Algernon is an open source web-based tool and browser plugin for learning and remembering things, with an open community-edited database; a companion you can rely on to help with continuous learning throughout your life and career.
 
 ## Why (what's the problem?)
 The online educational landscape right now consists of a bunch of walled gardens, disconnected learning resources and various flashcard tools.
@@ -31,7 +31,7 @@ The first downside of these tools is the fact that they're based on the concept 
 The second downside which is related to the first one, is that there is no source of truth in all the unstructured data of flashcards and decks. In Anki, I can download shared decks made by other people, but there is no way to remove duplicate cards unless they are exactly identical. And the fact that everyone makes their own underlying note structure that generates the cards means there is no standard way to refer to a piece of knowledge.
 
 ### Other resources
-On the other end, there are a _ton_ of free (and paid) resources for learning stuff on the web, things like blogs, podcasts, wikis, open data sets and Youtube videos just to mention a few. If you want to study these in an effective way, you have to do a lot of manual work to get them into your SRS app, or set up your own manual system of study.
+On the other end, there are a _ton_ of free (and paid) resources for learning stuff on the web, things like blogs, podcasts, wikis, open data sets and Youtube videos just to mention a few. If you want to study these in an effective way, you have to do a lot of manual work to get them into your SRS app, or set up your own manual system of study. Here, I want to index this content just like a search engine indexes the whole web. Some data sets may need to be processed and indexed manually, but for most cases, the browser plugin will facilitate the importing of content from any web-site.
 
 ## How: on a high level
 The two main parts of Algernon are the Knowledge Base and the Memory Model.
@@ -49,11 +49,6 @@ The knowledge base consists of
 Using the knowledge base and user responses to its exercises, we can build an integrated memory model that takes into account the interactions between items in the knowledge base.
 
 Using the model, we make the knowledge base searchable based on difficulty, providing tailored recommendations for each individual user. Eventually, we can see what _kind_ of exercise would be most beneficial at a certain point in time. For example, if I'm having trouble remembering a specific word, it might make sense to add more "higher-level" exercises containing that word (such as podcasts or reading exercises) rather than trying to cram the word into memory without the proper context.
-
-## How: on a technical level
-Algernon will primarily be a web-based service, because making apps with a cross-platform code-base, dependencies and UIs is not something a single developer has the time for. Making it web-based also means that iterating and pushing out new versions will be faster and easier. I also envision this project using a lot of machine learning, which is most conveniently implemented in my go-to programming language: Python. Besides the use of machine learning, the project will be built using "boring", old, proven technologies such as Django, PostgreSQL and Bootstrap. The initial focus will be on making something that is useful rather than something pretty. I think the success of Anki validates this approach.
-
-While the focus will not be on developing native apps, the API should be open and allow third-party apps to be built on top of it.
 
 ## Openness and freedom
 I want this to be a tool you can depend on for a long time, which is why I think it's important that it's open source. Even if hosting is not free, the user should always have the option of hosting it themselves or with a third party, if the service was to go down for some reason.
