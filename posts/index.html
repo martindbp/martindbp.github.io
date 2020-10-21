@@ -373,9 +373,14 @@ Algernon will instead sit somewhere between open source flashcard tools like Ank
 <h4>Memory Model</h4>
 <p>Using the knowledge base and user responses to its exercises, we can build an integrated memory model that takes into account the interactions between items in the knowledge base.</p>
 <p>Using the model, we make the knowledge base searchable based on difficulty, providing tailored recommendations for each individual user. Eventually, we can see what <em>kind</em> of exercise would be most beneficial at a certain point in time. For example, if I'm having trouble remembering a specific word, it might make sense to add more "higher-level" exercises containing that word (such as podcasts or reading exercises) rather than trying to cram the word into memory without the proper context.</p>
+<h3>How: on a technical level</h3>
+<h4>First milestone</h4>
+<p>The initial release will be focused on Chinese. It will use a Python Django server with PostgresSQL Database, where the knowledge base and user data is stored. The web app provides basic exploration of indexed content relevant to the user's level. User word data can be imported from Anki directly in order to cross-reference with the knowledge base. The main interface though will be the browser extension, which indexes the content on visited web pages, and allows the user to see translations and pinyin, and to import words and sentences from them. Once imported, the user can generate notes and cards and sync them back to Anki, or some other format.</p>
+<h4>Later releases</h4>
+<p>Will flesh out the web app primarily with its own Spaced Repetition System and recommendation engine, which takes advantage of the explicit structure of the knowledge base to generate innovative exercise variations that are interconnected in the memory model.</p>
 <h3>Openness and freedom</h3>
-<p>I want this to be a tool you can depend on for a long time, which is why I think it's important that it's open source. Even if hosting is not free, the user should always have the option of hosting it themselves or with a third party, if the service was to go down for some reason.</p>
-<p>The openness goes for the data as well, not only the knowledge base (as far as it's legally possible to share), but also the user's personal memory model which should be easy to export.</p>
+<p>I wish for this to be a tool you can depend on for a long time, which is why I think it's important that it's open source. Hosting will be provided for free to the extent that I can personally pay for it, or the hosting is covered by donations. The user should always have the option of hosting it themselves or with a third party, if the service was to go down for some reason.</p>
+<p>The openness goes for the data as well, not only the knowledge base (as far as it's legally possible to share w.r.t licensing), but also the user's personal memory model which should be easy to export.</p>
 </div>
     </div>
     </article><article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="minesweeper/" class="u-url">Solving Minesweeper</a></h1>
