@@ -16,11 +16,7 @@ Hi there, welcome to my little space on the interwebs! This is where I post rand
 * [Chinese Placement Test with Logistic Regression and Active Learning](posts/chinese-placement-test/)
 * [Are parents picking less common names?](posts/name-statistics/)
 
-Posts regarding my learning app project Algernon:
-
-* [Introducing Algernon](posts/introducing-algernon)
-* [Work Log](posts/algernon-work-log)
-
 Github projects:
 
+* [MerkL: ML pipelines based on Merkle DAGs](https://github.com/martindbp/merkl)
 * [Inter-Planetary Version Control: An implementation of a git-like DVCS on top of IPFS](https://github.com/martindbp/ipvc)
