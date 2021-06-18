@@ -7,50 +7,38 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://martindbp.com/</loc>
-  <lastmod>2020-05-22T13:53:00Z</lastmod>
+  <lastmod>2021-06-18T16:03:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/2019/</loc>
-  <lastmod>2020-01-01T10:05:00Z</lastmod>
- </url>
- <url>
-  <loc>https://martindbp.com/2020/</loc>
-  <lastmod>2020-02-03T10:12:00Z</lastmod>
+  <lastmod>2021-06-18T16:03:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/archive.html</loc>
-  <lastmod>2020-10-21T09:25:00Z</lastmod>
+  <lastmod>2021-06-18T16:03:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/categories/</loc>
-  <lastmod>2020-01-01T10:05:00Z</lastmod>
+  <lastmod>2021-06-18T16:03:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/posts/</loc>
-  <lastmod>2020-05-22T13:53:00Z</lastmod>
- </url>
- <url>
-  <loc>https://martindbp.com/posts/algernon-work-log/</loc>
-  <lastmod>2020-02-14T08:45:00Z</lastmod>
+  <lastmod>2021-06-18T16:03:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/posts/can-i-say-this/</loc>
-  <lastmod>2020-02-04T08:32:00Z</lastmod>
+  <lastmod>2021-06-18T16:03:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/posts/chinese-placement-test/</loc>
-  <lastmod>2020-02-04T08:32:00Z</lastmod>
- </url>
- <url>
-  <loc>https://martindbp.com/posts/introducing-algernon/</loc>
-  <lastmod>2020-01-01T10:05:00Z</lastmod>
+  <lastmod>2021-06-18T16:03:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/posts/minesweeper/</loc>
-  <lastmod>2020-02-04T08:32:00Z</lastmod>
+  <lastmod>2021-06-18T16:03:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/posts/name-statistics/</loc>
-  <lastmod>2020-02-04T08:32:00Z</lastmod>
+  <lastmod>2021-06-18T16:03:00Z</lastmod>
  </url>
 </urlset>

@@ -22,7 +22,6 @@ MathJax.Hub.Config({
 });
 </script><!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Martin Pettersson">
 <link rel="prev" href="../name-statistics/" title="Are parents picking less common names?" type="text/html">
-<link rel="next" href="../introducing-algernon/" title="Introducing Algernon" type="text/html">
 <meta property="og:site_name" content="martindbp">
 <meta property="og:title" content="Solving Minesweeper">
 <meta property="og:url" content="https://martindbp.com/posts/minesweeper/">
@@ -570,9 +569,9 @@ Where $N(i)$ is the neighborhood of square i.</p>
   <span class="k">return</span> <span class="n">wins</span> <span class="o">/</span> <span class="p">(</span><span class="n">wins</span> <span class="o">+</span> <span class="n">losses</span><span class="p">)</span>
     
 <span class="n">num_runs</span> <span class="o">=</span> <span class="mi">10000</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Win ratios for strategies over </span><span class="si">{num_runs}</span><span class="s1"> runs:'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Random lowest probability mine: {estimate_win_ratio(num_runs, difficulty="expert", max_solutions=2000, prob_pick_strategy="random")}'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Max zero probability: {estimate_win_ratio(num_runs, difficulty="expert", max_solutions=2000, prob_pick_strategy="prob_zero")}'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Win ratios for strategies over </span><span class="si">{num_runs}</span><span class="s1"> runs:'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Random lowest probability mine: {estimate_win_ratio(num_runs, difficulty="expert", max_solutions=2000, prob_pick_strategy="random")}'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Max zero probability: {estimate_win_ratio(num_runs, difficulty="expert", max_solutions=2000, prob_pick_strategy="prob_zero")}'</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -787,18 +786,18 @@ Max zero probability: 0.4945
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">time</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="k">import</span> <span class="n">b64encode</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
 
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">PIL.Image</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
 <span class="kn">import</span> <span class="nn">IPython.display</span>
-<span class="kn">from</span> <span class="nn">matplotlib.animation</span> <span class="k">import</span> <span class="n">FuncAnimation</span>
+<span class="kn">from</span> <span class="nn">matplotlib.animation</span> <span class="kn">import</span> <span class="n">FuncAnimation</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="k">import</span> <span class="n">label</span>
-<span class="kn">from</span> <span class="nn">scipy.ndimage.morphology</span> <span class="k">import</span> <span class="n">distance_transform_edt</span>
+<span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">label</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage.morphology</span> <span class="kn">import</span> <span class="n">distance_transform_edt</span>
 
 <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
@@ -806,7 +805,7 @@ Max zero probability: 0.4945
 <span class="n">IMG_SQUARE_SIZE</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">IMAGES</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="s1">'bomb'</span><span class="p">,</span> <span class="s1">'facingDown'</span><span class="p">,</span> <span class="s1">'flagged'</span><span class="p">]:</span>
-  <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">f</span><span class="s1">'minesweeper/</span><span class="si">{name}</span><span class="s1">.png'</span><span class="p">)</span>
+  <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">f</span><span class="s1">'minesweeper/</span><span class="si">{name}</span><span class="s1">.png'</span><span class="p">)</span>
   <span class="n">IMAGES</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="n">IMG_SQUARE_SIZE</span><span class="p">,</span> <span class="n">IMG_SQUARE_SIZE</span><span class="p">))</span>
 
     
@@ -832,7 +831,7 @@ Max zero probability: 0.4945
 
 
 <span class="k">class</span> <span class="nc">MinesweeperBoard</span><span class="p">:</span>
-  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_mines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">difficulty</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_mines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">difficulty</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_solutions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prob_pick_strategy</span><span class="o">=</span><span class="s1">'prob_zero_near_edge'</span><span class="p">,</span> 
                <span class="n">visualize_constraints</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">visualize_lvl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">visualize_zero_probs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">visualize_output</span><span class="o">=</span><span class="s1">'video'</span><span class="p">,</span> <span class="n">visualize_crop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visualize_frames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1309,11 +1308,11 @@ Max zero probability: 0.4945
     <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_frame</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visualize_output</span> <span class="o">==</span> <span class="s1">'image'</span><span class="p">:</span>
       <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visualize_frames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Iteration </span><span class="si">{self.iteration}</span><span class="s1"> frame </span><span class="si">{self.frame_idx}</span><span class="s1">'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Iteration </span><span class="si">{self.iteration}</span><span class="s1"> frame </span><span class="si">{self.frame_idx}</span><span class="s1">'</span><span class="p">)</span>
       <span class="n">IPython</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">duplicate_num_frames</span><span class="p">):</span>
-        <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">f</span><span class="s1">'board</span><span class="si">{self.frame_idx:04}</span><span class="s1">-</span><span class="si">{i:02}</span><span class="s1">.png'</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="sa">f</span><span class="s1">'board</span><span class="si">{self.frame_idx:04}</span><span class="s1">-</span><span class="si">{i:02}</span><span class="s1">.png'</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">frame_idx</span> <span class="o">+=</span> <span class="mi">1</span>
 
@@ -1443,13 +1442,13 @@ Max zero probability: 0.4945
     <span class="n">width_str</span> <span class="o">=</span> <span class="s1">'width="'</span><span class="o">+</span><span class="n">width</span><span class="o">+</span><span class="s1">'"'</span> <span class="k">if</span> <span class="n">width</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">""</span>
     <span class="n">max_width_str</span> <span class="o">=</span> <span class="s1">'style="max-width:'</span><span class="o">+</span><span class="n">max_width</span><span class="o">+</span><span class="s1">'"'</span> <span class="k">if</span> <span class="n">max_width</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">""</span>
     <span class="c1"># Display the video HTML element</span>
-    <span class="n">html</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="s1">'&lt;video {"controls" if controls else ""}'</span>
-            <span class="n">f</span><span class="s1">'       </span><span class="si">{width_str}</span><span class="s1">'</span>
-            <span class="n">f</span><span class="s1">'       </span><span class="si">{max_width_str}</span><span class="s1">'</span>
-            <span class="n">f</span><span class="s1">'       {"autoplay" if autoplay else ""}'</span>
-            <span class="n">f</span><span class="s1">'       {"loop" if loop else ""}&gt;'</span>
-            <span class="n">f</span><span class="s1">'   &lt;source src="</span><span class="si">{data_url}</span><span class="s1">" type="video/mp4"&gt;'</span>
-            <span class="n">f</span><span class="s1">'&lt;/video&gt;'</span><span class="p">)</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s1">'&lt;video {"controls" if controls else ""}'</span>
+            <span class="sa">f</span><span class="s1">'       </span><span class="si">{width_str}</span><span class="s1">'</span>
+            <span class="sa">f</span><span class="s1">'       </span><span class="si">{max_width_str}</span><span class="s1">'</span>
+            <span class="sa">f</span><span class="s1">'       {"autoplay" if autoplay else ""}'</span>
+            <span class="sa">f</span><span class="s1">'       {"loop" if loop else ""}&gt;'</span>
+            <span class="sa">f</span><span class="s1">'   &lt;source src="</span><span class="si">{data_url}</span><span class="s1">" type="video/mp4"&gt;'</span>
+            <span class="sa">f</span><span class="s1">'&lt;/video&gt;'</span><span class="p">)</span>
     <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">html</span><span class="p">))</span>
 </pre></div>
 
@@ -1480,9 +1479,6 @@ Max zero probability: 0.4945
     </a>
     <a href="https://martindbp.com/posts/name-statistics/" rel="prev" title="Are parents picking less common names?">
        <i class="fa fa-2x fa-fw fa-arrow-circle-left" aria-hidden="true" title="Previous post: Are parents picking less common names?"></i>
-    </a>
-    <a href="https://martindbp.com/posts/introducing-algernon/" rel="next" title="Next post: Introducing Algernon" aria-label="Next post: Introducing Algernon">
-       <i class="fa fa-2x fa-fw fa-arrow-circle-right" aria-hidden="true"></i>
     </a>
     <span class="post-sharing">
      <a href="http://twitter.com/share?text=Solving+Minesweeper&amp;url=https%3A%2F%2Fmartindbp.com%2Fposts%2Fminesweeper%2F" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" aria-label="Share on Twitter">
@@ -1520,7 +1516,7 @@ Max zero probability: 0.4945
     <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
-        </section><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha256-SDRP1VVYu+tgAGKhddBSl5+ezofHKZeI+OzxakbIe/Y=" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+        </section><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
     tex2jax: {
         inlineMath: [ ['$','$'], ["\\(","\\)"] ],
@@ -1532,7 +1528,7 @@ MathJax.Hub.Config({
         styles: {'.MathJax_Display': {"margin": 0}}
     }
 });
-</script><script>var disqus_shortname="martindbp";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><footer id="footer"><p>Contents © 2020         <a href="mailto:me@martindbp.com">Martin Pettersson</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         </p>
+</script><script>var disqus_shortname="martindbp";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><footer id="footer"><p>Contents © 2021         <a href="mailto:me@martindbp.com">Martin Pettersson</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         </p>
             
         </footer>
 </div>

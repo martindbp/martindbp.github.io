@@ -55,335 +55,7 @@ MathJax.Hub.Config({
         
 
 <div class="posts">
-    <article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="algernon-work-log/" class="u-url">Algernon Work Log</a></h1>
-        <div class="metadata">
-            <p class="dateline"><a href="algernon-work-log/" rel="bookmark"><time class="post-date published dt-published" datetime="2020-02-01T13:06:58+00:00" title="2020-02-01">2020-02-01</time></a></p>
-                <p class="commentline">
-        
-    <a href="algernon-work-log/#disqus_thread" data-disqus-identifier="cache/posts/algernon-work-log.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="e-content entry-content">
-    <div>
-<h2>2020-06-13</h2>
-<p>I've been thinking about knowledge tracing and what it is we want to predict really. In the past I was thinking about it in terms of wanting to assign a probability for the person to correctly complete an exercise at a given point in time.  Ideally however, we actually the whole probability distribution of all possible answers, as a function of time. The probability for the <em>correct</em> answer is just a special case of the having the full distribution. This would for example help with clearning up confusions or misunderstandings.</p>
-<p>On another note, I want to add the grammar rules from the AllSet Learning Grammar wiki as separate items. I think most
-of the rules can be hard-coded for segmentation, but it will be a lot of manual work.</p>
-<h2>2020-05-06</h2>
-<p>I'm thinking more and more that I need a browser extension eventually. One case where it would be extra useful is with Viki Rakuten videos, which cannot be embedded. With an extension we could either hook into the subtitles as they're being displayed (and allow adding them to vocab), or display them somewhere else and sync the time. It would also enable users to view sites which don't allow iframe embedding.</p>
-<h2>2020-05-03</h2>
-<p>Trying to build small classifiers for hanzi word -&gt; pinyin. Before I relied mostly on the freqency in the ChinesePod transcripts, but I found a dataset called the The Lancaster Corpus of Mandarin Chinese which has hanzi as well as pinyin. Using this I can segement all the sentences and get examples of when a hanzi word is pronounced in different ways. With those examples I can train small decision tree on the POS tags generated from the Jieba segmentation.</p>
-<p>Here's the dataset
-https://ota.bodleian.ox.ac.uk/repository/xmlui/handle/20.500.12024/2474</p>
-<p>But after parsing and analyzing the data, there doesn't seem to be enough ambiguous cases to build classifiers for them, instead I'll manually check the POS tags in a window and decide which reading it should be.</p>
-<h2>2020-04-25</h2>
-<p>I decided to pause the indexing parsing for now and focus on using sentence translations to pick words and word translations.</p>
-<h2>2020-04-23</h2>
-<p>I found another great podcasts site and I wanted to index the content, but the 24 posts had 4 different layouts, and some are really hard to parse without special code. So I think it's time I build an indexing module that has very few assumptions about the layout. The only thing we should need to know is what combination of hanzi, pinyin and translations there is on the page. My plan is this: </p>
-<ol>
-<li>Filter out HTML elements which we know contain hanzi or pinyin. Treat the rest as potential translations.</li>
-<li>Use the Levenshtein code to align the three types of elements<ul>
-<li>Comparing hanzi and pinyin, use the Levenshtein distance using the same weighting function as I used for the chinesepod frequency database.</li>
-<li>Comparing hanzi and translation, use the percentage of dictionary word translations that can be found in the translation</li>
-<li>If all three are available, first work out the hanzi+pinyin to narrow down the word links, then cross reference with translation</li>
-</ul>
-</li>
-<li>Optionally provide selectors for where to look for content, if needed</li>
-</ol>
-<p>The assumptions for this to work are:</p>
-<ol>
-<li>Elements of a certain type (hanzi, pinyin or translation) are arranged sequentially on the page</li>
-<li>Matching elements of different types are delimited in the same way. E.g. if one element has two hanzi sentences, the corresponding pinyin element is assumed to have two sentences.</li>
-</ol>
-<h2>2020-04-18</h2>
-<p>Instead of going for the strategy below, I opted for building a character-reading frequency database instead. I have some vague memory of seenig a character reading frequency database, but can't find it anymore.</p>
-<p>What I decided to do was to use the ChinesePod transcripts, which have both hanzi, pinyin and translation, and simply get the pinyin reading frequencies from there. As it turns out though, there are frequent errors in the correspondence between the hanzi and the pinyin, but using the weighted Levenshtein distance I was able to align them and remove all errors (AFAIK).</p>
-<p>Now that I've written the code for aligning them, I can use it in the sentence indexing as well, so that we can pick the correct word based on the hanzi and pinyin, if pinyin is available. Next up I'll also use the translation to disambiguate. I also want to point to specific translations within that word whenever possible. My plan is to do some simple heuristic, such as:</p>
-<ul>
-<li>For each candidate chinese word<ul>
-<li>For each word translation<ul>
-<li>Remove things within parenthesis and other "extra" information</li>
-<li>Get the least frequent english word in the translation</li>
-<li>If that english word exists in the sentence translation, then pick it.</li>
-</ul>
-</li>
-<li>If several translations had matches, keep links to all of them</li>
-</ul>
-</li>
-<li>First go by pinyin if available, but then use translation as tie-breaker</li>
-</ul>
-<h2>2020-04-15</h2>
-<p>I've been having to manually correct the pinyin priority for many duo-yin-zi. The latest I found was 读 which got assigned dou4 rather than du2. Now that I've fixed so many of these, I think it's better to do some analysis and try to catch the unknown number of remaning errors. What I plan to do is: for each duo-yin-zi, find all compound words that contains the character, and order pronounciations by the frequency they appear in these words (and the frequency of those words).</p>
-<p>There are however characters that have the same readings but different translations. In this case we still need a manual tie-breaker. It turns out thought that most of these cases in CEDICT, one instance contains of the other.</p>
-<h2>2020-04-14</h2>
-<p>I went ahead and implemented both optimizations mentioned yesterday. Might be a premature optimization, but I think it really helps that each search is 5ms instead of 40ms because I can see this being a bottleneck as people are typing in search queries or browsing around the tables. And the optimizations will work for any item type.</p>
-<h2>2020-04-13</h2>
-<p>There were lots of little issues with search match highlighting but I finally got it working, here's a screenshot:
-<a href="../images/Screenshot_2020-04-13%20Algernon.png">screenshot</a></p>
-<p>While profiling the search queries I noticed that counting up the items takes like 90% of the time. It makes sense, since Postgres has to go through every single match to count them up. However, when actually fetching the matching items, it's usually much faster since we have e.g. LIMIT 25. This is true when fetching the first few pages, but as you go through the pages to the end with OFFSET, the time it takes to fetch them approaches the counting time. But now I see two optimizations that could be done:</p>
-<ol>
-<li>Cache the number of items for a query, or just calculate it once by order of the front-end. This should then save 90-50% of the time for fetching different pages of that search query.</li>
-<li>Wait to calculate the total number before the user requests a different page than the first one. This one might be tricky since we need to know the total number of pages to do pageination, but since I'm mainly using a slider for that, I could "hide" the fact that I don't know how many pages there are, until the user actually clicks somewhere else on that slider.</li>
-</ol>
-<p>The combination of 1 and 2 means that we reduce the load for lots of unecessary queries (due to misspelling, spurious requests during typing etc), and then only do the count once when the user is looking through the results.</p>
-<p>For non search queries I could also keep a record of the number of items in each table.</p>
-<h2>2020-04-10</h2>
-<p>I have an interesting problem aligning search matches in normalized pinyin, e.g "wo3 xi3huan", with the diacritical version "wǒ xǐhuan", since they are of differing length. Let's say the search term is "xi" and we find a match in the normalized pinyin, how do we get the range of the match in the diacritical version?</p>
-<p>I was thinking this should be pretty easy, but then what if we search for "3 xi"? Then the 3 will match the tone of "wo", but we'll probably not want to highlight "wo" because of that. I'm thinking it might be better to keep the tonal numbers in the converted diacritical text, but just hide them on the front-end. Then all the indices are the same.</p>
-<p>What I ended up doing is sending pinyiny with diacritical marks <em>and</em> tonal numbers to the front-end, and then filtering out the tonal numbers there. That way the indices from the search lines up when I do the search match highlighting.</p>
-<h2>2020-04-04</h2>
-<p>I added text search on the fields in the items table using Django's contains/icontains filtering and full-text search. To speed it up I added Trigram GIN indexes.</p>
-<p>I considered using full-text search for the translation field, but for this use case I realized it's a bad fit since we actually care about word ordering, we don't want stemming (since you might want to find uses of a specific word tense etc). However, a simple %LIKE% query also doesn't work well, since searching for "ok", will match "he looked left". I think first trying startswith=text, and then contains=f' {text}' will work well enough.</p>
-<h2>2020-02-28 - 2020-04-02</h2>
-<p>Well, things have been... interesting lately. I started working full time so I'll have less time to work on this, but I try to squeeze in some time here and there. And, well, Corona happened. I've been in self-imposed quarantine for the past 5 weeks, first at home and then at my parents house on the country-side. Getting any kind of work done with a 2-year-old around is challenging, even with babysitting help, but sometimes I get a few hours on the weekend, or on a rare day when I feel I've gotten enough done at my day job I'll allow myself to code a bit on this project. I've taken one big leap, and that is to move the UI away from Django templates+JQuery+Bootstrap to Vue.js Vuetify instead. The speed of developing an interactive is just orders of magnitue better with Vue.js, and I picked it over React and others because if I stick to modern browsers I don't even need a build system. The whole pile of complexity that is JS build systems, webpack, transpilers and NPM is something I want to avoid unless it's absolutely necessary.</p>
-<p>Here's the result after porting one item list view to Vue.js:
-<a href="../images/Screenshot_2020-04-02%20Algernon.png">screenshot</a></p>
-<p>Another benefit of using Vue.js and no build system is that it's perfect for enabling customization. Users can create an exercise component in a single file and upload it to be used in the application, and I can just include it directly. Naturally any user contributed code would have to go through review before others can see it.</p>
-<p>For now I'm focusing on the sentence table and have a bunch of things to do:</p>
-<ul>
-<li>Separate the user review data to a separate end-point from the items. While this will require two API calls instead of one, it enables caching the items since they are the same for all users. In order to reduce load I can then only invalidate the cache at a set interval, even if there are changes to some items or added items. As the data solidifies over time it becomes less important to keep it completely up to date for the table/search. Of course, the more search options there are, the worse caching will work, but if we can cache the most common types, e.g. just plain search without any options maybe it will still help.</li>
-<li>Related to above, the user review end-point I think can return the whole data set, or the data that changed since time t, which we can keep consistent on the front-end. It's also not mission critical in case it's not consistent since it'll only be used for search. If a user has 10k reviewed items, and we send the first 64-bit bits instead of the full 256-bit UUID, then we could get away with 10k*(64+16) = 800 Kb, which is not too bad. 16-bit for the number of reviews.</li>
-<li>Implement text-search</li>
-<li>Filter by word-link</li>
-<li>Filter by source</li>
-</ul>
-<h2>2020-02-28</h2>
-<p>Thinking about what would be the optimal way to achieve "pinyin-guided" hanzi "word sense induction".</p>
-<p>If the pinyin syllables perfectly match the hanzi characters, then it's easy: we just pick the word sense for each character that matches the pinyin.</p>
-<p>But, we have many sentences where there are extra pinyin syllables such as, especially with numbers.
-我副100块钱了 may have the pinyin wo3 fu4 yi1bai3 kuai4qian2 le. Maybe there are other cases. What I can do is to search through all the sentences in the database and print the ones with differing number of hanzi characters and pinyin syllables in order to get a sense of the problem.</p>
-<p>Doing this, I saw that it's not only a problem for numbers, but there are often other errors.</p>
-<p>The problem then is a bit of a chicken and egg problem: we need to generate the pinyin from the hanzi in order to do get the levenshtein ops. A brute force way of doing it would be to generate all possible combinations of pinyin from the hanzi and pick the one with the smallest levenshtein distance, but this would quickly become intractable. A faster method might be to first generate a greedy pinyin, where we just select the least difficult pinyin for each word, then do levenshtein matching on the two, then assume that the "replace" operations constitute the corrections. For this to work we need to encode pinyin syllables into a single unicode character.</p>
-<h2>2020-02-26</h2>
-<ul>
-<li>Optimized the item page queries</li>
-<li>Fixed a bug where in rare cases the sentence links were not in order which caused
-  sentences to have lots of extra text. Added an order by clause to fix it.</li>
-<li>Display a '-' for None values in the tables</li>
-<li>Fixed display difficulties when logged in vs anonymous. Use black for unknown words. Display explanation for the color codes.</li>
-</ul>
-<p>Thinking about what would be most useful to include in a word popover. I'm thinking edit and queue buttons, but instead of just an "I know this" button, have 1 colored button for each level so the user can easily specify a level. Then we can put this level as a special review in the review log, which can then be used to calculate an up to date level after further reviews.</p>
-<h2>2020-02-23</h2>
-<p>Added checks in cedict for "(name)" and marking those words as having POS=nr, then filtering out those words when calculating sentence difficulty, and graying them out in the UI. Generally people are not interested studying/remembering person names, while cities, countries and other place names you generally do.</p>
-<h2>2020-02-22</h2>
-<p>Once again I'm questioning whether to use full-stack Django with JQuery, or a front-end framework like React, Vue or Svelte. The pros of the first approach is:</p>
-<ol>
-<li>Can use Django forms for editing items, which come with automatic validation and easy tie-in to models</li>
-<li>Already have auth in place, which is easy with Django</li>
-<li>Don't have to engage much with the JS ecosystem and build systems.</li>
-<li>Routing works better than SPA</li>
-</ol>
-<p>The pros for using a front-end framework:
-1. Get a reusable REST api for other apps
-2. Sending less data over the wire (this is already a problem)
-3. More modern/repsonsive UI
-4. Exercise templates can be built as components in the framework</p>
-<p>Possible compromise:
-* Keep the auth end-points outside of the SPA
-* Use an SPA everywhere else
-* Use Bootstrap components with the SPA so we can intermingle SPA and Django</p>
-<p>For now, due to lack of time, I'll stay on course with boring tech. Perfect is the enemy of good. An imperfect released project is infinitely better than a perfect project that is never done.</p>
-<h2>2020-02-21</h2>
-<h4>Database</h4>
-<p>Switching most on_delete=PROTECT to CASCADE, because I think that's what I really want, just wasn't sure how it all worked. It was getting messy having to delete dependencies in the right order.</p>
-<p>I really need to clean up the prepare_text function. It has a few complications that make it complex:</p>
-<ol>
-<li>We segment sentences with jieba.posseg.cut, but some of the words don't have matches in our dictionary, so we need to break it down further with jieba.tokenize(..., mode='search').</li>
-<li>If the input is a dictionary word, we want to break it down futher if it contains multiple other dictionary words</li>
-</ol>
-<p>Implemented choosing the link word based on the pinyin first, then tags, then the least difficult one.</p>
-<p>I'm thinking it might be worth it to encode piyin syllables in binary, as unicode characters outside the ascii range. This would probably cut down on space by a factor of 4, and it could be useful for calculate string alignment between the pinyin supplied for a sentence and the pinyin from the hanzi.</p>
-<h2>2020-02-20</h2>
-<p>An interesting <a href="https://use-the-index-luke.com/sql/dml/insert">quote</a>:</p>
-<blockquote>
-<p>Nevertheless, the performance without indexes is so good that it can make sense to temporarily drop all indexes while loading large amounts of data—provided the indexes are not needed by any other SQL statements in the meantime. This can unleash a dramatic speed-up which is visible in the chart and is, in fact, a common practice in data warehouses.</p>
-</blockquote>
-<p>So maybe it would make sense to drop some indexes from import_chinese_data and import_anki_collection.</p>
-<h4>Optimization</h4>
-<p>So, I think I realized why loading the pages with a lot of words on it is slow, and why rendering is slow. It's because the generated HTML is 1.5 Mb! I guess all those spans with popover details really add up.</p>
-<h2>2020-02-19</h2>
-<p>After some more digging, it turns out that runnning an ORDER BY query on just the item table, with LIMIT and OFFSET takes only 10ms while just doing the join between the item and sentence table takes 70ms, and the ORDER BY another 70ms. So it seems like it would be better to not have the item fields in a separate table, but for each subclassed item table to duplicate the fields. Lesson learned: avoid joins! In that spirit I'll probably change the Source id to its name, which should be unique, and it's something that's useful to display in the UI.</p>
-<p>The problem with getting rid of the items table is that Exercise refers to it with a foreign key. But we keep a item_table field there, because we still need to figure out which one to join with. So really it makes no difference if we remove the items table. When we do want to make a join between exercises and items, we'll just have to do it for one item table at a time.</p>
-<p>Another upside, I can use bulk_create again without implementing my own! Interestingly enough, sorting by just difficulty now keeps the same internal order, so I don't have to sort by id.</p>
-<h2>2020-02-18</h2>
-<p>Shaved 33 seconds off importin my Anki collection by optimizing the previously implemented bulk_create. Instead of fetching all the sentences and then their words I instead fetch all the sentence words in one query.</p>
-<h4>UI</h4>
-<p>Now displaying known/unkown sentence words if logged in using the stats in ZhUserWordSummary.
-<a href="../images/Screenshot_2020-02-18%20Algernon.png">screenshot</a></p>
-<p>Surprisingly, the number of revs for a given word is much higher than I thought, probably due to them being in sentences. When setting the color it makes sense to set the limits for each level quite high, now 10, 25, 50, 100 revs respectively. These numbers seem to work for my Anki revs, but will have to make sure it generalizes.</p>
-<p>Halfway implementing the word tooltip as a popover instead, with an "add to queue" and an "I know this" button shortcuts. Also refactoring the format_word to output both hanzi and pinyn in the same cell since iterating over all word links seems one reason the rendering is so slow.</p>
-<h4>Database</h4>
-<p>Investigating again why item listing is so slow. Notices that listing sentences does a sort on disk in PostgresSQL. This is due to the table not fitting in working memory, which is set to 4 Mb. We can increase it by setting work_mem higher in PostgreSQL: <code>alter database algernon set work_mem='64MB';</code>. The downside is that each query might take this much memory... And it doesn't seem to speed up the query a whole lot, just ~20% (100ms -&gt; 80ms).</p>
-<p>Been trying very hard to profile what takes so long besides the SQL queries. Managed to find the profiling bar in Django Debug Toolbar, but the granularity is quite low. It seems like Django spends a ton of time iterating over and post-processing the result for the database queries. I cannot fathom why this takes any significant amount of time. I guess I'll have to solve this with caching.</p>
-<h2>2020-02-16</h2>
-<p>Implemented the populating of ZhUserWordSummary as a bulk_create Manager method instead of a signal, in order to allow bulk processing and speeding things up. It's still quite slow but better than the first implementation.</p>
-<h2>2020-02-15</h2>
-<p>Tried using PostgreSQL triggers to automatically populate a ZhUserWordSummary database from added reviews in the ReviewLog table, but decided to use django triggers instead because they're versioned more easily and require no database migrations, although they are slower since they need separate database queries. Another upside is being able to run ML model inference which will be hard in SQL.</p>
-<h2>2020-02-14</h2>
-<h4>Database</h4>
-<p>Trying to make import_chinese_data faster to speed up development. Tried caching the mp3 file metadata instead of reading it every time, but it seems like the biggest problem was actually calculating the levenshtein distance between transcript and transcribed. Might be worth converting it to Cython to speed it up, since this step now takes 8 minutes. On second thought, it probably most of its time in the supplied substitution_cost function. After profiling it seems not to be the case.</p>
-<p>I tried optimizing the function with Cython, but not able to get any speedup, pausing this for now. Opt for just caching the resulting timings instead, because that algorithm rarely changes. This improved the time from 8 minutes to 2m22s.</p>
-<h2>2020-02-12</h2>
-<h4>Database</h4>
-<p>Found a case where the Jieba segmentation is wrong: 下週 is split in to 下 and 週, while the compound is in the dictionary. I might have to go back to overriding the segmentation if there exists words in the dictionary that encompass several of the segments. I remember cases where this didn't work though, so might have to add a white list instead.
-Another case: 暱称 - nickname</p>
-<h4>UI</h4>
-<p>Finished level highlighting for words, both in hanzi and pinyin.</p>
-<p>Working on displaying the user knowledge level for each word instead of difficulty level. Will need to make a crazy expensive join that we'll obviously have to cache somehow.</p>
-<h2>2020-02-11</h2>
-<h4>UI</h4>
-<p>Working on a way to visualize the difficulty of a (external) media item, both for anonymous and logged in users. Considering a histogram over HSK levels. The problem with that is that lvl just by virtue of Zipf's law the earlier levels will always contain most of the vocabulary. But maybe it's worth a try, just to see if it's useful. For logged in users the histogram would instead be over levels of user knowledge.</p>
-<p>Converted "normalized" pinyin with numbers to diacriticals for the UI.</p>
-<p>Added per-word color highlighting for the hanzi field in sentences list. This surfaced quite a number of problems with the HSK level / difficulty level of words:</p>
-<ol>
-<li>We probably want to sort out pronouns like names (probably not countries/cities though), since they are rare in the corpus and affect the difficulty of the sentence.</li>
-<li>If there is no frequency for a word, we currently use the minimum frequency of the linked words. However, in many cases there are no such linked words, since they may not be in the dictionary. In those cases we probably want to assign a frequency for those words based on the compound words it appears in.</li>
-</ol>
-<h4>Database</h4>
-<p>There are pure dialogues, short stories and other readings on ilovelearningchinese.com that I should index. Need a new model for reading material.</p>
-<p>I added has_dialogue and has_lesson fields to Media and ExternalMedia so that we can filter on those in the future, for when you want just dialouge without tons of explanation.</p>
-<h2>2020-02-09</h2>
-<p>Adding a file hash field to the item model, and renaming source_pointer to source_file_id. For now I'm using the first 64 bits of the md5 hash and store them as integer fields. With those two fields will help with updating items when the source material updates, or we've updated the algorithms, but can't regenerate the database from a clean slate.</p>
-<h2>2020-02-08</h2>
-<h4>UI</h4>
-<p>Implemented ability to combine two or more fields into one switchable column. This is conventient for combining hanzi and pinyin. The preference is saved in a cookie.</p>
-<p>I noticed the sentences list view loading fairly slow and turned on the Django debug toolbar. I reduced the number of requests by prefetching/selecting links and source. But I noticed just getting the number of items in the table for pageination took 12ms!. It turns out Postgres doesn't keep a count metadata for tables, so a SELECT COUNT(*) FROM table_name; has to go through the whole table. Wow. There seems to be a way to get an approximate count, but it's only updated when running certain commands. The better solution instead seems to be using a Django signal to keep a count in a separate table.</p>
-<h2>2020-02-07</h2>
-<h4>Database</h4>
-<p>There is a problem with the  frequency data for homonyms. E.g the word 都 can be dou1 (both/all) which is very common, or du1 (capital) which is fairly common, but the frequency information I'm using from Jieba includes all homonyms of a word. This becomes a problem when I generate the word links for a sentence, as if there are multiple matches I pick the highest frequency one. So far I've been dealing with this problem by overriding the frequency, usually setting it to 0 for the less common homonym. The problem with this is that I now calculate the difficulty based on this frequency, so I have to be a bit more careful. Therefore, I'll try to override using a compound word, e.g for 重 zhong4/heavy, there is the less common chong2/repeat. But "repeat" is usually a two character word "重复", so we can take the frequency from that word instead of setting it to some arbitrary number. For other words, it might be better to set the frequency based on the HSK level it would end up in.</p>
-<h4>UI</h4>
-<p>Abstracted the item table to be reusable for both item lists, and the list of links on the item view.</p>
-<h2>2020-02-06</h2>
-<h4>Database</h4>
-<p>I think I have to mark some external media as "lesson" which includes explanations, vs. "dialogue/story" which is just Chinese. Chinesepod audio already has this distinction.</p>
-<p>Found some new sites worth indexing:
-Lots of articles for reading and audio: https://www.chinesereadersguild.com
-Reading practice: http://chinesereadingpractice.com
-Picture books for children: http://mandarinforme.com</p>
-<p>Added an index to the difficulty field.</p>
-<h2>2020-02-05</h2>
-<p>Gave all Chinese models a "Zh" prefix and renamed "mandarin" to "zh", just to have a shorter namespace.</p>
-<p>Thinking about how to calculate difficulty for indexed websites where the word source is just a list of words rather than the whole transcript. The problem is that only the difficulty words are usually listed.</p>
-<p>When I tried calculating the difficulty for ChinesePod podcasts, the interesting thing was that I can see on the titles, which include the difficulty level, whether the calculated difficulty sorts the podcasts in the same order. Turns out just sorting it based on audio duration, or the sum of all the sentence difficulties (which in turn are the sum of the word difficulties) worked best. Using the average sentence difficulty did not work very well. Will have to investigate further why this is. It could be that words are put in a higher level than they should be.</p>
-<h4>Bugs</h4>
-<p>Fixed sources not working for external media.</p>
-<p>Saw that many external media podcasts didn't have a duration. Seems like I filtered on file ending with .mp3, but some urls had a query string attached, so fixed this and rerun the indexing of all sites to make sure I get the duration.</p>
-<h4>Database</h4>
-<p>Contemplating adding the media URL to the database for external media. While it should be legal to link to publically available resources on the web, I also don't want to hurt the businesses by reducing their ad revenue or exposure by the visit a user would have brought. One mitigation might be to require the user to visit the site before showing the link to the media.</p>
-<h2>2020-02-04</h2>
-<h4>Bugs</h4>
-<p>Fixed some bad word links which was partly due to a bug, and partly the wrong homonyms being picked due to missing frequency information. It is really easier finding these bugs now that I have some kind of visualization of the data.</p>
-<h4>UI</h4>
-<p>Abstracted the ItemView, ItemListView and templates for both sentences and media. Combine the hanzi and pinyin fields to one switchable field since they take up so much space and you usually only need one.</p>
-<h2>2020-02-03</h2>
-<h4>Bulk insert speedup</h4>
-<p>Measured the speedup by using bulk insert for 110k words:</p>
-<ul>
-<li>Before: 558s</li>
-<li>After: 24s</li>
-</ul>
-<p>For a speedup of 20x! Well worth doing I think. </p>
-<h4>Potential 7th HSK level</h4>
-<p>Looking at the stats for HSK levels, and whether to create a level 7:</p>
-<ul>
-<li>HSK level 1 mean: 59673 std: 131535</li>
-<li>HSK level 2 mean: 26994 std: 54312</li>
-<li>HSK level 3 mean: 12393 std: 21252</li>
-<li>HSK level 4 mean: 6872 std: 13899</li>
-<li>HSK level 5 mean: 3599 std: 4798</li>
-<li>HSK level 6 mean: 1294 std: 1918</li>
-</ul>
-<p>Since level 6 covers 0 frequency within a single standard deviation, conclusion to me is that it's best not to make another level.</p>
-<h4>Item rank for recommendations and discovery</h4>
-<p>Thinking about how we can rank items for recommendations / discovery. In a way the problem is similar to regular search engine rankings: the query is now the words in a user's vocabulary, and the documents are the items (i.e sentences, podcasts etc). The problem is that the crieria for ranking are very different. TF-IDF would make no sense, as we're not interested in specifically finding documents with the user's vocabulary in them, but documents whose out-of-vocab words are not too many, and not too difficult.</p>
-<p>Another thing to look at would be collaborative filtering. You could see each item as a "thing" to be recommended, based on what similar users have added at a similar knowledge state. The problem is that once you have a new item, we won't know what to do with it.</p>
-<p>I think the ideal solution would be to check how many out-of-vocab words and of what difficulty are in each item and rank based on that. The problem with this is this would be an O(number of items * number of users * average user vocab size) operation. With number of items number in the hundreds of thousans, and average user vocab in the hundreds or thousands, I don't think this is feasible unless you first filter down the possible items.</p>
-<p>In order to filter down we could manually assign a difficulty value to each item (which is what I've done so far). I would however prefer to learn this mapping instead. We could reduce both the item difficulty and the user knowledge level to a single number that we can index and filter on. Let's say we use the histogram of dependent item difficulties in an item, and a histogram of user vocab item difficulties as the input, then we could learn a mapping to two float values. For this we'd need some actual data. Initially, I could use my own Anki history for this. With this history, I can see when I added a sentence and the knowledge level I had at that point in time. A simple thing to try would be to essientially do a single neuron layer without an activation for both histograms, and minimize the squared error between them:</p>
-<p>$$L = \sum_{t,u} (w_t \cdot (h_t + b_t) - w_u \cdot (h_u + b_u))^2$$</p>
-<p>where we project the item difficulty histogram $h_t$, translated by a bias $b_t$ to a single number using the weight vector $w_t$. Similarly for the user difficulty histogram. We can train this once and then fine-tune the user parameters $w_u, b_u$ as we go in order to provide a bit more personalized results, if e.g. the user tends to prefer easier or more difficult items.</p>
-<p>The problem with my own dataset is that my proficiency level doesn't span very many levels, as I started using Anki after I'd done most of HSK3. Anyway, the solution that will be reached by the optimizer will be all zeroes for all parameters, which means all items and user states will be mapped to zero and there will be zero loss. To avoid that we can add a negative regularizer on the parameters, pushing them away from zero, but that would probably mean that both the item and user state will be mapped to some other non-zero value. A simple trick might be to add a negative regularizer of the standard deviation of the resulting scores as this would penalize narrow distributions:
-$$v_t^i = w_t \cdot (h_t^i + b_t)$$
-$$v_u^i = w_u \cdot (h_u^i + b_u)$$
-$$L = \sum_{i \in D}[(v_t^i - v_u^i)^2] - \beta Var_{i \in D}(v_t^i) - \beta Var_{i \in D}(v_u^i)$$
-where D is the dataset of pairs of histograms of items and user knowledge states.</p>
-<p>Perhaps running each value through the logistic funcion, in a sense turning it into logistic regression,
-might be a good way to keep the values within bounds [0-1].</p>
-<h4>Bugs</h4>
-<p>I noticed "common knowledge" words/expressions like "happy birthday" has a very low frequency in the corpus. I might want to go through Chinesepod lessons and mark words with the level of the lesson, if the word previously has a high level due to being infrequent.</p>
-<p>I also saw 还 being linked to huan2 instead of hai2, and some other examples like that I need to look into. Also 的-&gt;di1.</p>
-<h4>UI</h4>
-<p>Started on a common ItemListView with template that simplifies creating a list view for each type of item.</p>
-<h4>Screenshot</h4>
-<p><a href="../images/Screenshot_2020-02-03%20Algernon.png">screenshot</a></p>
-<h2>2020-02-02</h2>
-<p>Implemented the bulk insert of items. It was a bunch of work but should come in handy throughout the project. Still working on the link finding generalization. One problem with reusing the link finding for individual words is that the Jieba segmenter returns the full word, and we want to use the sub-words if they do exist.</p>
-<p>Found one problem with the current "greedy" linker for words such as "试试看". Tokenizing with Jieba in search mode produces the full word, 试看 and 试试. The greedy matching will pick 试试 for the first two character slots, and then it won't be able to match anything else, since only 看 is left. To make this work we'd need to do another word lookup rather than using the tokens found by Jieba.</p>
-<h2>2020-02-01</h2>
-<p>Generalizing finding links between sentences-&gt;words and compound words -&gt; words. Previously had separate logic for this which is unnecessary. Generally, the procedure is to segment the text with Jieba, and linking with database Words, disambiguated with the pinyin and translation if supplied.</p>
-<p>Would like to speed up the inserting of words into the database, since there are 110k of them it's very slow. But since Django doesn't support bulk_create for linked tables, there's not much we can do, unless we write the query manually. Maybe it's worth optimizing because I have to rerun <code>import_chinese_data</code> everytime I update the code.</p>
-<h2>2020-01-31</h2>
-<p>Working on setting a difficulty level for all the items in the database. At first my idea was to set the word difficulty based on frequency, but normalizing the range of frequencies gets rather complicated. For now I'll use the HSK level if set/known, otherwise I'll determine a "pseudo" HSK level based on which level the word frequency matches best. So for all HSK levels, I fetch all the words for that level and calculate mean and standard deviation of their frequencies, estimating the parameters of their normal distribution. I then go through each word without an HSK level, but with a frequency, and pick the maximum likelihood distribution. In the future maybe it's best to add a level 7, where we can put words that are very rare.</p>
-<h2>No more logs</h2>
-<p>Unfortunately I didn't start logging my work from the start, but as they say, the best time to plant a tree was 10 years ago, the next best is today.</p>
-</div>
-    </div>
-    </article><article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="introducing-algernon/" class="u-url">Introducing Algernon</a></h1>
-        <div class="metadata">
-            <p class="dateline"><a href="introducing-algernon/" rel="bookmark"><time class="post-date published dt-published" datetime="2019-12-19T13:06:58+00:00" title="2019-12-19">2019-12-19</time></a></p>
-                <p class="commentline">
-        
-    <a href="introducing-algernon/#disqus_thread" data-disqus-identifier="cache/posts/introducing-algernon.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="e-content entry-content">
-    <div>
-<p><img alt="" src="../images/algernon_venndiagram.png" title="Algernon"></p>
-<h3>What is it?</h3>
-<p>Algernon is an open source web-based tool and browser extension for learning and remembering things, with an open community-edited database; a companion you can rely on to help with continuous learning throughout your life and career.</p>
-<h3>Why (what's the problem?)</h3>
-<p>The online educational landscape right now consists of a bunch of walled gardens, disconnected learning resources and various flashcard tools.
-Algernon will instead sit somewhere between open source flashcard tools like Anki, walled gardens such as Coursera, Duolingo and Memrise, and Wikipedia.</p>
-<h4>The downsides of Walled Gardens</h4>
-<p>The upside of walled gardens is the curated content and systems specialized for a specific domain. But downsides are big:</p>
-<ol>
-<li>Your data is not portable: you cannot take your data with you, so there is no way to integrate what you have learned through various services</li>
-<li>The expectation that the service is the be all end all of its particular domain. When the service is out of content, there is usually no way for you to add your own or continue your study.</li>
-<li>If the service would go down or change significantly, there is nothing you can do about it. This is a problem if you're learning for the long term, i.e. 10+ years.</li>
-</ol>
-<h4>The downsides of Flashcard apps</h4>
-<p>There are many apps and services for studying and making flashcards. Some are offline apps such as Anki, Mnemosyne, SuperMemo, but there are also many web-based such as Quizlet.</p>
-<p>The first downside of these tools is the fact that they're based on the concept of flashcards and decks, which I think is inherently limiting. While I personally use Anki and I like it very much, the fact that there are no connections between cards is a daily annoyance to me, especially for language learning. The problem happens when you have related cards, such as a sentence card along with cards for each word in the sentence. How well you remember one depends to some degree on the other.</p>
-<p>The second downside which is related to the first one, is that there is no source of truth in all the unstructured data of flashcards and decks. In Anki, I can download shared decks made by other people, but there is no way to remove duplicate cards unless they are exactly identical. And the fact that everyone makes their own underlying note structure that generates the cards means there is no standard way to refer to a piece of knowledge.</p>
-<h4>Other resources</h4>
-<p>On the other end, there are a <em>ton</em> of free (and paid) resources for learning stuff on the web, things like blogs, podcasts, wikis, open data sets and Youtube videos just to mention a few. If you want to study these in an effective way, you have to do a lot of manual work to get them into your SRS app, or set up your own manual system of study. Here, I want to index this content just like a search engine indexes the web. Some data sets may need to be processed and indexed manually, but for most cases the browser extension will facilitate with the importing of content from any web-site.</p>
-<h3>How: on a high level</h3>
-<p>The two main parts of Algernon are the Knowledge Base and the Memory Model.</p>
-<h4>Knowledge Base</h4>
-<p>The knowledge base represents the single source of truth, a carefully structured database for various hand-picked domains from which exercises are generated.</p>
-<p>The knowledge base consists of</p>
-<ol>
-<li>Sources with permissive licenses, such as open data-sets and Creative Commons content.</li>
-<li>Links to indexed web resources covered by copyrights. Just like a search engine that indexes based on keywords, Algernon indexes based on concepts tied to the knowledge base.</li>
-<li>If all goes well: Additions and corrections made by the community of users, similar to Wikipedia.</li>
-</ol>
-<h4>Memory Model</h4>
-<p>Using the knowledge base and user responses to its exercises, we can build an integrated memory model that takes into account the interactions between items in the knowledge base.</p>
-<p>Using the model, we make the knowledge base searchable based on difficulty, providing tailored recommendations for each individual user. Eventually, we can see what <em>kind</em> of exercise would be most beneficial at a certain point in time. For example, if I'm having trouble remembering a specific word, it might make sense to add more "higher-level" exercises containing that word (such as podcasts or reading exercises) rather than trying to cram the word into memory without the proper context.</p>
-<h3>How: on a technical level</h3>
-<h4>First milestone</h4>
-<p>The initial release will be focused on Chinese. It will use a Python Django server with PostgresSQL Database, where the knowledge base and user data is stored. The web app provides basic exploration of indexed content relevant to the user's level. User word data can be imported from Anki directly in order to cross-reference with the knowledge base. The main interface though will be the browser extension, which indexes the content on visited web pages, and allows the user to see translations and pinyin, and to import words and sentences from them. Once imported, the user can generate notes and cards and sync them back to Anki, or some other format.</p>
-<h4>Later releases</h4>
-<p>Will flesh out the web app primarily with its own Spaced Repetition System and recommendation engine, which takes advantage of the explicit structure of the knowledge base to generate innovative exercise variations that are interconnected in the memory model.</p>
-<h3>Openness and freedom</h3>
-<p>I wish for this to be a tool you can depend on for a long time, which is why I think it's important that it's open source. Hosting will be provided for free to the extent that I can personally pay for it, or the hosting is covered by donations. The user should always have the option of hosting it themselves or with a third party, if the service was to go down for some reason.</p>
-<p>The openness goes for the data as well, not only the knowledge base (as far as it's legally possible to share w.r.t licensing), but also the user's personal memory model which should be easy to export.</p>
-</div>
-    </div>
-    </article><article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="minesweeper/" class="u-url">Solving Minesweeper</a></h1>
+    <article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="minesweeper/" class="u-url">Solving Minesweeper</a></h1>
         <div class="metadata">
             <p class="dateline"><a href="minesweeper/" rel="bookmark"><time class="post-date published dt-published" datetime="2019-11-18T00:00:00+00:00" title="2019-11-18">2019-11-18</time></a></p>
                 <p class="commentline">
@@ -888,9 +560,9 @@ Where $N(i)$ is the neighborhood of square i.</p>
   <span class="k">return</span> <span class="n">wins</span> <span class="o">/</span> <span class="p">(</span><span class="n">wins</span> <span class="o">+</span> <span class="n">losses</span><span class="p">)</span>
     
 <span class="n">num_runs</span> <span class="o">=</span> <span class="mi">10000</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Win ratios for strategies over </span><span class="si">{num_runs}</span><span class="s1"> runs:'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Random lowest probability mine: {estimate_win_ratio(num_runs, difficulty="expert", max_solutions=2000, prob_pick_strategy="random")}'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Max zero probability: {estimate_win_ratio(num_runs, difficulty="expert", max_solutions=2000, prob_pick_strategy="prob_zero")}'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Win ratios for strategies over </span><span class="si">{num_runs}</span><span class="s1"> runs:'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Random lowest probability mine: {estimate_win_ratio(num_runs, difficulty="expert", max_solutions=2000, prob_pick_strategy="random")}'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Max zero probability: {estimate_win_ratio(num_runs, difficulty="expert", max_solutions=2000, prob_pick_strategy="prob_zero")}'</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1105,18 +777,18 @@ Max zero probability: 0.4945
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">time</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="k">import</span> <span class="n">b64encode</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
 
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">PIL.Image</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
 <span class="kn">import</span> <span class="nn">IPython.display</span>
-<span class="kn">from</span> <span class="nn">matplotlib.animation</span> <span class="k">import</span> <span class="n">FuncAnimation</span>
+<span class="kn">from</span> <span class="nn">matplotlib.animation</span> <span class="kn">import</span> <span class="n">FuncAnimation</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="k">import</span> <span class="n">label</span>
-<span class="kn">from</span> <span class="nn">scipy.ndimage.morphology</span> <span class="k">import</span> <span class="n">distance_transform_edt</span>
+<span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">label</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage.morphology</span> <span class="kn">import</span> <span class="n">distance_transform_edt</span>
 
 <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
@@ -1124,7 +796,7 @@ Max zero probability: 0.4945
 <span class="n">IMG_SQUARE_SIZE</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">IMAGES</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="s1">'bomb'</span><span class="p">,</span> <span class="s1">'facingDown'</span><span class="p">,</span> <span class="s1">'flagged'</span><span class="p">]:</span>
-  <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">f</span><span class="s1">'minesweeper/</span><span class="si">{name}</span><span class="s1">.png'</span><span class="p">)</span>
+  <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">f</span><span class="s1">'minesweeper/</span><span class="si">{name}</span><span class="s1">.png'</span><span class="p">)</span>
   <span class="n">IMAGES</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="n">IMG_SQUARE_SIZE</span><span class="p">,</span> <span class="n">IMG_SQUARE_SIZE</span><span class="p">))</span>
 
     
@@ -1150,7 +822,7 @@ Max zero probability: 0.4945
 
 
 <span class="k">class</span> <span class="nc">MinesweeperBoard</span><span class="p">:</span>
-  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_mines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">difficulty</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_mines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">difficulty</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_solutions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prob_pick_strategy</span><span class="o">=</span><span class="s1">'prob_zero_near_edge'</span><span class="p">,</span> 
                <span class="n">visualize_constraints</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">visualize_lvl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">visualize_zero_probs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">visualize_output</span><span class="o">=</span><span class="s1">'video'</span><span class="p">,</span> <span class="n">visualize_crop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visualize_frames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1627,11 +1299,11 @@ Max zero probability: 0.4945
     <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_frame</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visualize_output</span> <span class="o">==</span> <span class="s1">'image'</span><span class="p">:</span>
       <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visualize_frames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Iteration </span><span class="si">{self.iteration}</span><span class="s1"> frame </span><span class="si">{self.frame_idx}</span><span class="s1">'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Iteration </span><span class="si">{self.iteration}</span><span class="s1"> frame </span><span class="si">{self.frame_idx}</span><span class="s1">'</span><span class="p">)</span>
       <span class="n">IPython</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">duplicate_num_frames</span><span class="p">):</span>
-        <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">f</span><span class="s1">'board</span><span class="si">{self.frame_idx:04}</span><span class="s1">-</span><span class="si">{i:02}</span><span class="s1">.png'</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="sa">f</span><span class="s1">'board</span><span class="si">{self.frame_idx:04}</span><span class="s1">-</span><span class="si">{i:02}</span><span class="s1">.png'</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">frame_idx</span> <span class="o">+=</span> <span class="mi">1</span>
 
@@ -1761,13 +1433,13 @@ Max zero probability: 0.4945
     <span class="n">width_str</span> <span class="o">=</span> <span class="s1">'width="'</span><span class="o">+</span><span class="n">width</span><span class="o">+</span><span class="s1">'"'</span> <span class="k">if</span> <span class="n">width</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">""</span>
     <span class="n">max_width_str</span> <span class="o">=</span> <span class="s1">'style="max-width:'</span><span class="o">+</span><span class="n">max_width</span><span class="o">+</span><span class="s1">'"'</span> <span class="k">if</span> <span class="n">max_width</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">""</span>
     <span class="c1"># Display the video HTML element</span>
-    <span class="n">html</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="s1">'&lt;video {"controls" if controls else ""}'</span>
-            <span class="n">f</span><span class="s1">'       </span><span class="si">{width_str}</span><span class="s1">'</span>
-            <span class="n">f</span><span class="s1">'       </span><span class="si">{max_width_str}</span><span class="s1">'</span>
-            <span class="n">f</span><span class="s1">'       {"autoplay" if autoplay else ""}'</span>
-            <span class="n">f</span><span class="s1">'       {"loop" if loop else ""}&gt;'</span>
-            <span class="n">f</span><span class="s1">'   &lt;source src="</span><span class="si">{data_url}</span><span class="s1">" type="video/mp4"&gt;'</span>
-            <span class="n">f</span><span class="s1">'&lt;/video&gt;'</span><span class="p">)</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s1">'&lt;video {"controls" if controls else ""}'</span>
+            <span class="sa">f</span><span class="s1">'       </span><span class="si">{width_str}</span><span class="s1">'</span>
+            <span class="sa">f</span><span class="s1">'       </span><span class="si">{max_width_str}</span><span class="s1">'</span>
+            <span class="sa">f</span><span class="s1">'       {"autoplay" if autoplay else ""}'</span>
+            <span class="sa">f</span><span class="s1">'       {"loop" if loop else ""}&gt;'</span>
+            <span class="sa">f</span><span class="s1">'   &lt;source src="</span><span class="si">{data_url}</span><span class="s1">" type="video/mp4"&gt;'</span>
+            <span class="sa">f</span><span class="s1">'&lt;/video&gt;'</span><span class="p">)</span>
     <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">html</span><span class="p">))</span>
 </pre></div>
 
@@ -2018,7 +1690,7 @@ Max zero probability: 0.4945
                      <span class="n">color</span><span class="o">=</span><span class="s1">'blue'</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">);</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">));</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">f</span><span class="s1">'Girls </span><span class="si">{year}</span><span class="s1">'</span><span class="p">);</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Girls </span><span class="si">{year}</span><span class="s1">'</span><span class="p">);</span>
 </pre></div>
 
     </div>
@@ -2487,18 +2159,18 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
-<span class="kn">from</span> <span class="nn">hanziconv</span> <span class="k">import</span> <span class="n">HanziConv</span>
-<span class="kn">from</span> <span class="nn">sympy.ntheory</span> <span class="k">import</span> <span class="n">factorint</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">lru_cache</span>
-<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="k">import</span> <span class="n">TensorDataset</span><span class="p">,</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">RandomSampler</span><span class="p">,</span> <span class="n">SequentialSampler</span>
-<span class="kn">from</span> <span class="nn">keras.preprocessing.sequence</span> <span class="k">import</span> <span class="n">pad_sequences</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">GroupKFold</span>
-<span class="kn">from</span> <span class="nn">pytorch_transformers</span> <span class="k">import</span> <span class="n">BertTokenizer</span><span class="p">,</span> <span class="n">BertConfig</span><span class="p">,</span> <span class="n">BertModel</span>
-<span class="kn">from</span> <span class="nn">pytorch_transformers</span> <span class="k">import</span> <span class="n">AdamW</span><span class="p">,</span> <span class="n">BertForSequenceClassification</span><span class="p">,</span> <span class="n">BertForMaskedLM</span>
-<span class="kn">from</span> <span class="nn">pynvml</span> <span class="k">import</span> <span class="n">nvmlInit</span><span class="p">,</span> <span class="n">nvmlDeviceGetHandleByIndex</span><span class="p">,</span> <span class="n">nvmlDeviceGetMemoryInfo</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">matthews_corrcoef</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span><span class="p">,</span> <span class="n">trange</span>
+<span class="kn">from</span> <span class="nn">hanziconv</span> <span class="kn">import</span> <span class="n">HanziConv</span>
+<span class="kn">from</span> <span class="nn">sympy.ntheory</span> <span class="kn">import</span> <span class="n">factorint</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">TensorDataset</span><span class="p">,</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">RandomSampler</span><span class="p">,</span> <span class="n">SequentialSampler</span>
+<span class="kn">from</span> <span class="nn">keras.preprocessing.sequence</span> <span class="kn">import</span> <span class="n">pad_sequences</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">GroupKFold</span>
+<span class="kn">from</span> <span class="nn">pytorch_transformers</span> <span class="kn">import</span> <span class="n">BertTokenizer</span><span class="p">,</span> <span class="n">BertConfig</span><span class="p">,</span> <span class="n">BertModel</span>
+<span class="kn">from</span> <span class="nn">pytorch_transformers</span> <span class="kn">import</span> <span class="n">AdamW</span><span class="p">,</span> <span class="n">BertForSequenceClassification</span><span class="p">,</span> <span class="n">BertForMaskedLM</span>
+<span class="kn">from</span> <span class="nn">pynvml</span> <span class="kn">import</span> <span class="n">nvmlInit</span><span class="p">,</span> <span class="n">nvmlDeviceGetHandleByIndex</span><span class="p">,</span> <span class="n">nvmlDeviceGetMemoryInfo</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">matthews_corrcoef</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">accuracy_score</span>
 
 <span class="o">%</span> <span class="n">matplotlib</span> <span class="n">inline</span>
 
@@ -2517,9 +2189,9 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
   <span class="n">handle</span> <span class="o">=</span> <span class="n">nvmlDeviceGetHandleByIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
   <span class="n">info</span> <span class="o">=</span> <span class="n">nvmlDeviceGetMemoryInfo</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
   <span class="k">if</span> <span class="n">print_stats</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"Total memory: {info.total/1e9:.2f} GB"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"Free memory: {info.free/1e9:.2f} GB"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"Used memory: {info.used/1e9:.2f} GB"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Total memory: {info.total/1e9:.2f} GB"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Free memory: {info.free/1e9:.2f} GB"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Used memory: {info.used/1e9:.2f} GB"</span><span class="p">)</span>
   <span class="k">return</span> <span class="n">info</span><span class="o">.</span><span class="n">free</span><span class="o">/</span><span class="mf">1e9</span>
 
 <span class="c1"># Make sure we have enough memory</span>
@@ -2989,9 +2661,9 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
   <span class="n">use_sentences</span> <span class="o">=</span> <span class="n">orig_sentences</span><span class="p">[:</span><span class="n">use_num</span><span class="p">]</span>
   <span class="n">hard_negatives</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_num</span> <span class="o">//</span> <span class="n">num_at_a_time</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">):</span>
       <span class="k">continue</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
       <span class="n">sentences</span> <span class="o">=</span> <span class="n">use_sentences</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">num_at_a_time</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">num_at_a_time</span><span class="p">]</span>
       <span class="k">for</span> <span class="n">negative</span> <span class="ow">in</span> <span class="n">generate_hard_negatives</span><span class="p">(</span><span class="n">sentences</span><span class="p">,</span> <span class="n">masked_lm_model</span><span class="p">,</span> <span class="n">debug_print</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">hard_negatives</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">negative</span><span class="p">)</span>
@@ -3000,7 +2672,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
   <span class="c1"># Concatenate all files to one</span>
   <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">negatives_path</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">n</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_num</span> <span class="o">//</span> <span class="n">num_at_a_time</span><span class="p">):</span>
-      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">n</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 </pre></div>
 
@@ -3083,7 +2755,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 
     <span class="c1"># Train the data for one epoch</span>
     <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataloader</span><span class="p">):</span>
-      <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Batch: </span><span class="si">{step}</span><span class="s1">'</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Batch: </span><span class="si">{step}</span><span class="s1">'</span><span class="p">)</span>
       <span class="c1"># Add batch to GPU</span>
       <span class="n">batch</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">)</span>
       <span class="c1"># Unpack the inputs from our dataloader</span>
@@ -3121,12 +2793,12 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 <span class="k">def</span> <span class="nf">print_stats</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">sentences</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
   <span class="n">tab</span> <span class="o">=</span> <span class="s1">''</span>
   <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{label}</span><span class="s1">:'</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{label}</span><span class="s1">:'</span><span class="p">)</span>
     <span class="n">tab</span> <span class="o">=</span> <span class="s1">'</span><span class="se">\t</span><span class="s1">'</span>
-  <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Matthews Correlaton Coefficient:'</span><span class="p">,</span> <span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-  <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Accuracy:'</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-  <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Precision:'</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-  <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Recall:'</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Matthews Correlaton Coefficient:'</span><span class="p">,</span> <span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Accuracy:'</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Precision:'</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Recall:'</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -3701,7 +3373,7 @@ Overall Self-Supervised:
           <span class="n">incorrect_sentences</span><span class="p">,</span> <span class="n">predict</span><span class="p">(</span><span class="n">incorrect_dataloader</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">final_model</span><span class="p">,</span> <span class="n">has_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Correct | Incorrect'</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">correct</span><span class="p">,</span> <span class="p">(</span><span class="n">prob_correct</span><span class="p">,</span> <span class="n">_</span><span class="p">),</span> <span class="n">incorrect</span><span class="p">,</span> <span class="p">(</span><span class="n">prob_incorrect</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">gen</span><span class="p">:</span>
-  <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{correct}</span><span class="s1">: </span><span class="si">{prob_correct:.2f}</span><span class="s1"> | </span><span class="si">{incorrect}</span><span class="s1">: </span><span class="si">{prob_incorrect:.2f}</span><span class="s1">'</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{correct}</span><span class="s1">: </span><span class="si">{prob_correct:.2f}</span><span class="s1"> | </span><span class="si">{incorrect}</span><span class="s1">: </span><span class="si">{prob_incorrect:.2f}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -3827,10 +3499,10 @@ Overall Self-Supervised:
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">combinations</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="n">wrap</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">wrap</span>
 
 <span class="kn">import</span> <span class="nn">jieba</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -3838,9 +3510,9 @@ Overall Self-Supervised:
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">st</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
 <span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
 
 <span class="o">%</span><span class="k">matplotlib</span> inline
 
@@ -3945,7 +3617,7 @@ Overall Self-Supervised:
 <span class="n">hsk_lvl_by_word</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">for</span> <span class="n">lvl</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
     <span class="n">words</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="s1">'hsk/HSK</span><span class="si">{lvl}</span><span class="s1">.txt'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8-sig'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">'hsk/HSK</span><span class="si">{lvl}</span><span class="s1">.txt'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8-sig'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
             <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="c1"># strip away newlines</span>
@@ -3985,12 +3657,12 @@ Overall Self-Supervised:
 <span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">lvl</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
         <span class="n">words</span> <span class="o">=</span> <span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">component_assignments_per_lvl</span><span class="p">[</span><span class="n">lvl</span><span class="p">]])</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Component HSK </span><span class="si">{lvl}</span><span class="s1"> words:'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Component HSK </span><span class="si">{lvl}</span><span class="s1"> words:'</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="mi">80</span><span class="p">)))</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Added for each level: '</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">lvl</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'HSK</span><span class="si">{lvl}</span><span class="s1">: {len(component_assignments_per_lvl[lvl])}'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'HSK</span><span class="si">{lvl}</span><span class="s1">: {len(component_assignments_per_lvl[lvl])}'</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -4777,7 +4449,7 @@ $$\frac{1}{1+e^{-(x^{L}_1 \beta_1 + \ldots + x^{L}_n \beta_n + \beta_c)}} = 0.5 
 
     
     <span class="k">while</span> <span class="ow">not</span> <span class="n">terminate</span><span class="p">():</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">answer_based_on_anki</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'Iteration {iteration+1}'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">answer_based_on_anki</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Iteration {iteration+1}'</span><span class="p">)</span>
 
         <span class="n">curr_sample</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">curr_sample</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_samples</span><span class="p">:</span>
@@ -4805,9 +4477,9 @@ $$\frac{1}{1+e^{-(x^{L}_1 \beta_1 + \ldots + x^{L}_n \beta_n + \beta_c)}} = 0.5 
             <span class="k">if</span> <span class="n">answer_based_on_anki</span><span class="p">:</span>
                 <span class="n">outcome</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">anki_words</span> <span class="k">else</span> <span class="mf">0.0</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'HSK </span><span class="si">{hsk_lvl}</span><span class="s1">: </span><span class="si">{w}</span><span class="s1"> </span><span class="si">{f}</span><span class="s1">'</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'HSK </span><span class="si">{hsk_lvl}</span><span class="s1">: </span><span class="si">{w}</span><span class="s1"> </span><span class="si">{f}</span><span class="s1">'</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">py</span><span class="p">,</span> <span class="n">transls</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="p">[</span><span class="n">w</span><span class="p">]:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">'</span><span class="si">{py}</span><span class="s1">: {"/".join(transls)}'</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{py}</span><span class="s1">: {"/".join(transls)}'</span><span class="p">)</span>
 
                 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
                 <span class="n">answer</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">'Do you know it, y/n? '</span><span class="p">)</span>
@@ -4942,9 +4614,9 @@ $$\frac{1}{1+e^{-(x^{L}_1 \beta_1 + \ldots + x^{L}_n \beta_n + \beta_c)}} = 0.5 
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
 <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">iteration</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">loss</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">'Iteration'</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">'Loss'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">f</span><span class="s1">'Loss over </span><span class="si">{NUM_RUNS}</span><span class="s1"> runs'</span><span class="p">);</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">'Iteration'</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">'Loss'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">'Loss over </span><span class="si">{NUM_RUNS}</span><span class="s1"> runs'</span><span class="p">);</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">iteration</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">outcomes</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">'Iteration'</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">'% known'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">f</span><span class="s1">'% Known words over </span><span class="si">{NUM_RUNS}</span><span class="s1"> runs'</span><span class="p">);</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">'Iteration'</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">'% known'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">'% Known words over </span><span class="si">{NUM_RUNS}</span><span class="s1"> runs'</span><span class="p">);</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
@@ -5023,7 +4695,7 @@ $$\frac{1}{1+e^{-(x^{L}_1 \beta_1 + \ldots + x^{L}_n \beta_n + \beta_c)}} = 0.5 
         
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">display</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">display</span>
 <span class="kn">import</span> <span class="nn">tabulate</span>
 
 <span class="n">h</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">stats_history</span><span class="p">)</span>
@@ -5197,7 +4869,7 @@ $$\frac{1}{1+e^{-(x^{L}_1 \beta_1 + \ldots + x^{L}_n \beta_n + \beta_c)}} = 0.5 
 
 
         
-       <script>var disqus_shortname="martindbp";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha256-SDRP1VVYu+tgAGKhddBSl5+ezofHKZeI+OzxakbIe/Y=" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+       <script>var disqus_shortname="martindbp";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
     tex2jax: {
         inlineMath: [ ['$','$'], ["\\(","\\)"] ],
@@ -5209,7 +4881,7 @@ MathJax.Hub.Config({
         styles: {'.MathJax_Display': {"margin": 0}}
     }
 });
-</script><footer id="footer"><p>Contents © 2020         <a href="mailto:me@martindbp.com">Martin Pettersson</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         </p>
+</script><footer id="footer"><p>Contents © 2021         <a href="mailto:me@martindbp.com">Martin Pettersson</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         </p>
             
         </footer>
 </div>
