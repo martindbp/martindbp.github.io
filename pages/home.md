@@ -15,7 +15,7 @@ processing, computer vision and machine learning, with a bit of back-end
 programming thrown in for good measure.
 
 Currently I'm taking a break from regular employement, instead trying to bring
-Value To The People™ by way of [zimu.ai](zimu.ai). It's a browser extension providing captions and subtitles for
+Value To The People™ by way of [zimu.ai](http://zimu.ai). It's a browser extension providing captions and subtitles for
 pretty much any Chinese video online, using Computer Vision and ML to extract them, then personalizing them for Chinese learners.
 
 Here is a list of other things I've done / written about:
