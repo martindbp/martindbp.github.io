@@ -9,7 +9,16 @@
 .. type: text
 -->
 
-Hi there, welcome to my little space on the interwebs! This is where I post random thoughts, analyses and side-projects. Day to day I work mostly with Computer Vision and Machine Learning. In my spare time I split my time between trying to learn Chinese and trying to improve the learning process. Here is a list of things I've done / written about:
+Hi there, my name is Martin Pettersson, and this is where I post
+random thoughts, analyses and (side)projects. My background is in image
+processing, computer vision and machine learning, with a bit of back-end
+programming thrown in for good measure.
+
+Currently I'm taking a break from regular employement, instead trying to bring
+Value To The People™ by way of [zimu.ai](zimu.ai). It's a browser extension providing captions and subtitles for
+pretty much any Chinese video online, using Computer Vision and ML to extract them, then personalizing them for Chinese learners.
+
+Here is a list of other things I've done / written about:
 
 * [Solving Minesweeper](posts/minesweeper/)
 * ["Can I Say This In Chinese" with BERT](posts/can-i-say-this/)
