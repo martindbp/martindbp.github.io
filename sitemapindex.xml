@@ -6,11 +6,7 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
-  <loc>https://martindbp.com/rss.xml</loc>
-  <lastmod>2021-07-02T08:00:00Z</lastmod>
- </sitemap>
- <sitemap>
   <loc>https://martindbp.com/sitemap.xml</loc>
-  <lastmod>2021-07-02T08:00:00Z</lastmod>
+  <lastmod>2021-12-12T08:31:00Z</lastmod>
  </sitemap>
 </sitemapindex>
