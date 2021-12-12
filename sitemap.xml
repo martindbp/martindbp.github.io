@@ -6,11 +6,19 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
+  <loc>https://martindbp.com/</loc>
+  <lastmod>2021-12-12T08:33:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://martindbp.com/2019/</loc>
   <lastmod>2021-06-18T16:03:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/2021/</loc>
+  <lastmod>2021-07-02T08:00:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://martindbp.com/archive.html</loc>
   <lastmod>2021-07-02T08:00:00Z</lastmod>
  </url>
  <url>
