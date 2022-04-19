@@ -69,7 +69,7 @@ MathJax.Hub.Config({
 <p class="dateline">
             <time class="post-date published dt-published" datetime="2019-10-09T21:09:01+10:00" itemprop="datePublished" title="2019-10-09">2019-10-09</time></p>
                 <p class="commentline">
-        
+    
     <a href="#disqus_thread" data-disqus-identifier="cache/posts/can_i_say_this.html">Comments</a>
 
 
@@ -77,8 +77,7 @@ MathJax.Hub.Config({
 </div>
         
 
-    </header><section class="e-content entry-content" itemprop="articleBody text"><div>
-<div class="cell border-box-sizing text_cell rendered">
+    </header><section class="e-content entry-content" itemprop="articleBody text"><div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -294,9 +293,9 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
   <span class="n">handle</span> <span class="o">=</span> <span class="n">nvmlDeviceGetHandleByIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
   <span class="n">info</span> <span class="o">=</span> <span class="n">nvmlDeviceGetMemoryInfo</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
   <span class="k">if</span> <span class="n">print_stats</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Total memory: {info.total/1e9:.2f} GB"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Free memory: {info.free/1e9:.2f} GB"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Used memory: {info.used/1e9:.2f} GB"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Total memory: </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">total</span><span class="o">/</span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Free memory: </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">free</span><span class="o">/</span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Used memory: </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">used</span><span class="o">/</span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB"</span><span class="p">)</span>
   <span class="k">return</span> <span class="n">info</span><span class="o">.</span><span class="n">free</span><span class="o">/</span><span class="mf">1e9</span>
 
 <span class="c1"># Make sure we have enough memory</span>
@@ -766,9 +765,9 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
   <span class="n">use_sentences</span> <span class="o">=</span> <span class="n">orig_sentences</span><span class="p">[:</span><span class="n">use_num</span><span class="p">]</span>
   <span class="n">hard_negatives</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_num</span> <span class="o">//</span> <span class="n">num_at_a_time</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">cache_path</span><span class="si">}</span><span class="s1">/negatives</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">.txt'</span><span class="p">):</span>
       <span class="k">continue</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">cache_path</span><span class="si">}</span><span class="s1">/negatives</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">.txt'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
       <span class="n">sentences</span> <span class="o">=</span> <span class="n">use_sentences</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">num_at_a_time</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">num_at_a_time</span><span class="p">]</span>
       <span class="k">for</span> <span class="n">negative</span> <span class="ow">in</span> <span class="n">generate_hard_negatives</span><span class="p">(</span><span class="n">sentences</span><span class="p">,</span> <span class="n">masked_lm_model</span><span class="p">,</span> <span class="n">debug_print</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">hard_negatives</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">negative</span><span class="p">)</span>
@@ -777,7 +776,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
   <span class="c1"># Concatenate all files to one</span>
   <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">negatives_path</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">n</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_num</span> <span class="o">//</span> <span class="n">num_at_a_time</span><span class="p">):</span>
-      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{cache_path}</span><span class="s1">/negatives{i+1}.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">cache_path</span><span class="si">}</span><span class="s1">/negatives</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">n</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 </pre></div>
 
@@ -860,7 +859,7 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 
     <span class="c1"># Train the data for one epoch</span>
     <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataloader</span><span class="p">):</span>
-      <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Batch: </span><span class="si">{step}</span><span class="s1">'</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Batch: </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
       <span class="c1"># Add batch to GPU</span>
       <span class="n">batch</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">)</span>
       <span class="c1"># Unpack the inputs from our dataloader</span>
@@ -898,12 +897,12 @@ Then we can perform take a correct sentence $S_c$ and perform a random mutation 
 <span class="k">def</span> <span class="nf">print_stats</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">sentences</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
   <span class="n">tab</span> <span class="o">=</span> <span class="s1">''</span>
   <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{label}</span><span class="s1">:'</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">:'</span><span class="p">)</span>
     <span class="n">tab</span> <span class="o">=</span> <span class="s1">'</span><span class="se">\t</span><span class="s1">'</span>
-  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Matthews Correlaton Coefficient:'</span><span class="p">,</span> <span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Accuracy:'</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Precision:'</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{tab}</span><span class="s1">Recall:'</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">tab</span><span class="si">}</span><span class="s1">Matthews Correlaton Coefficient:'</span><span class="p">,</span> <span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">tab</span><span class="si">}</span><span class="s1">Accuracy:'</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">tab</span><span class="si">}</span><span class="s1">Precision:'</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">tab</span><span class="si">}</span><span class="s1">Recall:'</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -1478,7 +1477,7 @@ Overall Self-Supervised:
           <span class="n">incorrect_sentences</span><span class="p">,</span> <span class="n">predict</span><span class="p">(</span><span class="n">incorrect_dataloader</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">final_model</span><span class="p">,</span> <span class="n">has_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Correct | Incorrect'</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">correct</span><span class="p">,</span> <span class="p">(</span><span class="n">prob_correct</span><span class="p">,</span> <span class="n">_</span><span class="p">),</span> <span class="n">incorrect</span><span class="p">,</span> <span class="p">(</span><span class="n">prob_incorrect</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">gen</span><span class="p">:</span>
-  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{correct}</span><span class="s1">: </span><span class="si">{prob_correct:.2f}</span><span class="s1"> | </span><span class="si">{incorrect}</span><span class="s1">: </span><span class="si">{prob_incorrect:.2f}</span><span class="s1">'</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">correct</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">prob_correct</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="n">incorrect</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">prob_incorrect</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1546,7 +1545,6 @@ Overall Self-Supervised:
 </div>
 </div>
 </div>
-</div>
     </section><aside class="sharing no-print"><a href="#content" aria-label="Post beginning">
        <i class="fa fa-2x fa-fw fa-arrow-circle-up" aria-hidden="true" title="Post beginning"></i>
     </a>
@@ -1572,7 +1570,7 @@ Overall Self-Supervised:
 
         <section class="comments hidden-print"><h2>Comments</h2>
         
-        
+    
         <div id="disqus_thread"></div>
         <script>
         var disqus_shortname ="martindbp",
@@ -1604,7 +1602,7 @@ MathJax.Hub.Config({
         styles: {'.MathJax_Display': {"margin": 0}}
     }
 });
-</script><script>var disqus_shortname="martindbp";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><footer id="footer"><p>Contents © 2021         <a href="mailto:me@martindbp.com">Martin Pettersson</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         </p>
+</script><script>var disqus_shortname="martindbp";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><footer id="footer"><p>Contents © 2022         <a href="mailto:me@martindbp.com">Martin Pettersson</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         </p>
             
         </footer>
 </div>
