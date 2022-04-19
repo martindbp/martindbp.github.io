@@ -14,7 +14,8 @@ background is in image processing, computer vision and machine learning, with a
 bit of back-end programming thrown in for good measure.
 
 Currently I'm taking a break from regular employement, instead trying to bring
-Value To The People™ by way of [zimu.ai](https://zimu.ai).
+Value To The People™ by way of [zimu.ai](https://zimu.ai). Support this project
+on [Patreon](https://www.patreon.com/martindbp).
 
 Here is a list of other things I've done / written about:
 
