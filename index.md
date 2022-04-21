@@ -19,6 +19,7 @@ on [Patreon](https://www.patreon.com/martindbp).
 
 Here is a list of other things I've done / written about:
 
+* [We can meet in VR instead of polluting our way across the globe](posts/vr/)
 * [Solving Minesweeper](posts/minesweeper/)
 * ["Can I Say This In Chinese" with BERT](posts/can-i-say-this/)
 * [Chinese Placement Test with Logistic Regression and Active Learning](posts/chinese-placement-test/)
