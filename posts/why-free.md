@@ -9,11 +9,11 @@
 .. type: text
 -->
 
-I'm an aspiring Indie Hacker, as in, I haven't actually launched anything yet. But I've already decided to make my app free? Sounds like a terrible decision, right?
+I'm an Indie Hacker and I've decided to make my app free. Sounds like a terrible decision, right?
 
-This post goes to the heart of why I'm Indie Hacking. Is it to make money? Definitely not. If I wanted to make money there's the risk free alternative of regular employment. Then is it to become rich? Clearly not, for that I'd probably need to do a proper startup, get VC funding and try to make it big. No, to me I want to cover our expenses as a family, which are not extravagant, while helping as many people as possible.
+I'm making a [browser extension](https://zimu.ai) that provides smart subtitles for Chinese videos. Am I Indie Hacking mainly to make money? Definitely not. If I wanted to make money there's the risk free alternative of regular employment. Then is it to become rich? Clearly not, a one-man project is unlikely to generate that kind of revenue. Why a one-man project then? It's mainly that at this point in our life with small kids, we want as much freedom as possible. Involving other people means meetings, discussions, aligning visions and work hours. 
 
-So the calculus is simple: maximize "number of users" times "value provided per user", subject to the constraint of paying our bills at some point in the future.
+No, what I really want is to cover our expenses as a family while creating as much value as possible. So the calculus is simple: maximize the "value" I can provide to other people, i.e. "number of users" times "value provided per user", subject to the constraint of paying our bills at some point in the future.
 
 I'm making a language learning app (actually, browser extension) for Chinese. There are plenty of those already, free and paid, but I think I'm providing something fairly special (otherwise I wouldn't do it). 
 
