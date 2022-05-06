@@ -21,31 +21,31 @@ To manually install the extension, first download the latest version of [here](h
 
 1. Open Chrome, click the small puzzle icon to the right of the address bar, then "Manage extensions".
 
-![screenshot](/images/zimu/manage_extensions_marked.png)
+![screenshot](/images/zimu/manage_extensions_marked.png =400x)
 
 2. Switch on Developer mode.
 
-![screenshot](/images/zimu/developer_mode_marked.png)
+![screenshot](/images/zimu/developer_mode_marked.png =400x)
 
 3. Click "Load unpacked", navigate to the extracted folder and confirm.
 
-![screenshot](/images/zimu/load_unpacked_marked.png)
+![screenshot](/images/zimu/load_unpacked_marked.png =400x)
 
 4. To make the extension more accessible, click the puzzle icon again and pin the extension.
 
-![screenshot](/images/zimu/pin_marked.png)
+![screenshot](/images/zimu/pin_marked.png =400x)
 
 # Extension Usage Basics
 
 After having installed the extension, navigate to [browse.zimu.ai](browse.zimu.ai) and pick a show or movie to watch. After loading the video page, you should see the zimu.ai subtitle window on top of the Youtube page.
 
-![screenshot](/images/zimu/subtitle_window.png)
+![screenshot](/images/zimu/subtitle_window.png =600x)
 
 The philosphy of this tool is that subtitles are there to help you understand the content, but as we're trying to learn Chinese here, we want it to help us as little as possible while still accomplishing that goal. When you first use the extension, you'll see that there are three rows, pinyin, hanzi and word translations, and under those is the full sentence translation. At first, all the information is available, except the full sentence translation. To hide a piece of information you can click on it to open the context menu and select the "hide" action. It will then be hidden the next time you encounter it, sort of like a natural flashcard.
 
 If you're not a complete beginner however, it would get tedious to hide all the stuff you already know. In that case you can go to the options, then the "Knowledge" tab and select which HSK levels to automatically hide for each type.
 
-![screenshot](/images/zimu/knowledge_level.png)
+![screenshot](/images/zimu/knowledge_level.png =600x)
 
 # Dictionary
 
