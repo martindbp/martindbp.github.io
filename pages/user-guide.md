@@ -21,7 +21,7 @@ To manually install the extension, first download the latest version of [here](h
 
 1. Open Chrome, click the small puzzle icon to the right of the address bar, then "Manage extensions".
 
-![screenshot](/images/zimu/manage_extensions_marked.png =400x)
+<img src="/images/zimu/manage_extensions_marked.png" width="400px" />
 
 2. Switch on Developer mode.
 
