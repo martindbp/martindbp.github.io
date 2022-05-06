@@ -33,7 +33,7 @@ Click "Load unpacked", navigate to the extracted folder and confirm.
 
 To make the extension more accessible, click the puzzle icon again and pin the extension.
 
-<img src="/images/zimu/pin_marked.png" width="400px" />
+<img src="/images/zimu/pin_extension_marked.png" width="400px" />
 
 # Extension Usage Basics
 
