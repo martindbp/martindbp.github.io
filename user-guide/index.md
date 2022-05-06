@@ -19,19 +19,19 @@ For the time being the extension has to be installed manually and not through th
 
 To manually install the extension, first download the latest version of [here](https://cdn.zimu.ai/file/zimu-public/browser_extension.zip). Extract the files into its own folder, for example "browser_extension".
 
-1. Open Chrome, click the small puzzle icon to the right of the address bar, then "Manage extensions".
+Open Chrome, click the small puzzle icon to the right of the address bar, then "Manage extensions".
 
 <img src="/images/zimu/manage_extensions_marked.png" width="400px" />
 
-2. Switch on Developer mode.
+Switch on Developer mode.
 
 <img src="/images/zimu/developer_mode_marked.png" width="400px" />
 
-3. Click "Load unpacked", navigate to the extracted folder and confirm.
+Click "Load unpacked", navigate to the extracted folder and confirm.
 
 <img src="/images/zimu/load_unpacked_marked.png" width="400px" />
 
-4. To make the extension more accessible, click the puzzle icon again and pin the extension.
+To make the extension more accessible, click the puzzle icon again and pin the extension.
 
 <img src="/images/zimu/pin_marked.png" width="400px" />
 
@@ -57,7 +57,7 @@ There are useful options that can be changed including keyboard shortcuts, the b
 
 When deciding which new words to focus on it can come in handy to see how often they occur in the video. If you hover over a word, the number of occurrences are shown in a small badge.
 
-.. image:: /images/occurrences.png
+<img src="/images/zimu/occurrences.png" width="300px" />
 
 # Starring content + exporting to Anki
 
