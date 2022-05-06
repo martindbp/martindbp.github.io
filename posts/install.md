@@ -21,7 +21,7 @@ To manually install the extension, first download the latest version of [here](h
 
 1. Open Chrome, click the small puzzle icon to the right of the address bar, then "Manage extensions".
 
-![Manage extensions](/images/manage_extensions_marked.png "Manage extensions")
+[screenshot](/images/manage_extensions_marked.png)
 
 .. image:: /images/manage_extensions_marked.png
 
