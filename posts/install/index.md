@@ -21,7 +21,7 @@ To manually install the extension, first download the latest version of [here](h
 
 1. Open Chrome, click the small puzzle icon to the right of the address bar, then "Manage extensions".
 
-[IMAGE]
+.. image:: /images/manage_extensions.jpg
 
 2. Switch on Developer mode.
 
@@ -62,4 +62,3 @@ You can "star" a word or a full sentence translation by opening the context menu
 [IMAGE]
 
 While there are plans to integrate flashcards and SRS (Spaced Repetition System), for now there is the ability to export starred content to [Anki](https://apps.ankiweb.net/), which is a free and open-source flashcards app.
-
