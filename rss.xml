@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2022 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Fri, 06 May 2022 12:43:00 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Zimu.ai User Guide</title><link>https://martindbp.com/posts/install/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;h2&gt;Introduction&lt;/h2&gt;
-&lt;p&gt;Zimu.ai provides a browser extension for Chrome that provides interactive and adapative subtitles for select Chinese TV-shows and movies on Youtube. It is currently only available for the Chrome browser.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>martindbp</title><link>https://martindbp.com/</link><description>This is the personal blog of Martin Pettersson</description><atom:link href="https://martindbp.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2022 &lt;a href="mailto:me@martindbp.com"&gt;Martin Pettersson&lt;/a&gt; </copyright><lastBuildDate>Fri, 06 May 2022 12:49:17 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>zimu.ai User Guide</title><link>https://martindbp.com/posts/install/</link><dc:creator>Martin Pettersson</dc:creator><description>&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;zimu.ai provides a browser extension for Chrome that provides interactive and adapative subtitles for select Chinese TV-shows and movies on Youtube. It is currently only available for the Chrome browser.&lt;/p&gt;
 &lt;h2&gt;Download and Install in Chrome&lt;/h2&gt;
 &lt;p&gt;For the time being the extension has to be installed manually and not through the Chrome store, this is due to updates sometimes take weeks to be approved, greatly slowing down the speed of improvement.&lt;/p&gt;
 &lt;p&gt;To manually install the extension, first download the latest version of &lt;a href="https://cdn.zimu.ai/file/zimu-public/browser_extension.zip"&gt;here&lt;/a&gt;. Extract the files into its own folder, for example "browser_extension".&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Open Chrome, click the small puzzle icon to the right of the address bar, then "Manage extensions".&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img alt="Manage extensions" src="https://martindbp.com/images/manage_extensions_marked.png" title="Manage extensions"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://martindbp.com/images/manage_extensions_marked.png"&gt;screenshot&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;.. image:: /images/manage_extensions_marked.png&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Switch on Developer mode.&lt;/li&gt;

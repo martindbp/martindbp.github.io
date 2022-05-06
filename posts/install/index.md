@@ -1,5 +1,5 @@
 <!--
-.. title: Zimu.ai User Guide
+.. title: zimu.ai User Guide
 .. slug: install
 .. date: 2022-05-04 13:21:12 UTC
 .. tags: 
@@ -11,7 +11,7 @@
 
 # Introduction
 
-Zimu.ai provides a browser extension for Chrome that provides interactive and adapative subtitles for select Chinese TV-shows and movies on Youtube. It is currently only available for the Chrome browser.
+zimu.ai provides a browser extension for Chrome that provides interactive and adapative subtitles for select Chinese TV-shows and movies on Youtube. It is currently only available for the Chrome browser.
 
 # Download and Install in Chrome
 
@@ -21,7 +21,7 @@ To manually install the extension, first download the latest version of [here](h
 
 1. Open Chrome, click the small puzzle icon to the right of the address bar, then "Manage extensions".
 
-![Manage extensions](/images/manage_extensions_marked.png "Manage extensions")
+[screenshot](/images/manage_extensions_marked.png)
 
 .. image:: /images/manage_extensions_marked.png
 
