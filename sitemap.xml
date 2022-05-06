@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://martindbp.com/</loc>
-  <lastmod>2022-04-21T11:06:00Z</lastmod>
+  <lastmod>2022-05-06T12:51:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/2019/</loc>
@@ -23,11 +23,15 @@
  </url>
  <url>
   <loc>https://martindbp.com/archive.html</loc>
-  <lastmod>2022-05-06T12:38:00Z</lastmod>
+  <lastmod>2022-05-06T12:51:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/categories/</loc>
   <lastmod>2021-06-18T16:03:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://martindbp.com/install/</loc>
+  <lastmod>2022-05-06T12:51:00Z</lastmod>
  </url>
  <url>
   <loc>https://martindbp.com/posts/</loc>
