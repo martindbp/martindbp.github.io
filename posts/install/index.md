@@ -21,39 +21,43 @@ To manually install the extension, first download the latest version of [here](h
 
 1. Open Chrome, click the small puzzle icon to the right of the address bar, then "Manage extensions".
 
-.. image:: /images/manage_extensions.jpg
+.. image:: /images/manage_extensions_marked.png
 
 2. Switch on Developer mode.
 
-[IMAGE]
+.. image:: /images/developer_mode_marked.png
 
 3. Click "Load unpacked", navigate to the extracted folder and confirm.
 
-[IMAGE]
+.. image:: /images/load_unpacked_marked.png
 
 4. To make the extension more accessible, click the puzzle icon again and pin the extension.
 
-[IMAGE]
+.. image:: /images/pin_marked.png
 
 # Extension Usage Basics
 
 After having installed the extension, navigate to [browse.zimu.ai](browse.zimu.ai) and pick a show or movie to watch. After loading the video page, you should see the zimu.ai subtitle window on top of the Youtube page.
 
-[IMAGE]
+.. image:: /images/subtitle_window.png
 
 The philosphy of this tool is that subtitles are there to help you understand the content, but as we're trying to learn Chinese here, we want it to help us as little as possible while still accomplishing that goal. When you first use the extension, you'll see that there are three rows, pinyin, hanzi and word translations, and under those is the full sentence translation. At first, all the information is available, except the full sentence translation. To hide a piece of information you can click on it to open the context menu and select the "hide" action. It will then be hidden the next time you encounter it, sort of like a natural flashcard.
 
 If you're not a complete beginner however, it would get tedious to hide all the stuff you already know. In that case you can go to the options, then the "Knowledge" tab and select which HSK levels to automatically hide for each type.
 
-[IMAGE]
+.. image:: /images/knowledge_level.png
 
 # Dictionary
 
-# Keyboard shortcuts
+If the word translation is wrong or you need more context, you can reach the dictionary entry for the word from the context menu, and then clicking the dictionary button.
 
-# Blurring hard-coded captions
+# Other tips and tricks
 
-# Adjustin font size
+There are useful options that can be changed including keyboard shortcuts, the blurring (or not) of the hard-coded captions, switching between simplified and traditional characters and more. Adjusting font size can be done with the plus and minus buttons on the top subtitle menu.
+
+When deciding which new words to focus on it can come in handy to see how often they occur in the video. If you hover over a word, the number of occurrences are shown in a small badge.
+
+.. image:: /images/occurrences.png
 
 # Starring content + exporting to Anki
 
