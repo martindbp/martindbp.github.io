@@ -25,7 +25,7 @@ To manually install the extension, first download the latest version of [here](h
 
 2. Switch on Developer mode.
 
-[IMAGE]
+.. image:: /images/developer_mode.jpg
 
 3. Click "Load unpacked", navigate to the extracted folder and confirm.
 
