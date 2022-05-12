@@ -59,10 +59,29 @@ When deciding which new words to focus on it can come in handy to see how often 
 
 <img src="/images/zimu/occurrences.png" width="300px" />
 
+Depending on your level and the speed/difficulty of the content, you can set the "auto pause" option in the "Subtitle" option tab. This will pause at the completion of each subtitle. You then press play (space) to resume after each subtitle.
+
 # Starring content + exporting to Anki
 
-You can "star" a word or a full sentence translation by opening the context menu and clicking the star icon. Starred content can be seen in the Dashboard, which can be reached from the popup menu when you click the extension's button to the right of the address bar.
-
-[IMAGE]
-
 While there are plans to integrate flashcards and SRS (Spaced Repetition System), for now there is the ability to export starred content to [Anki](https://apps.ankiweb.net/), which is a free and open-source flashcards app.
+
+In order to export, you first "star" a word or a full sentence translation by opening the context menu and clicking the star icon. Starred content can be seen in the Dashboard, which can be reached from the popup menu when you click the extension's button to the right of the address bar.
+
+In the Dashboard, select the words in the table you'd like to export and click the "Export to Anki" button.
+
+When clicking export, there are three tabs for different kinds of Anki exports. The first tab is for "Basic", then "Cloze" notes and lastly in the "Advanced" tab. All three uses fields separated by semi-colon rather than comma, make sure to change this when importing.
+
+For the advanced export, the complete data of the interaction can be exported in JSON format, including all the separate pinyin, hanzi, word translations and more. With this you can build more advanced cards. The fields on these notes includes:
+
+1. search: the combination of hanzi, pinyin and word translation, for easier searching of notes (since the rest of the data is in the JSON field)
+2. data: the JSON containing all the relevant data
+3-9: "boolean" fields (1 or empty) indicating whether a specific card should be generated.
+
+If you use the card templates provided below, then the 3-9 fields are:
+
+* Cloze word hanzi + pinyin ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_py_hz_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_py_hz_back.js))
+* Cloze word translation ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_tr_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_tr_back.js))
+* Cloze whole word ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_all_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_all_back.js))
+* Basic produce Chinese ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_py_hz_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_py_hz_back.js))
+* Basic produce translation ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_tr_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_tr_back.js))
+* Basic produce Hanzi ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_hz_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_hz_back.js))
