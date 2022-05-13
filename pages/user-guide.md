@@ -1,5 +1,5 @@
 <!--
-.. title: zimu.ai User Guide
+.. title: Installation and User Guide for zimu.ai
 .. slug: user-guide
 .. date: 2022-05-06 12:53:20 UTC
 .. tags: 
