@@ -69,15 +69,15 @@ If the word translation is wrong or you need more context, you can reach the dic
 
 By default, these keyboard shortcuts are available:
 
-Left arrow - go back one subtitle
-Right arrow - go forward one subtitle
-R - replay the current subtitle from the start
-D - open the dictionary
-P - peek all information
-T - peek sentence [t]ranslation
-Y - peek [p]inyin row
-H - peek [h]anzi row
-N - peek tra[n]slation row
+* Left arrow - go back one subtitle
+* Right arrow - go forward one subtitle
+* R - replay the current subtitle from the start
+* D - open the dictionary
+* P - peek all information
+* T - peek sentence [t]ranslation
+* Y - peek [p]inyin row
+* H - peek [h]anzi row
+* N - peek tra[n]slation row
 
 These bindings can be changed in the options.
 
