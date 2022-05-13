@@ -13,11 +13,13 @@
 
 zimu.ai provides a browser extension for Chrome that provides interactive and adapative subtitles for select Chinese TV-shows and movies on Youtube. It is currently only available for the Chrome browser.
 
+The philosphy behind this tool is that subtitles are there to help you understand the content. But as we're trying to learn and not only understand, we want to be challanged to just the right degree, making it not too easy, not to hard to understand. zimu.ai does that by allowing you to gradually hide information until one day all the subtitles empty and you're fluent, viola!
+
 # Download and Install in Chrome
 
-For the time being the extension has to be installed manually and not through the Chrome store, this is due to updates sometimes take weeks to be approved, greatly slowing down the speed of improvement.
+For the time being the extension has to be installed manually and not through the Chrome store, this is due to updates sometimes take weeks to be approved, greatly slowing down the speed of iteration and improvement.
 
-To manually install the extension, first download the latest version of [here](https://cdn.zimu.ai/file/zimu-public/browser_extension.zip). Extract the files into its own folder, for example "browser_extension".
+To manually install the extension, first download the latest version [here](https://cdn.zimu.ai/file/zimu-public/browser_extension.zip). Extract the files into its own folder, for example "browser_extension".
 
 Open Chrome, click the small puzzle icon to the right of the address bar, then "Manage extensions".
 
@@ -35,25 +37,37 @@ To make the extension more accessible, click the puzzle icon again and pin the e
 
 <img src="/images/zimu/pin_extension_marked.png" width="400px" />
 
-# Extension Usage Basics
+# How to start
 
 After having installed the extension, navigate to [browse.zimu.ai](browse.zimu.ai) and pick a show or movie to watch. After loading the video page, you should see the zimu.ai subtitle window on top of the Youtube page.
 
 <img src="/images/zimu/subtitle_window.png" width="600px" />
 
-The philosphy of this tool is that subtitles are there to help you understand the content, but as we're trying to learn Chinese here, we want it to help us as little as possible while still accomplishing that goal. When you first use the extension, you'll see that there are three rows, pinyin, hanzi and word translations, and under those is the full sentence translation. At first, all the information is available, except the full sentence translation. To hide a piece of information you can click on it to open the context menu and select the "hide" action. It will then be hidden the next time you encounter it, sort of like a natural flashcard.
+# Hiding information
 
-If you're not a complete beginner however, it would get tedious to hide all the stuff you already know. In that case you can go to the options, then the "Knowledge" tab and select which HSK levels to automatically hide for each type.
+When you first use the extension, you'll see that there are three rows, pinyin, hanzi and word translations, and under those is the full sentence translation. At first, all the information is available, except the full sentence translation. To hide a piece of information you can click on it to open the context menu and select the "hide" action. It will then be hidden the next time you encounter it, sort of like a natural flashcard. If when you encounter it again you forgot the meaning, you can click it to peek. After peeking it will still remain hidden the next time you see it, unless you click the "pin" icon in the context menu, which will reset its state to non-hidden.
+
+# Knowledge levels
+
+If you're not a complete beginner, it might get tedious to hide all the stuff you already know. In that case you can go to the options, then the "Knowledge" tab and select which HSK levels to automatically hide for each information type.
 
 <img src="/images/zimu/knowledge_level.png" width="600px" />
+
+# Peeking and pinning rows
+
+Sometimes we want to override our hidden information and display it anyway, for example if it's too difficult to make out what people are saying we might want to show all the pinyin, even if we know it very well. For this you can use the peek/pin button to the left of each row. Click once to peek all the information on that row. Click again to "pin" it so that it remains visible for all new subtitles. 
+
+<img src="/images/zimu/pin_row.png" width="600px" />
 
 # Dictionary
 
 If the word translation is wrong or you need more context, you can reach the dictionary entry for the word from the context menu, and then clicking the dictionary button.
 
+<img src="/images/zimu/dictionary.png" width="600px" />
+
 # Other tips and tricks
 
-There are useful options that can be changed including keyboard shortcuts, the blurring (or not) of the hard-coded captions, switching between simplified and traditional characters and more. Adjusting font size can be done with the plus and minus buttons on the top subtitle menu.
+There are useful options that can be changed includes keyboard shortcuts, the blurring (or not) of the hard-coded captions, switching between simplified and traditional characters and more. Adjusting font size can be done with the plus and minus buttons on the top subtitle menu.
 
 When deciding which new words to focus on it can come in handy to see how often they occur in the video. If you hover over a word, the number of occurrences are shown in a small badge.
 
@@ -101,6 +115,6 @@ Then click "Add", and use the "Basic" note type as the base. Then click "fields"
 
 You are now ready to import the exported advanced file to Anki, just remember to choose the semicolon (;) as the separator, and the correct note type.
 
-If you wish to add or remove cards to be generated, you can first edit them in the browser extension and then update the cards in the Anki note type.
+If you wish to add or remove cards to be generated, you can first edit them in the browser extension and then update the cards in the Anki note type. The last field in the export is always "1" if the starred content was the full sentence translation rather than a word.
 
 <img src="/images/zimu/advanced.png" width="400px" />
