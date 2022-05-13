@@ -95,23 +95,32 @@ zimu.ai provides a browser extension for Chrome that provides interactive and ad
 <p>While there are plans to integrate flashcards and SRS (Spaced Repetition System), for now there is the ability to export starred content to <a href="https://apps.ankiweb.net/">Anki</a>, which is a free and open-source flashcards app.</p>
 <p>In order to export, you first "star" a word or a full sentence translation by opening the context menu and clicking the star icon. Starred content can be seen in the Dashboard, which can be reached from the popup menu when you click the extension's button to the right of the address bar.</p>
 <p>In the Dashboard, select the words in the table you'd like to export and click the "Export to Anki" button.</p>
+<p><img src="../images/zimu/export.png" width="400px"></p>
 <p>When clicking export, there are three tabs for different kinds of Anki exports. The first tab is for "Basic", then "Cloze" notes and lastly in the "Advanced" tab. All three uses fields separated by semi-colon rather than comma, make sure to change this when importing.</p>
+<p><img src="../images/zimu/basic.png" width="400px"></p>
 <p>For the advanced export, the complete data of the interaction can be exported in JSON format, including all the separate pinyin, hanzi, word translations and more. With this you can build more advanced cards. The fields on these notes includes:</p>
 <ol>
 <li>search: the combination of hanzi, pinyin and word translation, for easier searching of notes (since the rest of the data is in the JSON field)</li>
-<li>data: the JSON containing all the relevant data
-3-9: "boolean" fields (1 or empty) indicating whether a specific card should be generated.</li>
+<li>data: the JSON containing all the relevant data</li>
 </ol>
-<p>If you use the card templates provided below, then the 3-9 fields are:</p>
+<p>Fields 3-9: "boolean" fields (1 or empty) indicating whether a specific card should be generated. The names of these fields must correspond with the conditional rendering tags at the top and bottom of the card templates.</p>
+<p>Here are the cards with front and back templates that can be used as examples</p>
 <ul>
-<li>Cloze word hanzi + pinyin (<a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_py_hz_front.js">front</a>, <a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_py_hz_back.js">back</a>)</li>
-<li>Cloze word translation (<a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_tr_front.js">front</a>, <a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_tr_back.js">back</a>)</li>
-<li>Cloze whole word (<a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_all_front.js">front</a>, <a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_all_back.js">back</a>)</li>
+<li>Cloze word hanzi + pinyin (<a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_py_hz_front.js">front</a>, <a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_back.js">back</a>)</li>
+<li>Cloze word translation (<a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_tr_front.js">front</a>, <a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_back.js">back</a>)</li>
+<li>Cloze whole word (<a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_all_front.js">front</a>, <a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_back.js">back</a>)</li>
 <li>Basic produce Chinese (<a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_py_hz_front.js">front</a>, <a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_py_hz_back.js">back</a>)</li>
 <li>Basic produce translation (<a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_tr_front.js">front</a>, <a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_tr_back.js">back</a>)</li>
 <li>Basic produce Hanzi (<a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_hz_front.js">front</a>, <a href="https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_hz_back.js">back</a>)</li>
 </ul>
-</div>
+<p>To create a note with the right cards in Anki, first click "Manage Note Types" in the drop down menu</p>
+<p><img src="../images/zimu/anki_notes.png" width="400px"></p>
+<p>Then click "Add", and use the "Basic" note type as the base. Then click "fields" to edit the field so that it looks like this</p>
+<p><img src="../images/zimu/anki_fields.png" width="400px"></p>
+<p>You are now ready to import the exported advanced file to Anki, just remember to choose the semicolon (;) as the separator, and the correct note type.</p>
+<p>If you wish to add or remove cards to be generated, you can first edit them in the browser extension and then update the cards in the Anki note type.</p>
+<p><img src="../images/zimu/advanced.png" width="400px"></p>
+    </div>
     
 
 </article><footer id="footer"><p>Contents © 2022         <a href="mailto:me@martindbp.com">Martin Pettersson</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         </p>

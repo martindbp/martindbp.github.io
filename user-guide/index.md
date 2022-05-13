@@ -69,19 +69,38 @@ In order to export, you first "star" a word or a full sentence translation by op
 
 In the Dashboard, select the words in the table you'd like to export and click the "Export to Anki" button.
 
+<img src="/images/zimu/export.png" width="400px" />
+
 When clicking export, there are three tabs for different kinds of Anki exports. The first tab is for "Basic", then "Cloze" notes and lastly in the "Advanced" tab. All three uses fields separated by semi-colon rather than comma, make sure to change this when importing.
+
+<img src="/images/zimu/basic.png" width="400px" />
 
 For the advanced export, the complete data of the interaction can be exported in JSON format, including all the separate pinyin, hanzi, word translations and more. With this you can build more advanced cards. The fields on these notes includes:
 
 1. search: the combination of hanzi, pinyin and word translation, for easier searching of notes (since the rest of the data is in the JSON field)
 2. data: the JSON containing all the relevant data
-3-9: "boolean" fields (1 or empty) indicating whether a specific card should be generated.
 
-If you use the card templates provided below, then the 3-9 fields are:
+Fields 3-9: "boolean" fields (1 or empty) indicating whether a specific card should be generated. The names of these fields must correspond with the conditional rendering tags at the top and bottom of the card templates.
 
-* Cloze word hanzi + pinyin ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_py_hz_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_py_hz_back.js))
-* Cloze word translation ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_tr_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_tr_back.js))
-* Cloze whole word ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_all_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_all_back.js))
+Here are the cards with front and back templates that can be used as examples
+
+* Cloze word hanzi + pinyin ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_py_hz_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_back.js))
+* Cloze word translation ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_tr_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_back.js))
+* Cloze whole word ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_word_all_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/cloze_back.js))
 * Basic produce Chinese ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_py_hz_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_py_hz_back.js))
 * Basic produce translation ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_tr_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_tr_back.js))
 * Basic produce Hanzi ([front](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_hz_front.js), [back](https://cdn.zimu.ai/file/zimu-public/anki_templates/basic_hz_back.js))
+
+To create a note with the right cards in Anki, first click "Manage Note Types" in the drop down menu
+
+<img src="/images/zimu/anki_notes.png" width="400px" />
+
+Then click "Add", and use the "Basic" note type as the base. Then click "fields" to edit the field so that it looks like this
+
+<img src="/images/zimu/anki_fields.png" width="400px" />
+
+You are now ready to import the exported advanced file to Anki, just remember to choose the semicolon (;) as the separator, and the correct note type.
+
+If you wish to add or remove cards to be generated, you can first edit them in the browser extension and then update the cards in the Anki note type.
+
+<img src="/images/zimu/advanced.png" width="400px" />
