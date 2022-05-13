@@ -65,13 +65,44 @@ If the word translation is wrong or you need more context, you can reach the dic
 
 <img src="/images/zimu/dictionary.png" width="600px" />
 
-# Other tips and tricks
+# Keyboard shortcuts
 
-There are useful options that can be changed includes keyboard shortcuts, the blurring (or not) of the hard-coded captions, switching between simplified and traditional characters and more. Adjusting font size can be done with the plus and minus buttons on the top subtitle menu.
+By default, these keyboard shortcuts are available:
+
+Left arrow - go back one subtitle
+Right arrow - go forward one subtitle
+R - replay the current subtitle from the start
+D - open the dictionary
+P - peek all information
+T - peek sentence [t]ranslation
+Y - peek [p]inyin row
+H - peek [h]anzi row
+N - peek tra[n]slation row
+
+These bindings can be changed in the options.
+
+# Blur hard-coded captions
+
+By default, hard-coded captions in the video are blurred. This is to reduce distractions and "leaks" of information that the learner doesn't wish to see.
+
+To unblur a caption, you can either click it in the video, or go to the options under the Subtitle tab.
+
+<img src="/images/zimu/blurred.png" width="300px" />
+<img src="/images/zimu/unblurred.png" width="300px" />
+
+# Font size
+
+Adjusting font size can be done with the plus and minus buttons on the top subtitle menu.
+
+<img src="/images/zimu/font_size.png" width="600px" />
+
+# Word frequency
 
 When deciding which new words to focus on it can come in handy to see how often they occur in the video. If you hover over a word, the number of occurrences are shown in a small badge.
 
 <img src="/images/zimu/occurrences.png" width="300px" />
+
+# Auto pause
 
 Depending on your level and the speed/difficulty of the content, you can set the "auto pause" option in the "Subtitle" option tab. This will pause at the completion of each subtitle. You then press play (space) to resume after each subtitle.
 
