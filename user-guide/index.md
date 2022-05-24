@@ -39,7 +39,7 @@ To make the extension more accessible, click the puzzle icon again and pin the e
 
 # How to start
 
-After having installed the extension, navigate to [browse.zimu.ai](browse.zimu.ai) and pick a show or movie to watch. After loading the video page, you should see the zimu.ai subtitle window on top of the Youtube page.
+After having installed the extension, navigate to [browse.zimu.ai](https://browse.zimu.ai) and pick a show or movie to watch. After loading the video page, you should see the zimu.ai subtitle window on top of the Youtube page.
 
 <img src="/images/zimu/subtitle_window.png" width="600px" />
 
